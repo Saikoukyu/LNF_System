@@ -190,12 +190,12 @@
 
             <div class="input-group">
                 <i class="fas fa-envelope"></i> 
-                <input type="text" placeholder="Email">
+                <input type="text" id="username" name="username" placeholder="Email" required>
             </div>
 
             <div class="input-group">
                 <i class="fas fa-lock"></i> 
-                <input type="password" id="passwordInput" placeholder="Password">
+                <input type="password" id="passwordInput" name="password" placeholder="Password" required>
             </div>
 
             <div class="show-password">
@@ -203,11 +203,11 @@
                 <label for="showPassword">Show Password</label>
             </div>
 
-            <button class="login-button">LOG IN</button>
+            <button class="login-button" type="submit">LOG IN</button>
         </div>
     </div>
 
-    <script>
+   <script>
         const adminBtn = document.getElementById('adminBtn');
         const studentBtn = document.getElementById('studentBtn');
         const loginButton = document.querySelector('.login-button');
