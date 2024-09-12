@@ -1,0 +1,133 @@
+body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    .header {
+        background-color: #35408e;
+        color: #fff;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .title {
+        margin-left: 20px;
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    .highlight {
+        color: #e1bd59;
+    }
+
+    .user-link {
+        color: #fff;
+        text-decoration: none;
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .user-link span {
+        margin: 0 13px;
+    }
+
+    .user-link i.fas.fa-caret-down {
+        margin-right: 20px;
+        transition: transform 0.3s ease; 
+    }
+
+    .user-link.active i.fas.fa-caret-down {
+        transform: rotate(180deg); 
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        right: 20px;
+        top: 55px;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        padding: 10px;
+    }
+
+    .dropdown-menu .logout-button {
+    background-color: transparent; /* Remove white container */
+    border: none; /* Remove border */
+    color: #1E201E; /* Set text color to white */
+    padding: 0;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    width: 90px;
+    cursor: pointer;
+}
+
+    .search-bar {
+        margin-top: 40px;
+        text-align: right;
+        margin-right: 70px;
+    }
+
+    .search-bar input[type="text"] {
+        padding: 10px;
+        width: 250px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    .lost-found-table {
+        width: 90%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #A6A6A6;
+        table-layout: fixed;
+    }
+
+    .lost-found-table th, .lost-found-table td {
+        border: 1px solid #1E201E;
+        padding: 20px;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #fff;
+    }
+
+    .lost-found-table td[contenteditable="true"] {
+        background-color: #f4f4f4;
+        text-align: left;
+        white-space: normal;
+        word-wrap: break-word;
+        color: #000;
+    }
+
+    .inquiry-container {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        background-color: #f4f4f4;
+    }
+
+    .inquiry-button {
+        background-color: #E1BD59;
+        border: none;
+        padding: 13px 30px;
+        color: #fff;
+        cursor: pointer;
+        border-radius: 20px;
+        transition: background-color 0.7s ease, transform 0.3s ease;
+        margin-left: 1000px;
+    }
+
+    .inquiry-button:active {
+        background-color: #e09b24;
+        transform: scale(0.97); 
+    }

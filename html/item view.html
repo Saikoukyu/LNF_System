@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Item View - Lost & Found Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            background-color: #35408e;
+            color: white;
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-greeting {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #2f3b82;
+        }
+
+        .menu-toggle {
+            display: flex;
+            align-items: center;
+            padding-left: 20px;
+            cursor: pointer;
+            padding-top: 20px;
+            padding-bottom: 10px;
+        }
+
+        .menu-toggle i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #2f3b82;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar ul li i {
+            margin-right: 40px;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .sidebar ul li span {
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .sidebar ul li:hover,
+        .sidebar ul li.active {
+            background-color: #2f3b82;
+        }
+
+        .content {
+            margin-left: 130px;
+            padding: 20px;
+            overflow-y: auto;
+            width: calc(115% - 350px);
+        }
+
+        .header {
+            background-color: #35408e;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 250px;
+            width: calc(100% - 250px);
+            z-index: 999;
+            border-bottom: 2px solid #e1bd59;
+            box-sizing: border-box;
+        }
+
+        .system-title {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .system-title span:first-child {
+            color: #e1bd59;
+        }
+
+        right-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .right-menu a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            position: relative;
+        }
+
+        .add-lost-found span {
+            font-weight: bold;
+        }
+
+        .add-lost-found .plus {
+            color: #ffd100;
+        }
+
+        .add-lost-found .lost {
+            color: #ff4b4b;
+        }
+
+        .add-lost-found .and,
+        .add-lost-found .found {
+            color: #6ccfff;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .dropdown-toggle i {
+            margin-right: 8px;
+            margin-left: 8px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 120px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown.open .dropdown-content {
+            display: block;
+        }
+
+        .table-container {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #35408e;
+            color: white;
+        }
+
+        td img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .search-bar {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px;
+            width: 250px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+		.content {
+			margin-top: 10px;
+       
+        .content h2 {
+			display: flex;
+			align-items: center;
+			font-size: 18px;
+			color: #35408e; 
+			margin-bottom: 0px;
+			font-weight: normal; 
+		}
+        .content h2 i {
+            margin-right: 10px;
+            font-size: 24px; 
+        }
+            @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            .content {
+                margin-left: 200px;
+            }
+            .header {
+                left: 200px;
+                width: calc(100% - 200px);
+            }
+            .search-bar input[type="text"] {
+                width: 100%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+      <div class="sidebar">
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+            <span>MENU</span>
+        </div>
+        <div class="sidebar-greeting">
+            Hello, Admin 1
+        </div>
+        <ul>
+            <li onclick="window.location.href='Admin_Dashboard.html'">
+                <i class="fas fa-tachometer-alt"></i><span>Dashboard</span>
+            </li>
+            <li onclick="window.location.href='item view.html'">
+                <i class="fas fa-eye"></i><span>Item View</span>
+            </li>
+            <li onclick="window.location.href='Admin_Report.html'">
+                <i class="fas fa-file-alt"></i><span>Report</span>
+            </li>
+            <li onclick="window.location.href='Admin_Admin.html'">
+                <i class="fas fa-user"></i><span>Admin</span>
+            </li>
+            <li onclick="window.location.href='Admin_ITAdmin.html'">
+                <i class="fas fa-cogs"></i><span>IT Admin</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="header">
+            <span class="system-title">
+                <span>LOST & FOUND</span>
+                <span>Management System</span>
+            </span>
+
+            <div class="right-menu">
+                <a href="lost and found.html" class="add-lost-found">
+                    <span class="plus">+</span>
+                    <span class="lost">Lost</span>
+                    <span class="and">&</span>
+                    <span class="found">Found</span>
+                </a>
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="fas fa-user"></i> Admin 1
+                        <i class="fas fa-caret-down dropdown-caret"></i> 
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="#" id="logoutButton">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <h2><i class="fas fa-eye"></i> Item View</h2>
+            <hr class="header-line">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search items...">
+            </div>
+            <div class="table-container">
+                <table id="itemTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Brand</th>
+                            <th>Image</th>
+                            <th>Lost Date</th>
+                            <th>Found Date</th>
+                            <th>Found Location</th>
+                            <th>Owner</th>
+							<th>Finder</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>My watch</td>
+                            <td>Acce</td>
+                            <td>Rolex</td>
+                            <td><img src="assets/rolex.jpg" alt="Item Image"></td>
+                            <td>30/8/24</td>
+                            <td>31/8/24</td>
+                            <td>Tondo</td>
+                            <td></td>
+							<td>Alice</td>
+                            <td>Found</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>My watch</td>
+                            <td>Acce</td>
+                            <td>Rolex</td>
+                            <td><img src="assets/rolex.jpg" alt="Item Image"></td>
+                            <td>30/8/24</td>
+                            <td>31/8/24</td>
+                            <td>Tondo</td>
+                            <td>Ela</td>
+							<td></td>
+                            <td>Claimed</td>
+                        </tr>
+						 <tr>
+                          <tr>
+                            <td>1</td>
+                            <td>My watch</td>
+                            <td>Acce</td>
+                            <td>Rolex</td>
+                            <td><img src="assets/rolex.jpg" alt="Item Image"></td>
+                            <td>30/8/24</td>
+                            <td>31/8/24</td>
+                            <td>Tondo</td>
+                            <td></td>
+							<td>Alice</td>
+                            <td>Found</td>
+                        </tr>
+						  <tr>
+                            <td>1</td>
+                            <td>My watch</td>
+                            <td>Acce</td>
+                            <td>Rolex</td>
+                            <td><img src="assets/rolex.jpg" alt="Item Image"></td>
+                            <td>30/8/24</td>
+                            <td>31/8/24</td>
+                            <td>Tondo</td>
+                            <td>Ela</td>
+							<td></td>
+                            <td>Claimed</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    <script>
+        // Script for handling dropdown
+        document.querySelectorAll('.dropdown-toggle').forEach(dropdown => {
+            dropdown.addEventListener('click', function (e) {
+                e.preventDefault();
+                this.parentElement.classList.toggle('open');
+            });
+        });
+        // Script for sidebar menu toggle
+        document.querySelector('.menu-toggle').addEventListener('click', function () {
+            document.querySelector('.sidebar').classList.toggle('open');
+        });
+		// Function to filter table rows based on search input
+document.getElementById('searchInput').addEventListener('input', function () {
+    const query = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#itemTable tbody tr');
+    
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const text = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
+        row.style.display = text.includes(query) ? '' : 'none';
+    });
+});
+const logoutButton = document.getElementById('logoutButton');
+
+    logoutButton.addEventListener('click', function() {
+        window.location.href = 'NU_LoginPage.html';
+    });
+    </script>
+</body>
+</html>
