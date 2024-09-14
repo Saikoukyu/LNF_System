@@ -154,12 +154,12 @@
         });
     
     document.getElementById('inquiryButton').addEventListener('click', function() {
-        window.location.href = 'lost and found.html';
+        window.location.href = 'Lost_and_Found.php';
     });
 
         const logoutButton = document.getElementById('logoutButton');
         logoutButton.addEventListener('click', function() {
-            window.location.href = 'NU_LoginPage.html';
+            window.location.href = 'NU_LoginPage.php';
         });
     </script>
 </body>
