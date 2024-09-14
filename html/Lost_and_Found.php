@@ -135,25 +135,20 @@
                     <label for="firstName">Name</label>
                     <input type="text" id="firstName" placeholder="First Name" required>
                     <input type="text" id="lastName" placeholder="Last Name" required>
+                    <label for="firstName" style="margin-top: 8px";>Email</label>
+                    <input type="text" id="email" placeholder="name@students.nu-dasma.edu.ph" required>
+                    <label for="firstName" style="margin-top: 8px";>Student ID</label>
+                    <input type="text" id="studendId" placeholder="2000-000000" required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="itemType">Item Type</label>
+                    <label for="itemType">Item Name</label>
                     <input type="text" id="itemType" required>
                 </div>
                 <div class="form-group">
-                    <label for="brand">Brand</label>
+                    <label for="brand">Brand (None if Applicable)</label>
                     <input type="text" id="brand" required>
-                </div>
-            </div>
-            <div class="form-row">
-                <label>Purpose of Contact</label>
-                <div class="radio-group">
-                    <input type="radio" id="lost" name="purpose" value="lost" required>
-                    <label for="lost">Lost Item</label>
-                    <input type="radio" id="found" name="purpose" value="found" required>
-                    <label for="found">Found Item</label>
                 </div>
             </div>
             <div class="form-row">
