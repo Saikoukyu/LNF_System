@@ -7,8 +7,266 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Profile - Lost & Found Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="/css/admin_admin.css">
-    
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            background-color: #35408e;
+            color: white;
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-greeting {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #2f3b82;
+        }
+
+        .menu-toggle {
+            display: flex;
+            align-items: center;
+            padding-left: 20px;
+            cursor: pointer;
+            padding-top: 20px;
+            padding-bottom: 10px;
+        }
+
+        .menu-toggle i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 15px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid #2f3b82;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar ul li i {
+            margin-right: 40px;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .sidebar ul li span {
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .sidebar ul li:hover,
+        .sidebar ul li.active {
+            background-color: #2f3b82;
+        }
+
+        .content {
+            margin-left: 130px;
+            padding: 20px;
+            overflow-y: auto;
+            margin-top: 0.5%;
+            width: calc(115% - 350px);
+        }
+
+        .header {
+            background-color: #35408e;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 250px;
+            width: calc(100% - 250px);
+            z-index: 999;
+            border-bottom: 2px solid #e1bd59;
+            box-sizing: border-box;
+        }
+
+        .system-title {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .system-title span:first-child {
+            color: #e1bd59;
+        }
+
+        .right-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .right-menu a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            position: relative;
+        }
+
+        .add-lost-found span {
+            font-weight: bold;
+        }
+
+        .add-lost-found .plus {
+            color: #ffd100;
+        }
+
+        .add-lost-found .lost {
+            color: #ff4b4b;
+        }
+
+        .add-lost-found .and,
+        .add-lost-found .found {
+            color: #6ccfff;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .dropdown-toggle i {
+            margin-right: 8px;
+            margin-left: 8px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 120px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 5px;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .dropdown.open .dropdown-content {
+            display: block;
+        }
+
+        .admin-profile {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .profile-section {
+            display: flex;
+            justify-content: left;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+
+        .profile-info {
+            text-align: left;
+            margin-right: 50px;
+        }
+
+        .profile-image {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10%;
+        }
+
+        .profile-email {
+            font-size: 16px;
+        }
+
+        .profile-phone {
+            font-size: 16px;
+        }
+
+        .edit-profile-btn {
+            padding: 8px 15px;
+            background-color: #f0c040;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .menu-items {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20%;
+            margin-left: 8%;
+            width: 100%;
+        }
+
+        .menu-item {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: white;
+            width: 100%;
+        }
+
+        .menu-item img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 10px;
+            margin-left: 7%;
+        }
+
+        .edit-btn {
+            margin-top: 5px;
+            padding: 5px 50px;
+            background-color: #003366;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
@@ -34,7 +292,7 @@
                 <i class="fas fa-user"></i><span>Admin</span>
             </li>
             <li onclick="window.location.href='Admin_ITAdmin.html'">
-                <i class="fas fa-cogs"></i><span>IT Admin Setting</span>
+                <i class="fas fa-cogs"></i><span>IT Admin</span>
             </li>
             </li>
         </ul>
@@ -66,47 +324,24 @@
             </div>
         </div>
 
-        <script>
-            // Dropdown toggle script
-            document
-              .querySelector(".dropdown-caret")
-              .addEventListener("click", function (event) {
-                event.preventDefault(); // Prevent the default action
-                this.closest(".dropdown").classList.toggle("open"); // Toggle the dropdown menu
-              });
-    
-            document.addEventListener("click", function (event) {
-              var isClickInside = document
-                .querySelector(".dropdown")
-                .contains(event.target);
-    
-              if (!isClickInside) {
-                document.querySelector(".dropdown").classList.remove("open");
-              }
-            });
-    
-            const logoutButton = document.getElementById("logoutButton");
-    
-            logoutButton.addEventListener("click", function () {
-              window.location.href = "NU_LoginPage.html";
-            });
-          </script>
-
         <section class="content">
             <h2><i class="fas fa-user"></i> Admin</h2>
             <hr class="header-line">
                 <div class="menu-items">
                     <div class="menu-item">
                         <h3>REPORTS</h3>
-                        <button class="edit-btn" onclick="navigateTo('REPORT EDITING.html')">REPORTS</button>
+                        <img src="report.png" alt="Reports Icon">
+                        <button class="edit-btn" onclick="navigateTo('REPORT EDITING.html')">EDIT</button>
                     </div>
                     <div class="menu-item">
                         <h3>ITEMS</h3>
-                        <button class="edit-btn" onclick="navigateTo('ITEMS EDITING.html')">ITEMS</button>
+                        <img src="item.png" alt="Items Icon">
+                        <button class="edit-btn" onclick="navigateTo('ITEMS EDITING.html')">EDIT</button>
                     </div>
                     <div class="menu-item">
                         <h3>FORM</h3>
-                        <button class="edit-btn" onclick="navigateTo('FORM EDITING.html')">FORM</button>
+                        <img src="form.png" alt="Form Icon">
+                        <button class="edit-btn" onclick="navigateTo('FORM EDITING.html')">EDIT</button>
                     </div>
                 </div>
     
