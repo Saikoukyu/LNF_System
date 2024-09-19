@@ -1,12 +1,17 @@
+<?php 
+    include("../php/connect.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Lost & Found Management System</title>
-    <link rel="stylesheet" href="/css/report.css">
+    <link rel="stylesheet" href="/css/admin_report.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
 </head>
 <body>
 
@@ -19,19 +24,19 @@
             Hello, Admin 1
         </div>
         <ul>
-            <li onclick="window.location.href='Admin_Dashboard.html'">
+            <li onclick="window.location.href='Admin_Dashboard.php'">
                 <i class="fas fa-tachometer-alt"></i><span>Dashboard</span>
             </li>
-            <li onclick="window.location.href='item view.html'">
+            <li onclick="window.location.href='item view.php'">
                 <i class="fas fa-eye"></i><span>Item View</span>
             </li>
-            <li onclick="window.location.href='Admin_Report.html'">
+            <li onclick="window.location.href='Admin_Report.php'">
                 <i class="fas fa-file-alt"></i><span>Report</span>
             </li>
-            <li onclick="window.location.href='Admin_Admin.html'">
+            <li onclick="window.location.href='Admin_Admin.php'">
                 <i class="fas fa-user"></i><span>Admin</span>
             </li>
-            <li onclick="window.location.href='Admin_ITAdmin.html'">
+            <li onclick="window.location.href='Admin_ITAdmin.php'">
                 <i class="fas fa-cogs"></i><span>IT Admin</span>
             </li>
         </ul>
@@ -80,7 +85,7 @@
                     <p><strong>Item Description:</strong> TITE</p>
                 </div>
                 <div class="report-image">
-                    <img src="wallet.jpg" alt="Gucci Wallet">
+                    <img src="assets/wallet.jpg" alt="Gucci Wallet">
                 </div>
             </div>
             <div class="report-timestamp">
@@ -99,7 +104,7 @@
                     <p><strong>Item Description:</strong> NEIL ASPAG</p>
                 </div>
                 <div class="report-image">
-                    <img src="assets/wallet.jpg" alt="Silver Ring">
+                    <img src="wallet.jpg" alt="Silver Ring">
                 </div>
             </div>
             <div class="report-timestamp">

@@ -1,4 +1,4 @@
-body {
+    body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #f4f4f4;
@@ -127,16 +127,16 @@ body {
 }
 
 .add-lost-found .plus {
-  color: #ffd100;
+  color: #ffffff;
 }
 
 .add-lost-found .lost {
-  color: #ff4b4b;
+  color: #ffffff;
 }
 
 .add-lost-found .and,
 .add-lost-found .found {
-  color: #6ccfff;
+  color: #ffffff;
 }
 
 .dropdown {

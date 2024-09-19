@@ -1,128 +1,19 @@
+<?php 
+    include("../php/connect.php");
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Lost & Found Management System</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .content {
-            margin-top: 70px;
-            margin-left: 100px;
-            padding: 20px;
-            overflow-y: auto;
-            height: calc(100vh - 70px);
-            width: calc(100% - 150px);
-            box-sizing: border-box;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 items per row */
-            gap: 20px; /* Space between items */
-        }
-
-        .report-item {
-            background-color: #35408e;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            padding: 10px;
-            color: #e1bd59;
-            position: relative; /* To position the buttons */
-        }
-
-        .report-header {
-            background-color: #e1bd59;
-            color: #35408e;
-            padding: 10px;
-            border-radius: 8px 8px 0 0;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .report-content {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            background-color: #35408e;
-            border-radius: 0 0 8px 8px;
-        }
-
-        .report-details {
-            color: white;
-            font-size: 20px;
-        }
-
-        .report-image img {
-            width: 150px;
-            height: 150px;
-            border-radius: 8px;
-        }
-
-        .report-timestamp {
-            text-align: right;
-            font-size: 20px;
-            color: #e1bd59;
-            margin-top: 5px;
-        }
-
-        .report-actions {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-
-        .report-actions button {
-            background-color: #e1bd59;
-            border: none;
-            color: #35408e;
-            padding: 5px 10px;
-            border-radius: 5px;
-            margin-left: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .report-actions button:hover {
-            background-color: #d1a03e;
-        }
-
-        .close-button {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #e1bd59;
-            border: none;
-            color: #35408e;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .close-button:hover {
-            background-color: #d1a03e;
-        }
-
-        @media screen and (max-width: 768px) {
-            .content {
-                margin-left: 0;
-                width: 100%;
-            }
-
-            .report-item {
-                max-width: 100%;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/css/admin_reportediting.css">
+  
 </head>
 <body>
-    <button class="close-button" onclick="window.location.href='Admin_Admin.html'">Close</button>
+    <button class="close-button" onclick="window.location.href='Admin_Admin.php'">Close</button>
 
     <div class="content">
         <!-- Report Item 1 -->
