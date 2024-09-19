@@ -4,7 +4,7 @@ include('connect.php');
 // Fetch form data
 $firstName = $_POST['fn_firstname'];
 $lastName = $_POST['ln_lastname'];
-$item_req_sender_email = $_POST['item_req_sender_email'];
+$item_req_sender_email = $_POST['item_req_sender_emai'];
 $item_req_sender_stud_id = $_POST['item_req_sender_stud_id'];
 $item_req_type_id = $_POST['item_req_type_id'];
 $item_req_name_id = $_POST['item_req_name_id'];
@@ -19,7 +19,7 @@ $item_req_add_info = $_POST['item_req_add_info'];
 // Handle file upload
 $file_name = $_FILES['item_req_photo']['name'];
 $temp_name = $_FILES['item_req_photo']['tmp_name'];
-$upload_directory = '../html/item-images/'; // Folder to store images
+$upload_directory = 'item-images/'; // Folder to store images
 $file_path = $upload_directory . basename($file_name);
 
 // Move file to the server directory
@@ -38,9 +38,7 @@ $stmt->bind_param("ss", $firstName, $lastName);
 if ($stmt->execute()) {
     if ($stmt->affected_rows > 0) {
         echo "Full name successfully inserted into tbl_full_name.<br>";
-        
-        // Get the fn_id of the newly inserted row
-        $fn_id = $conn->insert_id; // This is the fn_id for tbl_full_name
+        $fn_id = $conn->insert_id; // Get inserted fn_id
     } else {
         echo "Error inserting full name.<br>";
     }
@@ -56,9 +54,7 @@ $stmt->bind_param("ss", $date_lost, $time_lost);
 if ($stmt->execute()) {
     if ($stmt->affected_rows > 0) {
         echo "Date and time successfully inserted into tbl_time_date.<br>";
-        
-        // Get the time_date_id of the newly inserted row
-        $time_date_id = $conn->insert_id; // This is the time_date_id for tbl_time_date
+        $time_date_id = $conn->insert_id; // Get inserted time_date_id
     } else {
         echo "Error inserting date and time.<br>";
     }
@@ -66,20 +62,16 @@ if ($stmt->execute()) {
     echo "Error in date and time query: " . $stmt->error . "<br>";
 }
 
-if ($stmt->execute()) {
-    // Step 2: Check if the insert was successful
-    if ($stmt->affected_rows > 0) {
+// Insert into tbl_item_request with image path
+$insertItemRequestQuery = "INSERT INTO tbl_item_request (item_req_full_name_id, item_req_sender_email, item_req_sender_stud_id, item_req_type_id, item_req_name_id, item_req_detailed_name, item_req_brand, item_req_location_id, item_req_specific_location_id, item_req_time_date_id, item_req_add_info, item_req_photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$stmt2 = $conn->prepare($insertItemRequestQuery);
+$stmt2->bind_param("issiissiiiss", $fn_id, $item_req_sender_email, $item_req_sender_stud_id, $item_req_type_id, $item_req_name_id, $item_req_detailed_name, $item_req_brand, $item_req_location_id, $item_req_specific_location_id, $time_date_id, $item_req_add_info, $file_path);
 
-        // Step 4: Insert into tbl_item_request using the fn_id as the foreign key
-        $insertItemRequestQuery = "INSERT INTO tbl_item_request (item_req_full_name_id, item_req_sender_email, item_req_sender_stud_id, item_req_type_id, item_req_name_id, item_req_detailed_name, item_req_brand, item_req_location_id, item_req_specific_location_id, item_req_time_date_id, item_req_add_info) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt2 = $conn->prepare($insertItemRequestQuery);
-        $stmt2->bind_param("issiissiiis", $fn_id, $item_req_sender_email, $item_req_sender_stud_id, $item_req_type_id, $item_req_name_id, $item_req_detailed_name, $item_req_brand, $item_req_location_id, $item_req_specific_location_id, $time_date_id, $item_req_add_info);
-
-        if ($stmt2->execute()) {
-            echo "Item request successfully inserted into tbl_item_request.";
-        } else {
-            echo "Error inserting item request: " . $stmt2->error;
-        }
+if ($stmt2->execute()) {
+    echo "Item request successfully inserted into tbl_item_request.";
+} else {
+    echo "Error inserting item request: " . $stmt2->error;
+}
 
 $stmt2->close();
 $stmt->close();
