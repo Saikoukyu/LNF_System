@@ -4,7 +4,7 @@ include('connect.php');
 // Fetch form data
 $firstName = $_POST['fn_firstname'];
 $lastName = $_POST['ln_lastname'];
-$item_req_sender_email = $_POST['item_req_sender_emai'];
+$item_req_sender_email = $_POST['item_req_sender_email'];
 $item_req_sender_stud_id = $_POST['item_req_sender_stud_id'];
 $item_req_type_id = $_POST['item_req_type_id'];
 $item_req_name_id = $_POST['item_req_name_id'];
@@ -19,7 +19,7 @@ $item_req_add_info = $_POST['item_req_add_info'];
 // Handle file upload
 $file_name = $_FILES['item_req_photo']['name'];
 $temp_name = $_FILES['item_req_photo']['tmp_name'];
-$upload_directory = 'item-images/'; // Folder to store images
+$upload_directory = '../html/item-images/'; // Folder to store images
 $file_path = $upload_directory . basename($file_name);
 
 // Move file to the server directory
