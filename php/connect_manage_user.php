@@ -13,11 +13,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+    $role = ('Admin');
+
     // Hash the password for security
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // Prepare the SQL query to insert user (only username and password)
-    $sql = "INSERT INTO tbl_do_admin (username, password) VALUES (?, ?)";
+    $sql = "INSERT INTO tbl_do_admin (username, password, role) VALUES (?, ?, ?)";
 
     // Prepare statement to prevent SQL injection
     $stmt = $conn->prepare($sql);
@@ -28,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Bind the parameters (username and hashed password)
-    $stmt->bind_param("ss", $username, $password);
+    $stmt->bind_param("sss", $username, $password, $role);
 
     // Execute the query
     if ($stmt->execute()) {
