@@ -135,10 +135,19 @@ $result = $conn->query($sql);
                 echo "<td> Name </td>";
                 echo "<td>" . htmlspecialchars($row['username']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['password']) . "</td>";
-                echo "<td><button class='edit-btn' onclick='openEditModal(this)'>Edit</button></td>";
-                echo "<td><button class='delete-btn btn btn-danger' onclick='openDeleteModal(\"" . $row['username'] . "\", \"" . $row['username'] . "\")'>Delete</button></td>";
-                echo "</tr>";
-              }
+               // Check the role and conditionally show buttons
+            if ($row['role'] === 'IT_Admin') {
+              // Do not show edit or delete buttons
+              echo "<td></td>";
+              echo "<td></td>";
+          } else if ($row['role'] === 'Admin') {
+              // Show edit and delete buttons
+              echo "<td><button class='edit-btn' onclick='openEditModal(this)'>Edit</button></td>";
+              echo "<td><button class='delete-btn btn btn-danger' onclick='openDeleteModal(\"" . $row['username'] . "\", \"" . $row['username'] . "\")'>Delete</button></td>";
+          }
+      
+          echo "</tr>";
+      }
             } else {
               echo "<tr><td colspan='4'>No users found in the database.</td></tr>";
             }
