@@ -1,5 +1,18 @@
 <?php
 include("../php/connect.php");
+if (isset($_POST['submit'])){
+    $file_name = $_FILES['item_req_photo']['name'];
+    $temp_name = $_FILES['item_req_photo']['tmp_name'];
+    $folder = 'item-images/'.$file_name;
+
+    $query = mysqli_query($con, "Insert into image (file) values ('$file_name')");
+
+    if (move_uploaded_file($temp_name, $folder)){
+        echo "<h2>File upload Success!</h2>";
+    } else {
+         echo "<h2>File upload Failed!</h2>";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -141,7 +154,7 @@ include("../php/connect.php");
 </head>
 
 <body>
-    <form class="form-container" action="../php/connect_Lost_and_Found_Admin.php" method="POST">
+    <form class="form-container" enctype="multipart/form-data" action="../php/connect_Lost_and_Found_Admin.php" method="POST">
         <h2>LOST & FOUND FORM</h2>
         <form id="lostFoundForm">
             <div class="form-row">
@@ -227,7 +240,7 @@ include("../php/connect.php");
                 </div>
             </div>
             <div class="submit-container">
-                <button type="submit">Submit</button>
+                <button type="submit" name="submit" >Submit</button>
                 <button type="button" class="close-popup-btn" onclick="closePopup()">Close</button>
             </div>
         </form>
