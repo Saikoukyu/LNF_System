@@ -109,12 +109,12 @@
         // Close button functionality
         const closeBtn = document.getElementById('closeBtn');
         closeBtn.addEventListener('click', function() {
-            window.location.href = 'Admin_Admin.html'; // Redirects back to Admin_Admin.html
+            window.location.href = 'Admin_Admin.php'; // Redirects back to Admin_Admin.html
         });
 
         const logoutButton = document.getElementById('logoutButton');
         logoutButton?.addEventListener('click', function() {
-            window.location.href = 'NU_LoginPage.html';
+            window.location.href = 'NU_LoginPage.php';
         });
     </script>
 </body>
