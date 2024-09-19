@@ -150,7 +150,7 @@ include("../php/connect.php");
                     <input type="text" id="fn_firstname" name="fn_firstname" placeholder="First Name" required>
                     <input type="text" id="ln_lastname" name="ln_lastname" placeholder="Last Name" required>
                     <label for="firstName" style="margin-top: 8px" ;>Email</label>
-                    <input type="email" id="item_req_sender_emai" name="item_req_sender_emai" placeholder="name@students.nu-dasma.edu.ph" required>
+                    <input type="email" id="item_req_sender_email" name="item_req_sender_email" placeholder="name@students.nu-dasma.edu.ph" required>
                     <label for="studentId" style="margin-top: 8px" ;>Student ID</label>
                     <input type="text" id="item_req_sender_stud_id" name="item_req_sender_stud_id" pattern="\d{4}-\d{6}" placeholder="0000-000000" required>
                 </div>
@@ -216,13 +216,13 @@ include("../php/connect.php");
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="info">Please provide detailed information about the item lost/found</label>
+                    <label for="info">Please provide detailed information about the item lost</label>
                     <textarea id="item_req_add_info" name="item_req_add_info" rows="4" required></textarea>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="upload">Upload an image of lost/found item (Optional)</label>
+                    <label for="upload">Upload an image of lost item (Optional)</label>
                     <input type="file" id="item_req_photo" name="item_req_photo" optional>
                 </div>
             </div>

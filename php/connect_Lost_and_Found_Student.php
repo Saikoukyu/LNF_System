@@ -3,7 +3,7 @@ include('connect.php');
 
 $firstName = $_POST['fn_firstname'];
 $lastName = $_POST['ln_lastname'];
-$item_req_sender_email = $_POST['item_req_sender_emai'];
+$item_req_sender_email = $_POST['item_req_sender_email'];
 $item_req_sender_stud_id = $_POST['item_req_sender_stud_id'];
 $item_req_type_id = $_POST['item_req_type_id'];
 $item_req_name_id = $_POST['item_req_name_id'];

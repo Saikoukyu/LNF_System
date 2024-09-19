@@ -146,19 +146,19 @@ include("../php/connect.php");
         <form id="lostFoundForm">
             <div class="form-row">
                 <div class="form-group">
-                    <label for="firstName">Name</label>
+                    <label for="firstName">Name of Founder</label>
                     <input type="text" id="fn_firstname" name="fn_firstname" placeholder="First Name" required>
                     <input type="text" id="ln_lastname" name="ln_lastname" placeholder="Last Name" required>
                     <label for="firstName" style="margin-top: 8px" ;>Email</label>
-                    <input type="email" id="item_req_sender_emai" name="item_req_sender_emai" placeholder="name@students.nu-dasma.edu.ph" required>
+                    <input type="email" id="item_founder_email" name="item_founder_email" placeholder="name@students.nu-dasma.edu.ph" required>
                     <label for="studentId" style="margin-top: 8px" ;>Student ID</label>
-                    <input type="text" id="item_req_sender_stud_id" name="item_req_sender_stud_id" pattern="\d{4}-\d{6}" placeholder="0000-000000" required>
+                    <input type="text" id="item_founder_stud_id" name="item_founder_stud_id" pattern="\d{4}-\d{6}" placeholder="0000-000000" required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label for="it_name">Item Type</label>
-                    <select id="it_name" name="item_req_type_id" onchange="updateItemName()" required>
+                    <select id="it_name" name="item_type_id" onchange="updateItemName()" required>
                         <option value="" disabled selected>Select Item Type</option>
                         <option value="1">Personal Belongings</option>
                         <option value="2">School Supplies</option>
@@ -171,7 +171,7 @@ include("../php/connect.php");
                 </div>
                 <div class="form-group">
                     <label for="in_name">Item Name</label>
-                    <select id="in_name" name="item_req_name_id" required>
+                    <select id="in_name" name="item_name_id" required>
                         <option value="" disabled selected>Select Item Type First</option>
                     </select>
                 </div>
@@ -179,17 +179,17 @@ include("../php/connect.php");
             <div class="form-row">
                 <div class="form-group">
                     <label for="detailedItemName">Detailed Item Name</label>
-                    <input type="text" id="item_req_detailed_name" name="item_req_detailed_name" placeholder="ex. Sound Peats TRUEDOT" required>
+                    <input type="text" id="item_detailed_name" name="item_detailed_name" placeholder="ex. Sound Peats TRUEDOT" required>
                 </div>
                 <div class="form-group">
                     <label for="brand">Item Brand (If Applicable)</label>
-                    <input type="text" id="item_req_brand" name="item_req_brand" placeholder="Adidas" required>
+                    <input type="text" id="item_brand" name="item_brand" placeholder="Adidas" required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="location_name">Item Lost Location</label>
-                    <select id="location_name" name="item_req_location_id" onchange="updateItemLostLocation()" required>
+                    <label for="location_name">Item Found Location</label>
+                    <select id="location_name" name="item_location_id" onchange="updateItemLostLocation()" required>
                         <option value="" disabled selected>Select Item Lost Location</option>
                         <option value="1">1st Floor</option>
                         <option value="2">4th Floor</option>
@@ -198,32 +198,32 @@ include("../php/connect.php");
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="specific_location_name">Item Lost Specific Location</label>
-                    <select id="specific_location_name" name="item_req_specific_location_id" required>
+                    <label for="specific_location_name">Item Found Specific Location</label>
+                    <select id="specific_location_name" name="item_specific_location_id" required>
                         <option value="" disabled selected>Select Item Lost Location First</option>
                     </select>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="date">Item Lost Date</label>
+                    <label for="date">Item Found Date</label>
                     <input type="date" id="date_lost" name="date_lost" placeholder="ex. Sound Peats TRUEDOT" required>
                 </div>
                 <div class="form-group">
-                    <label for="time">Item Lost Time</label>
+                    <label for="time">Item Found Time</label>
                     <input type="time" id="time_lost" name="time_lost" required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="info">Please provide detailed information about the item lost/found</label>
-                    <textarea id="item_req_add_info" name="item_req_add_info" rows="4" required></textarea>
+                    <label for="info">Please provide detailed information about the item found</label>
+                    <textarea id="item_add_info" name="item_add_info" rows="4" required></textarea>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="upload">Upload an image of lost/found item (Optional)</label>
-                    <input type="file" id="item_req_photo" name="item_req_photo" optional>
+                    <label for="upload">Upload an image of found item (Optional)</label>
+                    <input type="file" id="item_photo" name="item_photo" optional>
                 </div>
             </div>
             <div class="submit-container">
