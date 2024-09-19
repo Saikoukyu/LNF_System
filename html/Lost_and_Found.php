@@ -158,7 +158,7 @@ include("../php/connect.php");
             <div class="form-row">
                 <div class="form-group">
                     <label for="it_name">Item Type</label>
-                    <select id="it_name" onchange="updateItemName()" required>
+                    <select id="it_name" name="item_req_type_id" onchange="updateItemName()" required>
                         <option value="" disabled selected>Select Item Type</option>
                         <option value="1">Personal Belongings</option>
                         <option value="2">School Supplies</option>
@@ -171,7 +171,7 @@ include("../php/connect.php");
                 </div>
                 <div class="form-group">
                     <label for="in_name">Item Name</label>
-                    <select id="in_name" required>
+                    <select id="in_name" name="item_req_name_id" required>
                         <option value="" disabled selected>Select Item Type First</option>
                     </select>
                 </div>
@@ -189,7 +189,7 @@ include("../php/connect.php");
             <div class="form-row">
                 <div class="form-group">
                     <label for="location_name">Item Lost Location</label>
-                    <select id="location_name" onchange="updateItemLostLocation()" required>
+                    <select id="location_name" name="item_req_location_id" onchange="updateItemLostLocation()" required>
                         <option value="" disabled selected>Select Item Lost Location</option>
                         <option value="1">1st Floor</option>
                         <option value="2">4th Floor</option>
@@ -199,7 +199,7 @@ include("../php/connect.php");
                 </div>
                 <div class="form-group">
                     <label for="specific_location_name">Item Lost Specific Location</label>
-                    <select id="specific_location_name" required>
+                    <select id="specific_location_name" name="item_req_specific_location_id" required>
                         <option value="" disabled selected>Select Item Lost Location First</option>
                     </select>
                 </div>
