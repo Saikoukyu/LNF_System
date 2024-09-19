@@ -142,7 +142,7 @@ include("../php/connect.php");
 
 <body>
     <form class="form-container" action="../php/connect_Lost_and_Found_Student.php" method="POST">
-        <h2>LOST & FOUND FORM</h2>
+        <h2>LOST & FOUND FORM INQUIRY</h2>
         <form id="lostFoundForm">
             <div class="form-row">
                 <div class="form-group">
@@ -216,13 +216,13 @@ include("../php/connect.php");
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="info">Please provide detailed information about the item lost</label>
+                    <label for="info">Please Provide Detailed Information About the Item Lost</label>
                     <textarea id="item_req_add_info" name="item_req_add_info" rows="4" required></textarea>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="upload">Upload an image of lost item (Optional)</label>
+                    <label for="upload">Upload an Image of the Item Lost (Optional)</label>
                     <input type="file" id="item_req_photo" name="item_req_photo" optional>
                 </div>
             </div>
