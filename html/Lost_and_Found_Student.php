@@ -223,7 +223,7 @@ include("../php/connect.php");
             <div class="form-row">
                 <div class="form-group">
                     <label for="upload">Upload an Image of the Item Lost (Optional)</label>
-                    <input type="file" id="item_req_photo" name="item_req_photo" optional>
+                    <input type="file" id="item_req_photo" name="item_req_photo" accept=".jpg, .jpeg, .png" optional>
                 </div>
             </div>
             <div class="submit-container">

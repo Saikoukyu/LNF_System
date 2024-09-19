@@ -236,7 +236,7 @@ if (isset($_POST['submit'])){
             <div class="form-row">
                 <div class="form-group">
                     <label for="upload">Upload an Image of Item Found (Optional)</label>
-                    <input type="file" id="item_photo" name="item_photo" optional>
+                    <input type="file" id="item_photo" name="item_photo" accept=".jpg, .jpeg, .png" optional>
                 </div>
             </div>
             <div class="submit-container">

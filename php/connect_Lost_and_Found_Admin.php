@@ -1,6 +1,12 @@
 <?php
 include('connect.php');
 
+// Define the maximum file size in bytes (15 MB)
+$maxFileSize = 15 * 1024 * 1024; // 15 MB
+
+// Allowed image types
+$allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+
 // Fetch form data
 $firstName = $_POST['fn_firstname'];
 $lastName = $_POST['ln_lastname'];
@@ -19,15 +25,26 @@ $item_req_add_info = $_POST['item_req_add_info'];
 // Handle file upload
 $file_name = $_FILES['item_req_photo']['name'];
 $temp_name = $_FILES['item_req_photo']['tmp_name'];
+$file_size = $_FILES['item_req_photo']['size'];
+$file_type = $_FILES['item_req_photo']['type'];
 $upload_directory = '../html/item-images/'; // Folder to store images
 $file_path = $upload_directory . basename($file_name);
+
+// Validate file type
+if (!in_array($file_type, $allowedFileTypes)) {
+    die("Error: Only .jpg, .jpeg, and .png files are allowed.");
+}
+
+// Validate file size
+if ($file_size > $maxFileSize) {
+    die("Error: File size exceeds the 50MB limit.");
+}
 
 // Move file to the server directory
 if (move_uploaded_file($temp_name, $file_path)) {
     echo "File uploaded successfully.<br>";
 } else {
-    echo "Failed to upload image.<br>";
-    exit; // Stop script execution if the file fails to upload
+    die("Failed to upload image.<br>");
 }
 
 // Insert into tbl_full_name
@@ -40,10 +57,10 @@ if ($stmt->execute()) {
         echo "Full name successfully inserted into tbl_full_name.<br>";
         $fn_id = $conn->insert_id; // Get inserted fn_id
     } else {
-        echo "Error inserting full name.<br>";
+        die("Error inserting full name.<br>");
     }
 } else {
-    echo "Error in full name query: " . $stmt->error . "<br>";
+    die("Error in full name query: " . $stmt->error . "<br>");
 }
 
 // Insert into tbl_time_date
@@ -56,10 +73,10 @@ if ($stmt->execute()) {
         echo "Date and time successfully inserted into tbl_time_date.<br>";
         $time_date_id = $conn->insert_id; // Get inserted time_date_id
     } else {
-        echo "Error inserting date and time.<br>";
+        die("Error inserting date and time.<br>");
     }
 } else {
-    echo "Error in date and time query: " . $stmt->error . "<br>";
+    die("Error in date and time query: " . $stmt->error . "<br>");
 }
 
 // Insert into tbl_item_request with image path
@@ -70,7 +87,7 @@ $stmt2->bind_param("issiissiiiss", $fn_id, $item_req_sender_email, $item_req_sen
 if ($stmt2->execute()) {
     echo "Item request successfully inserted into tbl_item_request.";
 } else {
-    echo "Error inserting item request: " . $stmt2->error;
+    die("Error inserting item request: " . $stmt2->error);
 }
 
 $stmt2->close();
