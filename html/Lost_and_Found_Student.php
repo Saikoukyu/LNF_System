@@ -142,7 +142,7 @@ include("../php/connect.php");
 
 <body>
     <form class="form-container" action="../php/connect_Lost_and_Found_Student.php" method="POST">
-        <h2>LOST & FOUND FORM</h2>
+        <h2>LOST & FOUND FORM INQUIRY</h2>
         <form id="lostFoundForm">
             <div class="form-row">
                 <div class="form-group">
@@ -150,7 +150,7 @@ include("../php/connect.php");
                     <input type="text" id="fn_firstname" name="fn_firstname" placeholder="First Name" required>
                     <input type="text" id="ln_lastname" name="ln_lastname" placeholder="Last Name" required>
                     <label for="firstName" style="margin-top: 8px" ;>Email</label>
-                    <input type="email" id="item_req_sender_emai" name="item_req_sender_emai" placeholder="name@students.nu-dasma.edu.ph" required>
+                    <input type="email" id="item_req_sender_email" name="item_req_sender_email" placeholder="name@students.nu-dasma.edu.ph" required>
                     <label for="studentId" style="margin-top: 8px" ;>Student ID</label>
                     <input type="text" id="item_req_sender_stud_id" name="item_req_sender_stud_id" pattern="\d{4}-\d{6}" placeholder="0000-000000" required>
                 </div>
@@ -216,13 +216,13 @@ include("../php/connect.php");
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="info">Please provide detailed information about the item lost/found</label>
+                    <label for="info">Please Provide Detailed Information About the Item Lost</label>
                     <textarea id="item_req_add_info" name="item_req_add_info" rows="4" required></textarea>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="upload">Upload an image of lost/found item (Optional)</label>
+                    <label for="upload">Upload an Image of the Item Lost (Optional)</label>
                     <input type="file" id="item_req_photo" name="item_req_photo" optional>
                 </div>
             </div>
