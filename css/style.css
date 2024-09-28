@@ -1,0 +1,117 @@
+/* General styling for the page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f3f3;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container for the profile page */
+.profile-container {
+    width: 50%;
+    margin: 5% auto;
+    background-color: white; /* White background for the form */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+}
+
+/* Title */
+h2 {
+    color: #1e3a8a; /* Dark blue for the title */
+    margin-bottom: 20px;
+}
+
+/* Profile content styling */
+.profile-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+/* Profile image section */
+.profile-image {
+    text-align: center;
+}
+
+.profile-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    border: 3px solid #ffc107; /* Gold border around the image */
+}
+
+.profile-image p {
+    font-weight: bold;
+    color: #1e3a8a; /* Dark blue for the profile name */
+}
+
+/* Form styling */
+.profile-form {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Aligning the labels and inputs */
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* Label styling */
+label {
+    font-weight: bold;
+    color: #1e3a8a; /* Dark blue for the labels */
+    width: 30%;
+    text-align: left;
+}
+
+/* Input styling */
+input, textarea {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #1e3a8a; /* Dark blue border for the inputs */
+    border-radius: 5px;
+    margin-left: 10px;
+    font-size: 16px;
+    background-color: #fff; /* White background for inputs */
+    color: #000; /* Black text for inputs */
+}
+
+textarea {
+    height: 80px;
+}
+
+/* Save button styling */
+.save-btn {
+    background-color: #1e3a8a; /* Blue background for the button */
+    color: #fff; /* White text */
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.save-btn:hover {
+    background-color: #3b5998; /* Lighter blue on hover */
+}
+
+
+/* Input and textarea focus styling */
+input:focus, textarea:focus {
+    border-color: #1e3a8a; /* Blue border on focus */
+    outline: none;
+}
+
+/* Background color of the page */
+body {
+    background-color: #e0f7fa; /* Light blue background */
+}

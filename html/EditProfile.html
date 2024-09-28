@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="profile-container">
+        <h2>Edit Profile</h2>
+        <div class="profile-content">
+            <!-- Profile Picture -->
+            <div class="profile-image">
+                <img src="profile.png" alt="Profile Image">
+                <p>Jamal Webster Johnson</p>
+            </div>
+            
+            <!-- Profile Form -->
+            <form class="profile-form">
+                <div class="form-group">
+                    <label for="first-name">First Name</label>
+                    <input type="text" id="first-name" name="first-name" placeholder="e.g. Jamal Webster">
+                </div>
+                <div class="form-group">
+                    <label for="last-name">Last Name</label>
+                    <input type="text" id="last-name" name="last-name" placeholder="e.g. Johnson">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" id="phone" name="phone" placeholder="e.g. +63XXXXXXX">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="e.g. jamalwebster@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" placeholder="e.g. Imus, Cavite">
+                </div>
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <input type="text" id="country" name="country" placeholder="e.g. Philippines">
+                </div>
+                <div class="form-group">
+                    <label for="state">State/Region</label>
+                    <input type="text" id="state" name="state" placeholder="e.g. CALABARZON REGION IV-A">
+                </div>
+                <div class="form-group">
+                    <label for="experience">Experience</label>
+                    <textarea id="experience" name="experience" placeholder="Describe Experience"></textarea>
+                </div>
+                <button type="submit" class="save-btn">Save Profile</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
