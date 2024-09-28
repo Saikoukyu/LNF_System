@@ -52,7 +52,7 @@
             </span>
 
             <div class="right-menu">
-                <a href="lost and found.php" class="add-lost-found">
+            <a href="Lost_and_Found.php" class="add-lost-found">
                     <span class="plus">+</span>
                     <span class="lost">Lost</span>
                     <span class="and">&</span>

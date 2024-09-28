@@ -33,29 +33,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>2</td>
-                        <td>Wallet</td>
-                        <td>Acc</td>
-                        <td>Gucci</td>
-                        <td><img src="assets/wallet.jpg" alt="Item Image"></td>
-                        <td>1/9/24</td>
-                        <td>2/9/24</td>
-                        <td>Manila</td>
-                        <td>Ella</td>
-						<td></td>
-                        <td>
-                            <select>
-                                <option value="found">Found</option>
-                                <option value="lost">Lost</option>
-                                <option value="dispose">Dispose</option>
-                                <option value="return">Return</option>
-                                <option value="claimed">Claimed</option>
-                                <option value="unclaimed">Unclaimed</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
+
                         <td>2</td>
                         <td>Wallet</td>
                         <td>Acc</td>
@@ -68,12 +46,9 @@
 						<td>Alice</td>
                         <td>
                             <select>
-                                <option value="found">Found</option>
-                                <option value="lost">Lost</option>
-                                <option value="dispose">Dispose</option>
-                                <option value="return">Return</option>
                                 <option value="claimed">Claimed</option>
                                 <option value="unclaimed">Unclaimed</option>
+                                <option value="disposed">Disposed</option>
                             </select>
                         </td>
                     </tr>

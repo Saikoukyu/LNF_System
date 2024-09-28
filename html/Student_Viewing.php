@@ -160,7 +160,7 @@
         });
     
     document.getElementById('inquiryButton').addEventListener('click', function() {
-        window.location.href = 'Lost_and_Found.php';
+        window.location.href = '../html/Lost_and_Found_Student.php';
     });
 
         const logoutButton = document.getElementById('logoutButton');
