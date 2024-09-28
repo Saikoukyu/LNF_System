@@ -101,46 +101,7 @@
 							<td>Alice</td>
                             <td>Found</td>
                         </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>My watch</td>
-                            <td>Acce</td>
-                            <td>Rolex</td>
-                            <td><img src="assets/rolex.jpg" alt="Item Image"></td>
-                            <td>30/8/24</td>
-                            <td>31/8/24</td>
-                            <td>Tondo</td>
-                            <td>Ela</td>
-							<td></td>
-                            <td>Claimed</td>
-                        </tr>
-						 <tr>
-                          <tr>
-                            <td>1</td>
-                            <td>My watch</td>
-                            <td>Acce</td>
-                            <td>Rolex</td>
-                            <td><img src="assets/rolex.jpg" alt="Item Image"></td>
-                            <td>30/8/24</td>
-                            <td>31/8/24</td>
-                            <td>Tondo</td>
-                            <td></td>
-							<td>Alice</td>
-                            <td>Found</td>
-                        </tr>
-						  <tr>
-                            <td>1</td>
-                            <td>My watch</td>
-                            <td>Acce</td>
-                            <td>Rolex</td>
-                            <td><img src="assets/rolex.jpg" alt="Item Image"></td>
-                            <td>30/8/24</td>
-                            <td>31/8/24</td>
-                            <td>Tondo</td>
-                            <td>Ela</td>
-							<td></td>
-                            <td>Claimed</td>
-                        </tr>
+                       
                     </tbody>
                 </table>
             </div>
