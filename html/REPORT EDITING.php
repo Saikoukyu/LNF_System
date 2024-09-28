@@ -1,3 +1,8 @@
+<?php 
+    include("../php/connect.php");
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +13,7 @@
   
 </head>
 <body>
-    <button class="close-button" onclick="window.location.href='Admin_Admin.html'">Close</button>
+    <button class="close-button" onclick="window.location.href='Admin_Admin.php'">Close</button>
 
     <div class="content">
         <!-- Report Item 1 -->

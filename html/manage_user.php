@@ -1,3 +1,7 @@
+<?php 
+    include("../php/connect.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -24,19 +28,19 @@
         <!-- Placeholder for admin name -->
       </div>
       <ul>
-        <li onclick="window.location.href='Admin_Dashboard.html'">
+        <li onclick="window.location.href='Admin_Dashboard.php'">
           <i class="fas fa-tachometer-alt"></i><span>Dashboard</span>
         </li>
-        <li onclick="window.location.href='item view.html'">
+        <li onclick="window.location.href='item view.php'">
           <i class="fas fa-eye"></i><span>Item View</span>
         </li>
-        <li onclick="window.location.href='Admin_Report.html'">
+        <li onclick="window.location.href='Admin_Report.php'">
           <i class="fas fa-file-alt"></i><span>Report</span>
         </li>
-        <li onclick="window.location.href='Admin_Admin.html'">
+        <li onclick="window.location.href='Admin_Admin.php'">
           <i class="fas fa-user"></i><span>Admin</span>
         </li>
-        <li onclick="window.location.href='Admin_ITAdmin.html'">
+        <li onclick="window.location.href='Admin_ITAdmin.php'">
           <i class="fas fa-cogs"></i><span>IT Admin Setting</span>
         </li>
       </ul>
@@ -93,7 +97,7 @@
         const logoutButton = document.getElementById("logoutButton");
 
         logoutButton.addEventListener("click", function () {
-          window.location.href = "NU_LoginPage.html";
+          window.location.href = "NU_LoginPage.php";
         });
       </script>
 

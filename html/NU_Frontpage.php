@@ -1,3 +1,8 @@
+<?php 
+    include("../php/connect.php");
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,7 +39,7 @@
             <div class="service-box">
                 <img src="assets/lostnfound.png" alt="Lost and Found Management System" class="service-img"> 
                 <p>Easily report and track lost items on campus</p>
-                <div class="login-button" onclick="window.location.href='NU_LoginPage.html'">LOGIN</div>
+                <div class="login-button" onclick="window.location.href='NU_LoginPage.php'">LOGIN</div>
             </div>
         </div>
     </div>

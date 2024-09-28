@@ -1,3 +1,8 @@
+<?php 
+    include("../php/connect.php");
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,32 +43,32 @@
         </thead>
         <tbody id="table-body">
             <tr>
-                <td contenteditable="true">Wallet</td>
-                <td contenteditable="true">Library</td>
-                <td contenteditable="true">2024-09-01</td>
-                <td contenteditable="true">Lost</td>
+                <td>Wallet</td>
+                <td>Library</td>
+                <td>2024-09-01</td>
+                <td>Found</td>
             </tr>
             <tr>
-                <td contenteditable="true">Phone</td>
-                <td contenteditable="true">Cafeteria</td>
-                <td contenteditable="true">2024-08-25</td>
-                <td contenteditable="true">Found</td>
+                <td>Phone</td>
+                <td>Cafeteria</td>
+                <td>2024-08-25</td>
+                <td>Found</td>
             </tr>
             <tr>
-                <td contenteditable="true">Keys</td>
-                <td contenteditable="true">Gym</td>
-                <td contenteditable="true">2024-09-03</td>
-                <td contenteditable="true">Lost</td>
+                <td>Keys</td>
+                <td>Gym</td>
+                <td>2024-09-03</td>
+                <td>Lost</td>
             </tr>
             <tr>
-                <td contenteditable="true">Bag</td>
-                <td contenteditable="true">Hallway</td>
-                <td contenteditable="true">2024-09-02</td>
-                <td contenteditable="true">Lost</td>
+                <td>Bag</td>
+                <td>Hallway</td>
+                <td>2024-09-02</td>
+                <td>Lost</td>
             </tr>
         </tbody>
     </table>
-
+    
     <div class="inquiry-container">
         <button class="inquiry-button" id="inquiryButton">INQUIRY</button>
     </div>    
@@ -155,12 +160,12 @@
         });
     
     document.getElementById('inquiryButton').addEventListener('click', function() {
-        window.location.href = 'lost and found.html';
+        window.location.href = 'Lost_and_Found.php';
     });
 
         const logoutButton = document.getElementById('logoutButton');
         logoutButton.addEventListener('click', function() {
-            window.location.href = 'NU_LoginPage.html';
+            window.location.href = 'NU_LoginPage.php';
         });
     </script>
 </body>
