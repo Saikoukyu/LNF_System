@@ -155,7 +155,7 @@ if (isset($_POST['submit'])){
 
 <body>
     <form class="form-container" enctype="multipart/form-data" action="../php/connect_Lost_and_Found_Admin.php" method="POST">
-        <h2>LOST & FOUND FORM</h2>
+        <h2>LOST & FOUND ADMIN FORM</h2>
         <form id="lostFoundForm">
             <div class="form-row">
                 <div class="form-group">
