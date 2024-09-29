@@ -1,5 +1,5 @@
 <?php 
-    include("../php/connect.php");
+    include("../php/connect2.php");
 ?>
 
 
@@ -75,31 +75,83 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
+                            <th>Photo</th>
+                            <th>Specfic Name</th>
                             <th>Type</th>
+                            <th>Name</th>
                             <th>Brand</th>
-                            <th>Image</th>
-                            <th>Lost Date</th>
-                            <th>Found Date</th>
-                            <th>Found Location</th>
-                            <th>Owner</th>
-							<th>Finder</th>
+                            <th>Location Found</th>
+                            <th>Specific Location Found</th>
+                            <th>Date Found</th>
+                            <th>Time Found</th>
+                            <th>Additional Info</th>
                             <th>Status</th>
+                            <th>Item Details</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1</td>
-                            <td>My watch</td>
-                            <td>Acce</td>
-                            <td>Rolex</td>
-                            <td><img src="assets/rolex.jpg" alt="Item Image"></td>
-                            <td>30/8/24</td>
-                            <td>31/8/24</td>
-                            <td>Tondo</td>
-                            <td></td>
-							<td>Alice</td>
-                            <td>Found</td>
+                            <?php
+                        // Step 1: Prepare the SQL query
+                        $sql = "SELECT td.*, 
+                                       fn.fn_firstname, fn.fn_lastname, 
+                                       it.it_name, 
+                                       iname.in_name,
+                                       loc.location_name, 
+                                       sloc.specific_location_name, 
+                                       tdate.date_lost, tdate.time_lost ,
+                                       stat.status_name
+                                FROM tbl_item_description td
+                                JOIN tbl_full_name fn ON td.item_full_name_id = fn.fn_id
+                                JOIN tbl_item_type it ON td.item_type_id = it.it_id
+                                JOIN tbl_item_name iname ON td.item_name_id = iname.in_id
+                                JOIN tbl_location loc ON td.item_location_id = loc.location_id
+                                JOIN tbl_specific_location sloc ON td.item_specific_location_id = sloc.specific_location_id
+                                JOIN tbl_time_date tdate ON td.item_time_date_id = tdate.time_date_id
+                                JOIN tbl_status stat ON td.item_status_id = stat.status_id";
+
+                        // Step 2: Prepare and execute the query
+                        $stmt = $conn->prepare($sql); 
+                        $stmt->execute();
+
+                        // Step 3: Fetch all results
+                        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                        // Step 4: Check if there are any records
+                        if (count($rows) > 0) {
+                            // Step 5: Loop through each row and display
+                            foreach ($rows as $row) {
+                                $fullName = $row['fn_firstname'] . ' ' . $row['fn_lastname'];
+                                $itemType = $row['it_name'];
+                                $itemName = $row['in_name'];
+                                $locationName = $row['location_name'];
+                                $specificLocation = $row['specific_location_name'];
+                                $dateLost = $row['date_lost'];
+                                $formattedDateLost = date("m/d/Y", strtotime($dateLost));
+                                $timeLost = $row['time_lost'];
+                                $formattedTimeLost = date("h:i A", strtotime($timeLost));
+                                $statusName = $row['status_name'];
+
+                                echo "<tr>";
+                                echo "<td>" . $row['item_id'] . "</td>";
+                                echo "<td><img src='../assets/" . $row['item_photo'] . "' alt='Item Image' width='50'></td>";
+                                echo "<td>" . $row['item_detailed_name'] . "</td>";
+                                echo "<td>" . $itemType . "</td>";
+                                echo "<td>" . $itemName . "</td>";
+                                echo "<td>" . $row['item_brand'] . "</td>";
+                                echo "<td>" . $locationName. "</td>";
+                                echo "<td>" . $specificLocation. "</td>";
+                                echo "<td>" . $formattedDateLost. "</td>";
+                                echo "<td>" . $formattedTimeLost. "</td>";
+                                echo "<td>" . $row['item_add_info'] . "</td>";
+                                echo "<td>" . $statusName. "</td>";
+                                echo '<td><button type="button" class="btn btn-info">Details</button></td>';
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='14'>No items found</td></tr>";
+                        }
+                        ?>
                         </tr>
                        
                     </tbody>

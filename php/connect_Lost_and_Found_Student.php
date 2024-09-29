@@ -1,5 +1,5 @@
 <?php
-include('connect.php');
+include('../php/connect.php');
 
 // Define the maximum file size in bytes (15 MB)
 $maxFileSize = 15 * 1024 * 1024; // 15 MB
