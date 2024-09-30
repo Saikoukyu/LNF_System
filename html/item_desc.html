@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item Description</title>
+    <link rel="stylesheet" href="item_desc.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+            <span>MENU</span>
+        </div>
+        <div class="sidebar-greeting">
+            Hello, Admin 1
+        </div>
+        <ul>
+            <li onclick="window.location.href='Admin_Dashboard.html'">
+                <i class="fas fa-tachometer-alt"></i><span>Dashboard</span>
+            </li>
+            <li onclick="window.location.href='item view.html'">
+                <i class="fas fa-eye"></i><span>Item View</span>
+            </li>
+            <li onclick="window.location.href='Admin_Report.html'">
+                <i class="fas fa-file-alt"></i><span>Report</span>
+            </li>
+            <li onclick="window.location.href='Admin_Admin.html'">
+                <i class="fas fa-user"></i><span>Admin</span>
+            </li>
+            <li onclick="window.location.href='Admin_ITAdmin.html'">
+                <i class="fas fa-cogs"></i><span>IT Admin</span>
+            </li>
+            <li onclick="window.location.href='Admin_Settings.html'">
+                <i class="fas fa-cog"></i><span>Settings</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <span class="system-title">LOST & FOUND Management System</span>
+            <div class="right-menu">
+                <a href="#" class="add-lost-found">
+                    <span class="plus">+</span>
+                    <span class="lost">Lost</span>
+                    <span class="and">&</span>
+                    <span class="found">Found</span>
+                </a>
+                <div class="dropdown">
+                    <a href="#" class="dropdown-toggle">
+                        <i class="fas fa-user"></i> Admin 1
+                        <i class="fas fa-caret-down dropdown-caret"></i> 
+                    </a>
+                    <div class="dropdown-content">
+                        <a href="#" id="logoutButton">Logout</a>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="content-wrapper">
+                <div class="item-description">
+                    <h2>Item Description</h2>
+                    <div class="item-container">
+                        <div class="item-photo">
+                            <img src="https://via.placeholder.com/150" alt="Item Photo">
+                        </div>
+                        <div class="item-details">
+                            <p><strong>Specific name:</strong> </p>
+                            <p><strong>Status:</strong> </p>
+                            <p><strong>Type:</strong> </p>
+                            <p><strong>Name:</strong> </p>
+                            <p><strong>Brand:</strong> </p>
+                            <p><strong>Founder name:</strong> </p>
+                            <p><strong>Founder email:</strong> </p>
+                        </div>
+                    </div>
+
+                    <div class="location-time">
+                        <h2>Location / Time</h2>
+                        <p><strong>Location:</strong> </p>
+                        <p><strong>Specific Location:</strong> </p>
+                        <p><strong>Time:</strong> </p>
+                        <p><strong>Date:</strong> </p>
+                        <p><strong>Owner:</strong> </p>
+                        <p><strong>Owner Name:</strong> </p>
+                        <p><strong>Owner Email:</strong> </p>
+                        <p><strong>Return Date:</strong> </p>
+                    </div>
+                </div>
+
+                <div class="inquiries">
+                    <h2>Inquiries</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Check Inquiry</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Burikat</td>
+                                <td>burikat@gmail.com</td>
+                                <td><button>Details</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="item_desc.js"></script>
+</body>
+</html>
