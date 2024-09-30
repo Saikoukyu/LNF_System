@@ -1,5 +1,6 @@
-<?php 
-    include("../php/connect.php");
+<?php
+session_start(); // Start the session
+$role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
 ?>
 
 <!DOCTYPE html>
@@ -15,13 +16,17 @@
 </head>
 <body>
 
+    <!-- Sidebar -->
     <div class="sidebar">
         <div class="menu-toggle">
             <i class="fas fa-bars"></i>
             <span>MENU</span>
         </div>
         <div class="sidebar-greeting">
-            Hello, Admin 1
+            Hello, <?php
+            // Dynamically show the username or placeholder based on session (assumed username is stored in session)
+            echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
+            ?>
         </div>
         <ul>
             <li onclick="window.location.href='Admin_Dashboard.php'">
@@ -36,10 +41,13 @@
             <li onclick="window.location.href='Admin_Admin.php'">
                 <i class="fas fa-user"></i><span>Admin</span>
             </li>
+            <?php if ($role == 'IT_Admin') : ?>
             <li onclick="window.location.href='Admin_ITAdmin.php'">
-                <i class="fas fa-cogs"></i><span>IT Admin</span>
+                <i class="fas fa-cogs"></i><span>IT Admin Setting</span>
             </li>
+            <?php endif; ?>
         </ul>
+    </div>
         
     </div>
 
