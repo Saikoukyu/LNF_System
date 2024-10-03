@@ -70,6 +70,24 @@
     cursor: pointer;
 }
 
+.btn-box {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: gray; /* Bootstrap info color */
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn-box:hover {
+    background-color: lightgray; /* Slightly darker for hover effect */
+    text-decoration: none;
+    color: white; /* Keep the text color white on hover */
+}
+
+
     .search-bar {
         margin-top: 40px;
         text-align: right;

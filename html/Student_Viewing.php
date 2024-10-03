@@ -73,9 +73,10 @@ include("../php/connect2.php");
                 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                 // Step 4: Check if there are any records
-                if (count($rows) > 0) {
+                if ($rows && count($rows) > 0) {
                     // Step 5: Loop through each row and display
                     foreach ($rows as $row) {
+                        $itemId = $row['item_id'];
                         $fullName = $row['fn_firstname'] . ' ' . $row['fn_lastname'];
                         $itemType = $row['it_name'];
                         $itemName = $row['in_name'];
@@ -93,7 +94,7 @@ include("../php/connect2.php");
                         echo "<td>" . $formattedDateLost . "</td>";
                         echo "<td>" . $statusName . "</td>";
                         echo '<td>0</td>';
-                        echo '<td><button type="button" class="btn btn-info">Inquire</button></td>';
+                        echo '<td><a href="Lost_and_Found_Student_Item.php?item_id=' . $itemId . '" class="btn-box">Inquire</a></td>';
                         echo "</tr>";
                     }
                 } else {

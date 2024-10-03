@@ -1,13 +1,13 @@
 <?php
 include('../php/connect.php');
 
+// Define the maximum file size in bytes (15 MB)
+$maxFileSize = 15 * 1024 * 1024; // 15 MB
 
-$maxFileSize = 15 * 1024 * 1024; 
-
-
+// Allowed image types
 $allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
-
+// Fetch form data
 $firstName = $_POST['fn_firstname'];
 $lastName = $_POST['ln_lastname'];
 $item_req_sender_email = $_POST['item_req_sender_email'];
@@ -22,7 +22,10 @@ $date_lost = $_POST['date_lost'];
 $time_lost = $_POST['time_lost'];
 $item_req_add_info = $_POST['item_req_add_info'];
 
+// Capture the item_id from the form
+$item_id = $_POST['item_id'];
 
+// Handle file upload
 $file_name = $_FILES['item_req_photo']['name'];
 $temp_name = $_FILES['item_req_photo']['tmp_name'];
 $file_size = $_FILES['item_req_photo']['size'];
@@ -30,14 +33,14 @@ $file_type = $_FILES['item_req_photo']['type'];
 $upload_directory = '../html/item-images/'; // Folder to store images
 $file_path = $upload_directory . basename($file_name);
 
-
+// Validate file type
 if (!in_array($file_type, $allowedFileTypes)) {
     die("Error: Only .jpg, .jpeg, and .png files are allowed.");
 }
 
 // Validate file size
 if ($file_size > $maxFileSize) {
-    die("Error: File size exceeds the 50MB limit.");
+    die("Error: File size exceeds the 15MB limit.");
 }
 
 // Move file to the server directory
@@ -85,11 +88,24 @@ $stmt2 = $conn->prepare($insertItemRequestQuery);
 $stmt2->bind_param("issiissiiiss", $fn_id, $item_req_sender_email, $item_req_sender_stud_id, $item_req_type_id, $item_req_name_id, $item_req_detailed_name, $item_req_brand, $item_req_location_id, $item_req_specific_location_id, $time_date_id, $item_req_add_info, $file_path);
 
 if ($stmt2->execute()) {
-    echo "Item request successfully inserted into tbl_item_request.";
+    echo "Item request successfully inserted into tbl_item_request.<br>";
+    $item_req_id = $conn->insert_id; // Get the inserted item request ID
 } else {
     die("Error inserting item request: " . $stmt2->error);
 }
 
+// Now insert into tbl_inquiry using the newly inserted item_req_id and passed item_id
+$insertInquiryQuery = "INSERT INTO tbl_inquiry (inquiry_item_id, inquiry_request_id) VALUES (?, ?)";
+$stmt3 = $conn->prepare($insertInquiryQuery);
+$stmt3->bind_param("ii", $item_id, $item_req_id);
+
+if ($stmt3->execute()) {
+    echo "Inquiry successfully inserted into tbl_inquiry.<br>";
+} else {
+    die("Error inserting inquiry: " . $stmt3->error);
+}
+
+$stmt3->close();
 $stmt2->close();
 $stmt->close();
 $conn->close();
