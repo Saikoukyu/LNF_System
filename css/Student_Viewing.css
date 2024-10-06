@@ -149,3 +149,36 @@
         background-color: #e09b24;
         transform: scale(0.97); 
     }
+
+    /* Add custom styles for larger filters and buttons */
+.filter-bar {
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically (if needed) */
+    margin: 20px 0; /* Add some margin for spacing */
+}
+
+.filter-bar input[type="text"],
+.filter-bar select {
+    padding: 12px; /* Increase padding for larger input fields */
+    font-size: 16px; /* Increase font size for better readability */
+    margin-right: 10px; /* Space between inputs */
+    width: 200px; /* Set a fixed width for consistency */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+.filter-bar button {
+    padding: 12px 20px; /* Increase padding for larger buttons */
+    font-size: 16px; /* Increase font size for better readability */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    margin-left: 5px; /* Space between buttons */
+    background-color: #4CAF50; /* Set a background color */
+    color: white; /* Set button text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+.filter-bar button:hover {
+    background-color: #45a049; /* Darker shade on hover */
+}
