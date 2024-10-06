@@ -306,7 +306,13 @@ select {
 }
 
 .filters button {
-    padding: 8px 12px; /* Add padding to buttons */
-    margin: 5px 0; /* Add vertical margin for spacing */
-    cursor: pointer; /* Pointer cursor on hover */
+    padding: 12px 20px; /* Increase padding for larger buttons */
+    font-size: 16px; /* Increase font size for better readability */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    margin-left: 5px; /* Space between buttons */
+    background-color: #4CAF50; /* Set a background color */
+    color: white; /* Set button text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s; /* Transition for hover effect */
 }
