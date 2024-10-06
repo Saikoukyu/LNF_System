@@ -1,5 +1,5 @@
 <?php
-include("connect.php");
+include("connect2.php");
 
 if (!$conn) {
     echo "Database connection failed.";

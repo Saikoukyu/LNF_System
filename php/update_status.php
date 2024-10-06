@@ -1,5 +1,5 @@
 <?php
-include("../php/connect.php");
+include("connect2.php");
 
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
@@ -23,13 +23,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $sql = "UPDATE tbl_item_description SET item_status_id = :status_id WHERE item_id = :item_id";
             $stmt = $conn->prepare($sql);
 
-            // Use execute with an array to bind parameters
-            $stmt->execute([
+            // Debugging: Check if statement prepared successfully
+            if (!$stmt) {
+                echo "Error preparing statement: " . implode(" ", $conn->errorInfo());
+                exit;
+            }
+
+            // Execute the statement
+            $result = $stmt->execute([
                 ':status_id' => $statusId,
                 ':item_id' => $itemId
             ]);
 
-            
+            // Check if the execute was successful
+            if ($result) {
+                echo "Status updated successfully";
+            } else {
+                echo "Error executing statement: " . implode(" ", $stmt->errorInfo());
+            }
+
         } catch (PDOException $e) {
             // Display any error for debugging
             echo "Error: " . $e->getMessage();
@@ -40,4 +52,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     echo "Invalid request method. Only POST allowed.";
 }
-?>
