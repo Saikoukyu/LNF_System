@@ -3,7 +3,8 @@ include("../php/connect.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
-    $username = $_POST['email'];
+    $username = $_POST['username'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
     $confirmPassword = $_POST['confirmpassword'];
 
@@ -19,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // Prepare the SQL query to insert user (only username and password)
-    $sql = "INSERT INTO tbl_do_admin (username, password, role) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO tbl_do_admin (username, email, password, role) VALUES (?, ?, ?, ?)";
 
     // Prepare statement to prevent SQL injection
     $stmt = $conn->prepare($sql);
@@ -29,8 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die('Error in preparing statement: ' . $conn->error);
     }
 
-    // Bind the parameters (username and hashed password)
-    $stmt->bind_param("sss", $username, $password, $role);
+    // Bind the parameters (email and hashed password)
+    $stmt->bind_param("ssss", $username, $email, $password, $role);
 
     // Execute the query
     if ($stmt->execute()) {

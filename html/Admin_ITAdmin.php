@@ -68,7 +68,10 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
           </a>
           <div class="dropdown">
             <a href="#" class="dropdown-toggle">
-              <i class="fas fa-user"></i> Admin 1
+              <i class="fas fa-user"></i> <?php
+            // Dynamically show the username or placeholder based on session (assumed username is stored in session)
+            echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
+            ?>
               <i class="fas fa-caret-down dropdown-caret"></i>
             </a>
             <div class="dropdown-content">
@@ -100,7 +103,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
         const logoutButton = document.getElementById("logoutButton");
 
         logoutButton.addEventListener("click", function () {
-          window.location.href = "NU_LoginPage.php";
+          window.location.href = "../php/logout.php";
         });
       </script>
 
@@ -118,9 +121,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
               <h2 class="profile-name">LOST AND FOUND</h2>
               <p class="profile-email">lostandfound@gmail.com</p>
               <p class="profile-phone">09272181093</p>
-              <button class="edit-profile-btn" onclick="editProfile()">
-                EDIT PROFILE
-              </button>
+            
             </div>
             <div class="menu-items">
               <div class="menu-item">
@@ -129,54 +130,11 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                   class="edit-btn"
                   onclick="window.location.href='manage_user.php'"
                 >
-                  USER CONTROL
+                  MANAGE USERS
                 </button>
               </div>
 
-              <div class="menu-item">
-                <h3>EXTRA 1</h3>
-                <button
-                  class="edit-btn"
-                  onclick="window.location.href='configuration.php'"
-                >
-                  EXTRA 1
-                </button>
-              </div>
-              <div class="menu-item">
-                <h3>EXTRA 2</h3>
-                <button
-                  class="edit-btn"
-                  onclick="window.location.href='configuration.php'"
-                >
-                  EXTRA 2
-                </button>
-              </div>
-              <div class="menu-item">
-                <h3>EXTRA 3</h3>
-                <button
-                  class="edit-btn"
-                  onclick="window.location.href='configuration.php'"
-                >
-                  EXTRA 3
-                </button>
-              </div>
-              <div class="menu-item">
-                <h3>EXTRA 4</h3>
-                <button
-                  class="edit-btn"
-                  onclick="window.location.href='configuration.php'"
-                >
-                  EXTRA 4
-                </button>
-              </div>
-              <div class="menu-item">
-                <h3>EXTRA 5</h3>
-                <button
-                  class="edit-btn"
-                  onclick="window.location.href='configuration.php'"
-                >
-                  EXTRA 5
-                </button>
+           
               </div>
             </div>
           </div>

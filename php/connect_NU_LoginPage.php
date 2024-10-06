@@ -3,14 +3,14 @@ session_start();  // Start session
 include("connect.php");
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
+    $email = $_POST['email'];
     $password = $_POST['password'];
 
     // Example query (make sure it's working)
-    $query = "SELECT * FROM tbl_do_admin WHERE username = ? AND password = ?";
+    $query = "SELECT * FROM tbl_do_admin WHERE email = ? AND password = ?";
     
     if ($stmt = $conn->prepare($query)) {
-        $stmt->bind_param("ss", $username, $password);
+        $stmt->bind_param("ss", $email, $password);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -21,7 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             if ($password === $row['password']) {
                 // Store session variables
-                $_SESSION['username'] = $row['username'];
+            
+                $_SESSION['username'] = $row ['username'];
+                $_SESSION['email'] = $row['email'];
                 $_SESSION['role'] = $row['role'];
 
                 echo "Session set successfully."; // Debugging line
@@ -31,12 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 exit();
             }
         } else {
-            echo "<script>alert('Invalid username or password'); window.location.href = '../html/NU_LoginPage.php';</script>";
+            echo "<script>alert('Invalid email or password'); window.location.href = '../html/NU_LoginPage.php';</script>";
         }
 
         $stmt->close();
     } else {
-        echo "Please provide both username and password.";
+        echo "Please provide both email and password.";
     }
 }
 ?>

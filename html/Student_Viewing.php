@@ -200,7 +200,7 @@ include("../php/connect2.php");
 
         const logoutButton = document.getElementById('logoutButton');
         logoutButton.addEventListener('click', function() {
-            window.location.href = 'NU_LoginPage.php';
+            window.location.href = "../php/logout.php";
         });
     </script>
 </body>

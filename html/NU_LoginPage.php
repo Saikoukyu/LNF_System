@@ -1,5 +1,9 @@
 <?php 
     include("../php/connect.php");
+
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +35,7 @@
 
         <div class="input-group">
             <i class="fas fa-envelope"></i> 
-            <input type="text" id="username" name="username" placeholder="Email" required>
+            <input type="text" id="email" name="email" placeholder="Email" required>
         </div>
 
         <div class="input-group">
@@ -47,6 +51,13 @@
         <button class="login-button" type="submit">LOG IN</button>
     </div>
 </form>
+
+<script type="text/javascript">
+    window.history.pushState(null, "", window.location.href); 
+    window.onpopstate = function() {
+        window.history.pushState(null, "", window.location.href); 
+    };
+</script>
 
 <script>
     const adminBtn = document.getElementById('adminBtn');
@@ -86,5 +97,8 @@
         passwordInput.type = this.checked ? 'text' : 'password';
     });
 </script>
+
+
+
 </body>
 </html>

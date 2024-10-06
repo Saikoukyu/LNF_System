@@ -1,7 +1,48 @@
 <?php
 session_start(); // Start the session
 $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
+
+include("../php/connect2.php");
+
+try {
+    // Step 2: Prepare the SQL query to fetch the latest 8 item reports
+    $sql = "SELECT td.*, 
+                   fn.fn_firstname, fn.fn_lastname, 
+                   it.it_name, 
+                   iname.in_name,
+                   loc.location_name, 
+                   sloc.specific_location_name, 
+                   tdate.date_lost, tdate.time_lost,
+                   stat.status_name
+            FROM tbl_item_description td
+            JOIN tbl_full_name fn ON td.item_full_name_id = fn.fn_id
+            JOIN tbl_item_type it ON td.item_type_id = it.it_id
+            JOIN tbl_item_name iname ON td.item_name_id = iname.in_id
+            JOIN tbl_location loc ON td.item_location_id = loc.location_id
+            JOIN tbl_specific_location sloc ON td.item_specific_location_id = sloc.specific_location_id
+            JOIN tbl_time_date tdate ON td.item_time_date_id = tdate.time_date_id
+            JOIN tbl_status stat ON td.item_status_id = stat.status_id
+            ORDER BY tdate.date_lost DESC, tdate.time_lost DESC 
+            LIMIT 8";  // Fetch the latest 8 reports
+
+    // Step 3: Prepare and execute the query
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+
+    // Step 4: Fetch all results
+    $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (!$items) {
+        // If no items are found, handle the error
+        echo "No items found.";
+        exit;
+    }
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+    exit;
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +108,10 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                 </a>
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle">
-                        <i class="fas fa-user"></i> Admin 1
+                        <i class="fas fa-user"></i><?php
+            // Dynamically show the username or placeholder based on session (assumed username is stored in session)
+            echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
+            ?>
                         <i class="fas fa-caret-down dropdown-caret"></i> 
                     </a>
                     <div class="dropdown-content">
@@ -82,119 +126,30 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
         </div>
         <hr class="header-line">
     
-        <div class="report-item">
-            <div class="report-header">
-                <h2>Item #2100 was reported lost</h2>
-            </div>
-            <div class="report-content">
-                <div class="report-details">
-                    <p><strong>Name of Item:</strong> Gucci Wallet</p>
-                    <p><strong>Date Lost:</strong> August 12, 2024</p>
-                    <p><strong>Item Description:</strong> TITE</p>
+         <!-- Loop through the latest 8 reports -->
+         <?php foreach ($items as $index => $item) : ?>
+            <div class="report-item">
+                <div class="report-header">
+                    <h2>Item #<?php echo htmlspecialchars($item['item_id']); ?> was reported lost</h2>
                 </div>
-                <div class="report-image">
-                    <img src="assets/wallet.jpg" alt="Gucci Wallet">
+                <div class="report-content">
+                    <div class="report-details">
+                        <p><strong>Name of Item:</strong> <?php echo htmlspecialchars($item['in_name']); ?></p>
+                        <p><strong>Date Lost:</strong> <?php echo date("F j, Y", strtotime($item['date_lost'])); ?></p>
+                        <p><strong>Item Description:</strong> <?php echo htmlspecialchars($item['item_brand']); ?></p>
+                    </div>
+                    <div class="report-image">
+                        <img src="<?php echo !empty($item['item_photo']) ? '../assets/' . htmlspecialchars($item['item_photo']) : 'https://via.placeholder.com/150'; ?>" alt="<?php echo htmlspecialchars($item['in_name']); ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="report-timestamp">
-                <p>August 12, 2024, 2:18 PM</p>
-            </div>
-        </div>
+                <div class="report-timestamp">
+                    <p><?php echo date("F j, Y, h:i A", strtotime($item['date_lost'] . ' ' . $item['time_lost'])); ?></p>
+                </div>
         
-        <div class="report-item">
-            <div class="report-header">
-                <h2>Item #2101 was reported found</h2>
             </div>
-            <div class="report-content">
-                <div class="report-details">
-                    <p><strong>Name of Item:</strong> Silver Ring</p>
-                    <p><strong>Date Found:</strong> August 25, 2024</p>
-                    <p><strong>Item Description:</strong> NEIL ASPAG</p>
-                </div>
-                <div class="report-image">
-                    <img src="wallet.jpg" alt="Silver Ring">
-                </div>
-            </div>
-            <div class="report-timestamp">
-                <p>August 25, 2024, 3:20 PM</p>
-            </div>
-        </div>
+        <?php endforeach; ?>
+    </div>
         
-        <div class="report-item">
-            <div class="report-header">
-                <h2>Item #2102 was reported lost</h2>
-            </div>
-            <div class="report-content">
-                <div class="report-details">
-                    <p><strong>Name of Item:</strong> Blue Backpack</p>
-                    <p><strong>Date Lost:</strong> August 30, 2024</p>
-                    <p><strong>Item Description:</strong> BLUE JAB</p>
-                </div>
-                <div class="report-image">
-                    <img src="assets/wallet.jpg" alt="Blue Backpack">
-                </div>
-            </div>
-            <div class="report-timestamp">
-                <p>August 30, 2024, 9:45 AM</p>
-            </div>
-        </div>
-        
-        <div class="report-item">
-            <div class="report-header">
-                <h2>Item #2103 was reported found</h2>
-            </div>
-            <div class="report-content">
-                <div class="report-details">
-                    <p><strong>Name of Item:</strong> Car Keys</p>
-                    <p><strong>Date Found:</strong> September 1, 2024</p>
-                    <p><strong>Item Description:</strong> TINA MORAN</p>
-                </div>
-                <div class="report-image">
-                    <img src="assets/wallet.jpg" alt="Car Keys">
-                </div>
-            </div>
-            <div class="report-timestamp">
-                <p>September 1, 2024, 10:30 AM</p>
-            </div>
-        </div>
-
-        <div class="report-item">
-            <div class="report-header">
-                <h2>Item #2101 was reported lost</h2>
-            </div>
-            <div class="report-content">
-                <div class="report-details">
-                    <p><strong>Name of Item:</strong> Silver Ring</p>
-                    <p><strong>Date Found:</strong> August 25, 2024</p>
-                    <p><strong>Item Description:</strong> NEIL ASPAG</p>
-                </div>
-                <div class="report-image">
-                    <img src="assets/wallet.jpg" alt="Silver Ring">
-                </div>
-            </div>
-            <div class="report-timestamp">
-                <p>August 25, 2024, 3:20 PM</p>
-            </div>
-        </div>
-
-        <div class="report-item">
-            <div class="report-header">
-                <h2>Item #2101 was reported found</h2>
-            </div>
-            <div class="report-content">
-                <div class="report-details">
-                    <p><strong>Name of Item:</strong> Silver Ring</p>
-                    <p><strong>Date Found:</strong> August 25, 2024</p>
-                    <p><strong>Item Description:</strong> NEIL ASPAG</p>
-                </div>
-                <div class="report-image">
-                    <img src="assets/wallet.jpg" alt="Silver Ring">
-                </div>
-            </div>
-            <div class="report-timestamp">
-                <p>August 25, 2024, 3:20 PM</p>
-            </div>
-        </div>
 
     </div>
 

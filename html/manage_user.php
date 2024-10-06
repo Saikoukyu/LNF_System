@@ -74,7 +74,10 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
         </a>
         <div class="dropdown">
           <a href="#" class="dropdown-toggle">
-            <i class="fas fa-user"></i> Admin 1
+            <i class="fas fa-user"></i> <?php
+            // Dynamically show the username or placeholder based on session (assumed username is stored in session)
+            echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
+            ?>
             <!-- Placeholder for admin name -->
             <i class="fas fa-caret-down dropdown-caret"></i>
           </a>
@@ -107,7 +110,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
       const logoutButton = document.getElementById("logoutButton");
 
       logoutButton.addEventListener("click", function() {
-        window.location.href = "NU_LoginPage.php";
+        window.location.href = "../php/logout.php";
       });
     </script>
 
@@ -141,7 +144,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
               while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
                 echo "<td> Name </td>";
-                echo "<td>" . htmlspecialchars($row['username']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['email']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['password']) . "</td>";
                // Check the role and conditionally show buttons
             if ($row['role'] === 'IT_Admin') {
@@ -151,7 +154,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
           } else if ($row['role'] === 'Admin') {
               // Show edit and delete buttons
               echo "<td><button class='edit-btn' onclick='openEditModal(this)'>Edit</button></td>";
-              echo "<td><button class='delete-btn btn btn-danger' onclick='openDeleteModal(\"" . $row['username'] . "\", \"" . $row['username'] . "\")'>Delete</button></td>";
+              echo "<td><button class='delete-btn btn btn-danger' onclick='openDeleteModal(\"" . $row['email'] . "\", \"" . $row['email'] . "\")'>Delete</button></td>";
           }
       
           echo "</tr>";
@@ -312,7 +315,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
           <input
             type="text"
             id="name"
-            name="name"
+            name="username"
             placeholder="Enter full name"
             required />
 

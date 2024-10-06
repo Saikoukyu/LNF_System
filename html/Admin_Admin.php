@@ -65,7 +65,10 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                 </a>
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle">
-                        <i class="fas fa-user"></i> Admin 1
+                        <i class="fas fa-user"></i> <?php
+            // Dynamically show the username or placeholder based on session (assumed username is stored in session)
+            echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
+            ?>
                         <i class="fas fa-caret-down dropdown-caret"></i>
                     </a>
                     <div class="dropdown-content">
@@ -98,7 +101,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
     
             logoutButton.addEventListener("click", function () {
         
-              window.location.href = "NU_LoginPage.php";
+              window.location.href = "../php/logout.php";
             });
           </script>
 
@@ -114,10 +117,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                         <h3>ITEMS</h3>
                         <button class="edit-btn" onclick="navigateTo('ITEMS EDITING.php')">ITEMS</button>
                     </div>
-                    <div class="menu-item">
-                        <h3>FORM</h3>
-                        <button class="edit-btn" onclick="navigateTo('FORM EDITING.php')">FORM</button>
-                    </div>
+            
                 </div>
     
         </section>
