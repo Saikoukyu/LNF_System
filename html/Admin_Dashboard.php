@@ -253,8 +253,10 @@ try {
                 
                 <h4>Lost Items <em>in the last month</em></h4>
                 <canvas id="lostItemsChart"></canvas>
-                <h4>Unclaimed/Claimed <em>in the last month</em></h4>
+                <h4>Unclaimed <em>in the last month</em></h4>
                 <canvas id="foundItemsChart"></canvas>
+                <h4>Claimed <em>in the last month</em></h4>
+                <canvas id="ClaimedItemsChart"></canvas>
 
             </div>
 
@@ -267,11 +269,11 @@ try {
                 <h4>Recently Lost Items</h4>
                 <p>Name: <?php echo htmlspecialchars($lost['in_name']); ?></p>
                 <p>Item Type: <?php echo htmlspecialchars($lost['it_name']); ?></p>
-                <p>Brand: <?php echo htmlspecialchars($lost['specific_location_name']); ?></p> <!-- Assuming specific_location_name is the brand -->
+                <p>Location: <?php echo htmlspecialchars($lost['specific_location_name']); ?></p> <!-- Assuming specific_location_name is the brand -->
                 <p>Owner: <?php echo htmlspecialchars($lost['fn_firstname']) . ' ' . htmlspecialchars($lost['fn_lastname']); ?></p>
                 <div class="image-container">
                     <img src="<?php echo htmlspecialchars($lost['item_photo']); ?>" alt="<?php echo htmlspecialchars($lost['in_name']); ?>">
-                    <a href="#" class="show-button">Show</a>
+                    <a href="item_desc.php?item_id=<?php echo htmlspecialchars($lost['item_id']); ?>" class="show-button">Show</a>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -336,7 +338,29 @@ try {
                 borderColor: 'red',
                 borderWidth: 2,
                 fill: false
-            }, {
+            },]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    beginAtZero: true
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+     // Found Items Chart with both Unclaimed and Claimed status
+     var foundCtx = document.getElementById('ClaimedItemsChart').getContext('2d');
+    var foundItemsChart = new Chart(foundCtx, {
+        type: 'line',
+        data: {
+            labels: foundWeeksUnclaimed.length > foundWeeksClaimed.length ? foundWeeksUnclaimed : foundWeeksClaimed, // Choose the larger dataset for labels
+            datasets: [ {
                 label: 'Claimed Items',
                 data: foundCountsClaimed, // Dynamic claimed item counts
                 borderColor: 'green',

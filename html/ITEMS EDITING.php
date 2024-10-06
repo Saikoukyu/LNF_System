@@ -82,7 +82,6 @@
         </div>
 
         <div class="btn-container">
-            <button class="save-btn" id="saveBtn">Save</button>
             <button class="close-btn" id="closeBtn">Close</button>
         </div>
     </section>
@@ -133,11 +132,7 @@
                 });
             });
 
-            // Save button functionality
-            const saveBtn = document.getElementById('saveBtn');
-            saveBtn.addEventListener('click', function() {
-                alert('Save Successfully!');
-            });
+    
 
             // Close button functionality
             const closeBtn = document.getElementById('closeBtn');
