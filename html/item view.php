@@ -1,4 +1,3 @@
-@ -0,0 +1,302 @@
 <?php
 include("../php/connect2.php");
 session_start(); // Start the session
@@ -240,11 +239,10 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
             });
         });
 
-        // Function to filter table rows based on input values
         function filterTable() {
             const location = document.getElementById('locationFilter').value.toLowerCase();
             const itemType = document.getElementById('itemTypeFilter').value.toLowerCase();
-            const status = document.getElementById('statusFilter').value.toLowerCase();
+            const status = document.getElementById('statusFilter').value; // Keep it as is for direct comparison
             const dateInput = document.getElementById('dateFilter').value; // Format: mm/dd/yyyy
             const timeInput = document.getElementById('timeFilter').value; // Format: HH:MM
 
@@ -254,13 +252,13 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                 const cells = row.querySelectorAll('td');
                 const rowLocation = cells[6].textContent.toLowerCase(); // Location Found
                 const rowItemType = cells[3].textContent.toLowerCase(); // Item Type
-                const rowStatus = cells[11].textContent.toLowerCase(); // Status
+                const rowStatus = cells[11].textContent; // Status
                 const rowDate = cells[8].textContent; // Date Lost/Found (in mm/dd/yyyy format)
                 const rowTime = cells[9].textContent; // Time Lost/Found (in HH:MM AM/PM format)
 
                 const matchesLocation = location ? rowLocation.includes(location) : true;
                 const matchesItemType = itemType ? rowItemType.includes(itemType) : true;
-                const matchesStatus = status ? rowStatus.includes(status) : true;
+                const matchesStatus = status ? rowStatus === status : true; // Change to direct comparison
                 const matchesDate = dateInput ? rowDate === dateInput : true; // Compare the entered date
                 const matchesTime = timeInput ? rowTime.includes(timeInput) : true; // Compare the entered time
 
@@ -272,6 +270,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                 }
             });
         }
+
 
         // Filter button event listener
         document.getElementById('filterButton').addEventListener('click', filterTable);
