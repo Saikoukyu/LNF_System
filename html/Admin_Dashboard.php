@@ -101,39 +101,35 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
             <div class="card lime">
                 <h3><i class="fas fa-users"></i> 53</h3> <!-- Placeholder for items lost -->
                 <p>Items Lost</p>
-                <a href="#">Show all <i class="fas fa-arrow-right"></i></a>
+    
             </div>
             <div class="card yellow">
                 <h3><i class="fas fa-map-marker-alt"></i> 105</h3> <!-- Placeholder for items found -->
                 <p>Items Found</p>
-                <a href="#">Show all <i class="fas fa-arrow-right"></i></a>
+
             </div>
             <div class="card blue">
                 <h3><i class="fas fa-clipboard-list"></i> 215</h3> <!-- Placeholder for user reported list -->
                 <p>Student Reported List</p>
-                <a href="#">Show all <i class="fas fa-arrow-right"></i></a>
+
             </div>
             <div class="card green">
                 <h3><i class="fas fa-check-circle"></i> 68</h3> <!-- Placeholder for successfully returned items -->
                 <p>Successfully Returned</p>
-                <a href="#">Show all <i class="fas fa-arrow-right"></i></a>
+       
             </div>
             <div class="card red">
                 <h3><i class="fas fa-trash-alt"></i> 43</h3> <!-- Placeholder for items disposed/recycled -->
                 <p>Items Disposed/Recycled</p>
-                <a href="#">Show all <i class="fas fa-arrow-right"></i></a>
+        
             </div>
         </div>
 
         <!-- Grid Container -->
         <div class="grid-container">
             <div class="grid-item">
-                <h4>Quick Search</h4>
-                <p>Find items quickly by searching here...</p>
-                <div class="search-bar">
-                    <input type="text" placeholder="Eg. iPhone 10 pro max, etc.">
-                    <button><i class="fas fa-search"></i></button>
-                </div>
+                <h4>Graphs</h4>
+                
                 <h4>Lost Items <em>in the last month</em></h4>
                 <canvas id="lostItemsChart"></canvas>
                 <h4>Found Items <em>in the last month</em></h4>
