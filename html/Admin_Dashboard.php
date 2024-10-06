@@ -10,7 +10,133 @@ if (!isset($_SESSION['email'])) {
 }
 
 $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
+
+include("../php/connect2.php");
+
+try {
+    // Step 1: Fetch count for Items Lost (count of inquiry_id in tbl_inquiry)
+    $sql_lost_items = "SELECT COUNT(inquiry_id) AS total_lost FROM tbl_inquiry";
+    $stmt_lost_items = $conn->prepare($sql_lost_items);
+    $stmt_lost_items->execute();
+    $lost_items = $stmt_lost_items->fetch(PDO::FETCH_ASSOC)['total_lost'];
+
+    // Step 2: Fetch count for Items Found (count of item_id in tbl_item_description)
+    $sql_found_items = "SELECT COUNT(item_id) AS total_found FROM tbl_item_description";
+    $stmt_found_items = $conn->prepare($sql_found_items);
+    $stmt_found_items->execute();
+    $found_items = $stmt_found_items->fetch(PDO::FETCH_ASSOC)['total_found'];
+
+    // Step 3: Fetch count for Student Reported List (count of item_req_id in tbl_item_request)
+    $sql_reported_list = "SELECT COUNT(item_req_id) AS total_reported FROM tbl_item_request";
+    $stmt_reported_list = $conn->prepare($sql_reported_list);
+    $stmt_reported_list->execute();
+    $reported_list = $stmt_reported_list->fetch(PDO::FETCH_ASSOC)['total_reported'];
+
+    // Step 4: Fetch count for Successfully Returned (count of item_status_id = '2' in tbl_item_description)
+    $sql_returned_items = "SELECT COUNT(item_id) AS total_returned FROM tbl_item_description WHERE item_status_id = 2";
+    $stmt_returned_items = $conn->prepare($sql_returned_items);
+    $stmt_returned_items->execute();
+    $returned_items = $stmt_returned_items->fetch(PDO::FETCH_ASSOC)['total_returned'];
+
+    // Step 5: Fetch count for Items Disposed/Recycled (count of item_status_id = '3' in tbl_item_description)
+    $sql_disposed_items = "SELECT COUNT(item_id) AS total_disposed FROM tbl_item_description WHERE item_status_id = 3";
+    $stmt_disposed_items = $conn->prepare($sql_disposed_items);
+    $stmt_disposed_items->execute();
+    $disposed_items = $stmt_disposed_items->fetch(PDO::FETCH_ASSOC)['total_disposed'];
+
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+    exit;
+}
+
+
+// Fetch weekly data for lost items based on date_lost from tbl_time_date
+$sql_weekly_lost = "SELECT WEEK(tdate.date_lost) AS week_number, COUNT(td.item_time_date_id) AS lost_count
+                    FROM tbl_item_description td
+                    JOIN tbl_time_date tdate ON td.item_time_date_id = tdate.time_date_id
+                    WHERE tdate.date_lost IS NOT NULL
+                    GROUP BY WEEK(tdate.date_lost)
+                    ORDER BY WEEK(tdate.date_lost) ASC
+                    LIMIT 4";
+$stmt_weekly_lost = $conn->prepare($sql_weekly_lost);
+$stmt_weekly_lost->execute();
+$weekly_lost_data = $stmt_weekly_lost->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch weekly data for found items based on status (1 = Unclaimed, 2 = Claimed)
+$sql_weekly_found = "SELECT stat.status_name, WEEK(tdate.date_lost) AS week_number, COUNT(td.item_status_id) AS found_count
+                     FROM tbl_item_description td
+                     JOIN tbl_time_date tdate ON td.item_time_date_id = tdate.time_date_id
+                     JOIN tbl_status stat ON td.item_status_id = stat.status_id
+                     WHERE stat.status_id IN (1, 2) -- 1 for Unclaimed, 2 for Claimed
+                     GROUP BY stat.status_name, WEEK(tdate.date_lost)
+                     ORDER BY WEEK(tdate.date_lost) ASC
+                     LIMIT 4";
+$stmt_weekly_found = $conn->prepare($sql_weekly_found);
+$stmt_weekly_found->execute();
+$weekly_found_data = $stmt_weekly_found->fetchAll(PDO::FETCH_ASSOC);
+
+// Prepare the arrays to store the weekly data
+$weeks_lost = [];
+$counts_lost = [];
+
+$weeks_found_unclaimed = [];
+$counts_found_unclaimed = [];
+
+$weeks_found_claimed = [];
+$counts_found_claimed = [];
+
+// Process lost items data
+foreach ($weekly_lost_data as $lost) {
+    $weeks_lost[] = 'Week ' . $lost['week_number']; // Week labels
+    $counts_lost[] = $lost['lost_count']; // Lost item counts
+}
+
+// Process found items data
+foreach ($weekly_found_data as $found) {
+    if ($found['status_name'] == 'Unclaimed') {
+        $weeks_found_unclaimed[] = 'Week ' . $found['week_number']; // Week labels for unclaimed
+        $counts_found_unclaimed[] = $found['found_count']; // Unclaimed item counts
+    } elseif ($found['status_name'] == 'Claimed') {
+        $weeks_found_claimed[] = 'Week ' . $found['week_number']; // Week labels for claimed
+        $counts_found_claimed[] = $found['found_count']; // Claimed item counts
+    }
+}
+
+
+
+try {
+    // Fetch the two most recently lost distinct items
+    $sql_recent_lost = "SELECT DISTINCT td.item_id, 
+                               td.*, 
+                               fn.fn_firstname, fn.fn_lastname, 
+                               it.it_name, 
+                               iname.in_name,
+                               loc.location_name, 
+                               sloc.specific_location_name, 
+                               tdate.date_lost, tdate.time_lost,
+                               stat.status_name,
+                               td.item_photo -- Fetch the item photo
+                        FROM tbl_item_description td
+                        JOIN tbl_full_name fn ON td.item_full_name_id = fn.fn_id
+                        JOIN tbl_item_type it ON td.item_type_id = it.it_id
+                        JOIN tbl_item_name iname ON td.item_name_id = iname.in_id
+                        JOIN tbl_location loc ON td.item_location_id = loc.location_id
+                        JOIN tbl_specific_location sloc ON td.item_specific_location_id = sloc.specific_location_id
+                        JOIN tbl_time_date tdate ON td.item_time_date_id = tdate.time_date_id
+                        JOIN tbl_status stat ON td.item_status_id = stat.status_id
+                        WHERE td.item_status_id = 1 -- Unclaimed (lost items)
+                        ORDER BY tdate.date_lost DESC
+                        LIMIT 2"; // Get the 2 latest unique lost items
+
+    $stmt_recent_lost = $conn->prepare($sql_recent_lost);
+    $stmt_recent_lost->execute();
+    $recent_lost_items = $stmt_recent_lost->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -96,32 +222,27 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
         </div>
         <hr class="header-line">
 
-        <!-- Dashboard Cards -->
-        <div class="dashboard">
+          <!-- Dashboard Cards -->
+          <div class="dashboard">
             <div class="card lime">
-                <h3><i class="fas fa-users"></i> 53</h3> <!-- Placeholder for items lost -->
+                <h3><i class="fas fa-users"></i> <?php echo $lost_items; ?></h3> <!-- Items Lost -->
                 <p>Items Lost</p>
-    
             </div>
             <div class="card yellow">
-                <h3><i class="fas fa-map-marker-alt"></i> 105</h3> <!-- Placeholder for items found -->
+                <h3><i class="fas fa-map-marker-alt"></i> <?php echo $found_items; ?></h3> <!-- Items Found -->
                 <p>Items Found</p>
-
             </div>
             <div class="card blue">
-                <h3><i class="fas fa-clipboard-list"></i> 215</h3> <!-- Placeholder for user reported list -->
-                <p>Student Reported List</p>
-
+                <h3><i class="fas fa-clipboard-list"></i> <?php echo $reported_list; ?></h3> <!-- Student Reported List -->
+                <p>Student Item Requests </p>
             </div>
             <div class="card green">
-                <h3><i class="fas fa-check-circle"></i> 68</h3> <!-- Placeholder for successfully returned items -->
+                <h3><i class="fas fa-check-circle"></i> <?php echo $returned_items; ?></h3> <!-- Successfully Returned -->
                 <p>Successfully Returned</p>
-       
             </div>
             <div class="card red">
-                <h3><i class="fas fa-trash-alt"></i> 43</h3> <!-- Placeholder for items disposed/recycled -->
+                <h3><i class="fas fa-trash-alt"></i> <?php echo $disposed_items; ?></h3> <!-- Items Disposed/Recycled -->
                 <p>Items Disposed/Recycled</p>
-        
             </div>
         </div>
 
@@ -132,88 +253,111 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                 
                 <h4>Lost Items <em>in the last month</em></h4>
                 <canvas id="lostItemsChart"></canvas>
-                <h4>Found Items <em>in the last month</em></h4>
+                <h4>Unclaimed/Claimed <em>in the last month</em></h4>
                 <canvas id="foundItemsChart"></canvas>
+
             </div>
+
+          
+
+    <!-- The loop for recently lost items -->
+    <?php if (!empty($recent_lost_items)): ?>
+        <?php foreach ($recent_lost_items as $lost): ?>
             <div class="grid-item">
                 <h4>Recently Lost Items</h4>
-                <p>Name: EO Gold Eyeglass</p> <!-- Placeholder for item name -->
-                <p>Item Type: Accessories</p> <!-- Placeholder for item type -->
-                <p>Brand: EO-Executive Optical</p> <!-- Placeholder for brand -->
-                <p>Owner: Unknown</p> <!-- Placeholder for owner -->
+                <p>Name: <?php echo htmlspecialchars($lost['in_name']); ?></p>
+                <p>Item Type: <?php echo htmlspecialchars($lost['it_name']); ?></p>
+                <p>Brand: <?php echo htmlspecialchars($lost['specific_location_name']); ?></p> <!-- Assuming specific_location_name is the brand -->
+                <p>Owner: <?php echo htmlspecialchars($lost['fn_firstname']) . ' ' . htmlspecialchars($lost['fn_lastname']); ?></p>
                 <div class="image-container">
-                    <img src="assets/eyeglass.jpg" alt="Eyeglass"> <!-- Placeholder for image -->
+                    <img src="<?php echo htmlspecialchars($lost['item_photo']); ?>" alt="<?php echo htmlspecialchars($lost['in_name']); ?>">
                     <a href="#" class="show-button">Show</a>
                 </div>
             </div>
-            <div class="grid-item">
-                <h4>Recently Found Items</h4>
-                <p>Name:Rolex</p> <!-- Placeholder for item name -->
-                <p>Item Type: Accessories</p> <!-- Placeholder for item type -->
-                <p>Brand: Luxatic Rolex</p> <!-- Placeholder for brand -->
-                <p>Owner: Elizabeth</p> <!-- Placeholder for owner -->
-                <img src="assets/rolex.jpg" alt="Rolex Watch"> <!-- Placeholder for image -->
-                <a href="#" class="show-button">Show</a>
-            </div>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Placeholder data for Lost Items Chart
-        var lostCtx = document.getElementById('lostItemsChart').getContext('2d');
-        var lostItemsChart = new Chart(lostCtx, {
-            type: 'line',
-            data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], // Placeholder labels
-                datasets: [{
-                    label: 'Lost Items',
-                    data: [12, 19, 3, 5], // Placeholder data
-                    borderColor: 'cyan',
-                    borderWidth: 2,
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        beginAtZero: true
-                    },
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>No recently lost items found.</p>
+    <?php endif; ?>
+</div>
 
-        // Placeholder data for Found Items Chart
-        var foundCtx = document.getElementById('foundItemsChart').getContext('2d');
-        var foundItemsChart = new Chart(foundCtx, {
-            type: 'line',
-            data: {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'], // Placeholder labels
-                datasets: [{
-                    label: 'Found Items',
-                    data: [8, 11, 5, 13], // Placeholder data
-                    borderColor: 'red',
-                    borderWidth: 2,
-                    fill: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        beginAtZero: true
-                    },
-                    y: {
-                        beginAtZero: true
-                    }
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Pass PHP arrays to JavaScript for Lost Items
+    var lostWeeks = <?php echo json_encode($weeks_lost); ?>;
+    var lostCounts = <?php echo json_encode($counts_lost); ?>;
+
+    // Pass PHP arrays to JavaScript for Found Items
+    var foundWeeksUnclaimed = <?php echo json_encode($weeks_found_unclaimed); ?>;
+    var foundCountsUnclaimed = <?php echo json_encode($counts_found_unclaimed); ?>;
+
+    var foundWeeksClaimed = <?php echo json_encode($weeks_found_claimed); ?>;
+    var foundCountsClaimed = <?php echo json_encode($counts_found_claimed); ?>;
+
+    // Lost Items Chart
+    var lostCtx = document.getElementById('lostItemsChart').getContext('2d');
+    var lostItemsChart = new Chart(lostCtx, {
+        type: 'line',
+        data: {
+            labels: lostWeeks, // Dynamic week labels for lost items
+            datasets: [{
+                label: 'Lost Items',
+                data: lostCounts, // Dynamic lost item counts
+                borderColor: 'cyan',
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    beginAtZero: true
+                },
+                y: {
+                    beginAtZero: true
                 }
             }
-        });
+        }
+    });
+
+    // Found Items Chart with both Unclaimed and Claimed status
+    var foundCtx = document.getElementById('foundItemsChart').getContext('2d');
+    var foundItemsChart = new Chart(foundCtx, {
+        type: 'line',
+        data: {
+            labels: foundWeeksUnclaimed.length > foundWeeksClaimed.length ? foundWeeksUnclaimed : foundWeeksClaimed, // Choose the larger dataset for labels
+            datasets: [{
+                label: 'Unclaimed Items',
+                data: foundCountsUnclaimed, // Dynamic unclaimed item counts
+                borderColor: 'red',
+                borderWidth: 2,
+                fill: false
+            }, {
+                label: 'Claimed Items',
+                data: foundCountsClaimed, // Dynamic claimed item counts
+                borderColor: 'green',
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    beginAtZero: true
+                },
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
 
         // Dropdown toggle script
         document.querySelector('.dropdown-caret').addEventListener('click', function(event) {

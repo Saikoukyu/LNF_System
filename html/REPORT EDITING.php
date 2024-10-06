@@ -84,8 +84,8 @@ try {
                 <div class="report-timestamp">
                     <p><?php echo date("F j, Y, h:i A", strtotime($item['date_lost'] . ' ' . $item['time_lost'])); ?></p>
                 </div>
-                <div class="report-actions">
-                    <button onclick="deleteItem(<?php echo $item['item_id']; ?>)">Delete</button>
+                <div class="report-actions" data-item-id="<?= htmlspecialchars($item['item_id']); ?>">
+                <button onclick="deleteItem(<?= $item['item_id']; ?>)">Delete</button>
                 </div>
             </div>
         <?php endforeach; ?>
@@ -95,11 +95,35 @@ try {
 
     <script>
         function deleteItem(itemId) {
-            if (confirm('Are you sure you want to delete this item?')) {
-                // Implement the delete logic (e.g., an AJAX request to delete the item)
-                window.location.href = 'delete_item.php?item_id=' + itemId;
+    if (confirm('Are you sure you want to delete this item?')) {
+        // Create a FormData object to hold the data
+        const formData = new FormData();
+        formData.append('item_id', itemId);
+
+        // Send the delete request using fetch with the POST method
+        fetch('../php/delete_item.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert(data); // Show the server response (success or error message)
+
+            // If the deletion was successful, remove the item from the div
+            if (data.includes('Item deleted successfully')) {
+                const itemDiv = document.querySelector(`div[data-item-id="${itemId}"]`);
+                if (itemDiv) {
+                    itemDiv.remove(); // Remove the item div
+                }
             }
-        }
+        })
+        .catch(error => {
+            alert('Error deleting item: ' + error.message);
+            console.error('Error:', error);
+        });
+    }
+}
+
     </script>
 </body>
 </html>

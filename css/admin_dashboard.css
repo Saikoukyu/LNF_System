@@ -74,9 +74,8 @@
 
 .content {
     margin-top: 70px;
-    margin-left: 100px;
+    margin-left: 150px;
     padding: 20px;
-    overflow-y: auto;
     height: calc(100vh - 70px);
 }
 

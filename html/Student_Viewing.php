@@ -281,7 +281,32 @@ include("../php/connect2.php");
                 rows[i].style.display = ''; // Show all rows
             }
         });
+
+
+
     </script>
+
+    <script> 
+    document.querySelector('.user-link').addEventListener('click', function(event) {
+            event.preventDefault();
+            this.classList.toggle('active');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            if (dropdownMenu.style.display === 'none' || dropdownMenu.style.display === '') {
+                dropdownMenu.style.display = 'block';
+            } else {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+    
+    document.getElementById('inquiryButton').addEventListener('click', function() {
+        window.location.href = '../html/Lost_and_Found_Student.php';
+    });
+
+        const logoutButton = document.getElementById('logoutButton');
+        logoutButton.addEventListener('click', function() {
+            window.location.href = 'NU_LoginPage.php';
+        });
+</script>
 </body>
 
 </html>

@@ -90,10 +90,9 @@ body {
 }
 
 .content {
-    margin-left: 20px;
+    margin-left: 10px;
     padding: 20px;
-    overflow-y: auto;
-    width: calc(115% - 250px);
+    width: calc(115% - 230px);
 }
 
 .header {
