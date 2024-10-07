@@ -143,7 +143,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
               // Output each row of data from the database
               while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td> Name </td>";
+                echo "<td> ". htmlspecialchars($row['username']) ." </td>";
                 echo "<td>" . htmlspecialchars($row['email']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['password']) . "</td>";
                // Check the role and conditionally show buttons
@@ -169,77 +169,89 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
 
       <!-- Modal for Editing User -->
       <div class="modal-overlay" id="editModal">
-        <div class="modal">
-          <span class="close-btn" onclick="closeModal()">&times;</span>
-          <h2>Edit User</h2>
-          <form>
-            <input type="text" id="edit-name" name="name" placeholder="Edit user full name" required />
-            <input type="email" id="edit-email" name="email" placeholder="Edit user school or work email" required />
+  <div class="modal">
+    <span class="close-btn" onclick="closeEditModal()">&times;</span>
+    <h2>Edit User</h2>
+    <form>
+      <input type="text" id="edit-name" name="name" placeholder="Edit user full name" required />
+      <input type="email" id="edit-email" name="email" placeholder="Edit user school or work email" required />
 
-            <div class="password-container">
-              <input type="password" id="edit-password" name="password" placeholder="Edit user password" required />
-              <button type="button" class="show-password-btn" onclick="togglePasswordVisibility('edit-password')">
-                <i class="fas fa-eye"></i>
-              </button>
-            </div>
-
-            <div class="button-container">
-              <button type="button" onclick="saveEdit()">Save Changes</button>
-              <button type="button" onclick="closeEditModal()">Cancel</button>
-            </div>
-
-          </form>
-        </div>
+      <div class="password-container">
+        <input type="password" id="edit-password" name="password" placeholder="Edit user password" required />
+        <button type="button" class="show-password-btn" onclick="togglePasswordVisibility('edit-password')">
+          <i class="fas fa-eye"></i>
+        </button>
       </div>
+
+      <div class="button-container">
+        <button type="button" onclick="saveEdit()">Save Changes</button>
+        <button type="button" onclick="closeEditModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
 
       <script>
         let selectedEditRow; // To track the selected row for editing
-        let originalUsername; // To track the original username before editing
+  let originalEmail; // To track the original email before editing (for backend reference)
 
-        // Function to open the Edit Modal and populate the fields with current user data
-        function openEditModal(button) {
-          const row = button.closest('tr'); // Get the row of the clicked Edit button
-          selectedEditRow = row; // Store the selected row for updating later
-          originalUsername = row.cells[1].textContent; // Save the original username
+  // Function to open the Edit Modal and populate the fields with current user data
+  function openEditModal(button) {
+    const row = button.closest('tr'); // Get the row of the clicked Edit button
+    selectedEditRow = row; // Store the selected row for updating later
+    originalEmail = row.cells[1].textContent; // Save the original email
 
-          // Populate the modal with current user data
-          document.getElementById('editUsername').value = row.cells[1].textContent; // Username
-          document.getElementById('editPassword').value = row.cells[2].textContent; // Password
+    // Populate the modal with current user data
+    document.getElementById('edit-name').value = row.cells[0].textContent; // Name
+    document.getElementById('edit-email').value = row.cells[1].textContent; // Email
+    document.getElementById('edit-password').value = row.cells[2].textContent; // Password
 
-          // Display the modal
-          document.getElementById("editModal").style.display = "flex";
-        }
+    // Display the modal
+    document.getElementById("editModal").style.display = "flex";
+  }
 
-        // Function to close the Edit Modal
-        function closeEditModal() {
-          document.getElementById("editModal").style.display = "none";
-        }
+  // Function to close the Edit Modal
+  function closeEditModal() {
+    document.getElementById("editModal").style.display = "none";
+  }
 
-        // Function to handle saving edited user details
-        function saveEdit() {
-          const newUsername = document.getElementById('editUsername').value;
-          const newPassword = document.getElementById('editPassword').value;
+  // Function to handle saving edited user details
+  function saveEdit() {
+    const newName = document.getElementById('edit-name').value;
+    const newEmail = document.getElementById('edit-email').value;
+    const newPassword = document.getElementById('edit-password').value;
 
-          // Proceed with updating user details via AJAX
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", "../php/edit_user.php", true);
-          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-          xhr.onload = function() {
-            if (xhr.status === 200) {
-              alert(xhr.responseText); // Show success or error message
-              window.location.reload(); // Reload the page to update the table
-            } else {
-              alert("Error updating user. Please try again.");
-            }
-          };
+    // Proceed with updating user details via AJAX
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "../php/edit_user.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onload = function() {
+      if (xhr.status === 200) {
+        alert(xhr.responseText); // Show success or error message
+        window.location.reload(); // Reload the page to update the table
+      } else {
+        alert("Error updating user. Please try again.");
+      }
+    };
 
-          xhr.send("originalUsername=" + encodeURIComponent(originalUsername) +
-            "&newUsername=" + encodeURIComponent(newUsername) +
-            "&newPassword=" + encodeURIComponent(newPassword));
+    xhr.send("originalEmail=" + encodeURIComponent(originalEmail) +
+      "&newName=" + encodeURIComponent(newName) +
+      "&newEmail=" + encodeURIComponent(newEmail) +
+      "&newPassword=" + encodeURIComponent(newPassword));
 
-          // Close the modal after saving
-          closeEditModal();
-        }
+    // Close the modal after saving
+    closeEditModal();
+  }
+
+  // Function to toggle password visibility
+  function togglePasswordVisibility(passwordFieldId) {
+    var passwordField = document.getElementById(passwordFieldId);
+    if (passwordField.type === "password") {
+      passwordField.type = "text";
+    } else {
+      passwordField.type = "password";
+    }
+  }
       </script>
 
 

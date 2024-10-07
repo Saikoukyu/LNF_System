@@ -127,22 +127,23 @@
                             </select>
                             </td>
                             <td><div class="report-actions" data-item-id="<?= htmlspecialchars($item['item_id']); ?>">
-                <button onclick="deleteItem(<?= $item['item_id']; ?>)">Delete</button>
+                <button id="deleteBtn" onclick="deleteItem(<?= $item['item_id']; ?>)">Delete</button>
                 </div></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
+<div class="container2">
 
         <div class="pagination-container">
     <button id="prevBtn" disabled>Previous</button>
     <span id="pageIndicator">Page 1</span>
     <button id="nextBtn">Next</button>
-</div>
-
+        </div>
         <div class="btn-container">
             <button class="close-btn" id="closeBtn">Close</button>
+        </div>
         </div>
     </section>
 

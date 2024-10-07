@@ -1,31 +1,39 @@
 <?php
 include("../php/connect.php");
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $originalUsername = $_POST['originalUsername'];  // The original username
-    $newUsername = $_POST['newUsername'];            // The new username
-    $newPassword = $_POST['newPassword'];            // The new password
+// Check if the form data was posted
+if (isset($_POST['originalEmail']) && isset($_POST['newName']) && isset($_POST['newEmail']) && isset($_POST['newPassword'])) {
+    
+    // Get the posted data
+    $originalEmail = $_POST['originalEmail'];
+    $newName = $_POST['newName'];
+    $newEmail = $_POST['newEmail'];
+    $newPassword = $_POST['newPassword'];
 
-    // Prepare the SQL statement to update the user's details
-    $sql = "UPDATE tbl_do_admin SET username = ?, password = ? WHERE username = ?";
-    $stmt = $conn->prepare($sql);
+    // Create the SQL query to update the user details
+    $sql = "UPDATE tbl_do_admin SET username = ?, email = ?, password = ? WHERE email = ?";
 
-    if ($stmt === false) {
-        die('Error in preparing statement: ' . $conn->error);
-    }
+    // Prepare the SQL statement
+    if ($stmt = $conn->prepare($sql)) {
+        // Bind the parameters (s = string)
+        $stmt->bind_param("ssss", $newName, $newEmail, $newPassword, $originalEmail);
 
-    // Bind the new values to the statement
-    $stmt->bind_param("sss", $newUsername, $newPassword, $originalUsername);
+        // Execute the prepared statement
+        if ($stmt->execute()) {
+            echo "User details updated successfully!";
+        } else {
+            echo "Error updating record: " . $conn->error;
+        }
 
-    // Execute the statement
-    if ($stmt->execute()) {
-        echo "User updated successfully!";
+        // Close the statement
+        $stmt->close();
     } else {
-        echo "Error updating user: " . $stmt->error;
+        echo "Error preparing statement: " . $conn->error;
     }
 
-    // Close the statement and connection
-    $stmt->close();
+    // Close the database connection
     $conn->close();
+} else {
+    echo "Invalid input. Please provide all required data.";
 }
 ?>
