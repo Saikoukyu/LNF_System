@@ -11,6 +11,9 @@ if (!isset($_SESSION['email'])) {
 }
 
 $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -139,77 +142,89 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
 
 
             <div class="table-container">
-                <table id="itemTable">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Photo</th>
-                            <th>Specfic Name</th>
-                            <th>Type</th>
-                            <th>Name</th>
-                            <th>Brand</th>
-                            <th>Location Found</th>
-                            <th>Specific Location Found</th>
-                            <th>Date Lost/Found</th>
-                            <th>Time Lost/Found</th>
-                            <th>Additional Info</th>
-                            <th>Status</th>
-                            <th>Item Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        try {
-                            $sql = "SELECT td.*, 
-                                       fn.fn_firstname, fn.fn_lastname, 
-                                       it.it_name, 
-                                       iname.in_name,
-                                       loc.location_name, 
-                                       sloc.specific_location_name, 
-                                       tdate.date_lost, tdate.time_lost,
-                                       stat.status_name
-                                FROM tbl_item_description td
-                                JOIN tbl_full_name fn ON td.item_full_name_id = fn.fn_id
-                                JOIN tbl_item_type it ON td.item_type_id = it.it_id
-                                JOIN tbl_item_name iname ON td.item_name_id = iname.in_id
-                                JOIN tbl_location loc ON td.item_location_id = loc.location_id
-                                JOIN tbl_specific_location sloc ON td.item_specific_location_id = sloc.specific_location_id
-                                JOIN tbl_time_date tdate ON td.item_time_date_id = tdate.time_date_id
-                                JOIN tbl_status stat ON td.item_status_id = stat.status_id";
+    <table id="itemTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Photo</th>
+                <th>Specific Name</th>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Brand</th>
+                <th>Location Found</th>
+                <th>Specific Location Found</th>
+                <th>Date Lost/Found</th>
+                <th>Time Lost/Found</th>
+                <th>Additional Info</th>
+                <th>No. of Inquiries</th>
+                <th>Status</th>
+                <th>Item Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            try {
+                // Query to fetch item details
+                $sql = "SELECT td.*, 
+                               fn.fn_firstname, fn.fn_lastname, 
+                               it.it_name, 
+                               iname.in_name,
+                               loc.location_name, 
+                               sloc.specific_location_name, 
+                               tdate.date_lost, tdate.time_lost,
+                               stat.status_name
+                        FROM tbl_item_description td
+                        JOIN tbl_full_name fn ON td.item_full_name_id = fn.fn_id
+                        JOIN tbl_item_type it ON td.item_type_id = it.it_id
+                        JOIN tbl_item_name iname ON td.item_name_id = iname.in_id
+                        JOIN tbl_location loc ON td.item_location_id = loc.location_id
+                        JOIN tbl_specific_location sloc ON td.item_specific_location_id = sloc.specific_location_id
+                        JOIN tbl_time_date tdate ON td.item_time_date_id = tdate.time_date_id
+                        JOIN tbl_status stat ON td.item_status_id = stat.status_id";
 
-                            $stmt = $conn->prepare($sql);
-                            $stmt->execute();
-                            $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $stmt = $conn->prepare($sql);
+                $stmt->execute();
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                            if ($rows && count($rows) > 0) {
-                                foreach ($rows as $row) {
-                                    $itemId = $row['item_id']; // Use item_id to filter inquiries
-                                    echo "<tr>";
-                                    echo "<td>" . $row['item_id'] . "</td>";
-                                    echo "<td><img src='../assets/" . $row['item_photo'] . "' alt='Item Image' width='50'></td>";
-                                    echo "<td>" . $row['item_detailed_name'] . "</td>";
-                                    echo "<td>" . $row['it_name'] . "</td>";
-                                    echo "<td>" . $row['in_name'] . "</td>";
-                                    echo "<td>" . $row['item_brand'] . "</td>";
-                                    echo "<td>" . $row['location_name'] . "</td>";
-                                    echo "<td>" . $row['specific_location_name'] . "</td>";
-                                    echo "<td>" . date("m/d/Y", strtotime($row['date_lost'])) . "</td>";
-                                    echo "<td>" . date("h:i A", strtotime($row['time_lost'])) . "</td>";
-                                    echo "<td>" . $row['item_add_info'] . "</td>";
-                                    echo "<td>" . $row['status_name'] . "</td>";
-                                    echo '<td><a href="item_desc.php?item_id=' . $itemId . '" class="btn-box">Details</a></td>';
-                                    echo "</tr>";
-                                }
-                            } else {
-                                echo "<tr><td colspan='14'>No items found</td></tr>";
-                            }
-                        } catch (PDOException $e) {
-                            echo "Error: " . $e->getMessage();
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
+                if ($rows && count($rows) > 0) {
+                    foreach ($rows as $row) {
+                        $itemId = $row['item_id']; // Use item_id to filter inquiries
+
+                        // Query to count the number of inquiries for the specific item_id
+                        $inquirySql = "SELECT COUNT(*) AS inquiry_count 
+                                       FROM tbl_inquiry 
+                                       WHERE inquiry_item_id = ?";
+                        $inquiryStmt = $conn->prepare($inquirySql);
+                        $inquiryStmt->execute([$itemId]);
+                        $inquiryCount = $inquiryStmt->fetch(PDO::FETCH_ASSOC)['inquiry_count'];
+
+                        echo "<tr>";
+                        echo "<td>" . $row['item_id'] . "</td>";
+                        echo "<td><img src='../assets/" . $row['item_photo'] . "' alt='Item Image' width='50'></td>";
+                        echo "<td>" . $row['item_detailed_name'] . "</td>";
+                        echo "<td>" . $row['it_name'] . "</td>";
+                        echo "<td>" . $row['in_name'] . "</td>";
+                        echo "<td>" . $row['item_brand'] . "</td>";
+                        echo "<td>" . $row['location_name'] . "</td>";
+                        echo "<td>" . $row['specific_location_name'] . "</td>";
+                        echo "<td>" . date("m/d/Y", strtotime($row['date_lost'])) . "</td>";
+                        echo "<td>" . date("h:i A", strtotime($row['time_lost'])) . "</td>";
+                        echo "<td>" . $row['item_add_info'] . "</td>";
+                        echo "<td>" . $inquiryCount . "</td>"; // Display the inquiry count here
+                        echo "<td>" . $row['status_name'] . "</td>";
+                        echo '<td><a href="item_desc.php?item_id=' . $itemId . '" class="btn-box">Details</a></td>';
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='14'>No items found</td></tr>";
+                }
+            } catch (PDOException $e) {
+                echo "Error: " . $e->getMessage();
+            }
+            ?>
+        </tbody>
+    </table>
+</div>
         </section>
     </div>
 
