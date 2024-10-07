@@ -26,11 +26,12 @@ try {
     $stmt_found_items->execute();
     $found_items = $stmt_found_items->fetch(PDO::FETCH_ASSOC)['total_found'];
 
-    // Step 3: Fetch count for Student Reported List (count of item_req_id in tbl_item_request)
-    $sql_reported_list = "SELECT COUNT(item_req_id) AS total_reported FROM tbl_item_request";
-    $stmt_reported_list = $conn->prepare($sql_reported_list);
-    $stmt_reported_list->execute();
-    $reported_list = $stmt_reported_list->fetch(PDO::FETCH_ASSOC)['total_reported'];
+    // Step 3: Fetch count for Total Item Inquiries (count of inquiry_id in tbl_inquiry)
+    $sql_total_inquiries = "SELECT COUNT(inquiry_id) AS total_inquiries FROM tbl_inquiry";
+    $stmt_total_inquiries = $conn->prepare($sql_total_inquiries);
+    $stmt_total_inquiries->execute();
+    $total_inquiries = $stmt_total_inquiries->fetch(PDO::FETCH_ASSOC)['total_inquiries'];
+
 
     // Step 4: Fetch count for Successfully Returned (count of item_status_id = '2' in tbl_item_description)
     $sql_returned_items = "SELECT COUNT(item_id) AS total_returned FROM tbl_item_description WHERE item_status_id = 2";
@@ -43,7 +44,6 @@ try {
     $stmt_disposed_items = $conn->prepare($sql_disposed_items);
     $stmt_disposed_items->execute();
     $disposed_items = $stmt_disposed_items->fetch(PDO::FETCH_ASSOC)['total_disposed'];
-
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
     exit;
@@ -131,7 +131,6 @@ try {
     $stmt_recent_lost = $conn->prepare($sql_recent_lost);
     $stmt_recent_lost->execute();
     $recent_lost_items = $stmt_recent_lost->fetchAll(PDO::FETCH_ASSOC);
-
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
@@ -140,6 +139,7 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -149,6 +149,7 @@ try {
     <link rel="stylesheet" href="/css/admin_dashboard.css" />
 
 </head>
+
 <body>
 
     <!-- Sidebar -->
@@ -159,9 +160,9 @@ try {
         </div>
         <div class="sidebar-greeting">
             Hello, <?php
-            // Dynamically show the username or placeholder based on session (assumed username is stored in session)
-            echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
-            ?>
+                    // Dynamically show the username or placeholder based on session (assumed username is stored in session)
+                    echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
+                    ?>
         </div>
         <ul>
             <li onclick="window.location.href='Admin_Dashboard.php'">
@@ -176,10 +177,10 @@ try {
             <li onclick="window.location.href='Admin_Admin.php'">
                 <i class="fas fa-user"></i><span>Admin</span>
             </li>
-            <?php if ($role == 'IT_Admin') : ?>
-            <li onclick="window.location.href='Admin_ITAdmin.php'">
-                <i class="fas fa-cogs"></i><span>IT Admin Setting</span>
-            </li>
+            <?php if ($role == 'IT_Admin'): ?>
+                <li onclick="window.location.href='Admin_ITAdmin.php'">
+                    <i class="fas fa-cogs"></i><span>IT Admin Setting</span>
+                </li>
             <?php endif; ?>
         </ul>
     </div>
@@ -194,7 +195,7 @@ try {
             </span>
 
             <div class="right-menu">
-            <a href="Lost_and_Found_Admin.php" class="add-lost-found">
+                <a href="Lost_and_Found_Admin.php" class="add-lost-found">
                     <span class="plus">+</span>
                     <span class="lost">Lost</span>
                     <span class="and">&</span>
@@ -203,14 +204,14 @@ try {
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle">
                         <i class="fas fa-user"></i> <?php
-            // Dynamically show the username or placeholder based on session (assumed username is stored in session)
-            echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
-            ?>
-                        <i class="fas fa-caret-down dropdown-caret"></i> 
+                                                    // Dynamically show the username or placeholder based on session (assumed username is stored in session)
+                                                    echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
+                                                    ?>
+                        <i class="fas fa-caret-down dropdown-caret"></i>
                     </a>
                     <div class="dropdown-content">
                         <a href="#" id="logoutButton">Logout</a>
-                    </div>                    
+                    </div>
                 </div>
             </div>
         </div>
@@ -222,8 +223,8 @@ try {
         </div>
         <hr class="header-line">
 
-          <!-- Dashboard Cards -->
-          <div class="dashboard">
+        <!-- Dashboard Cards -->
+        <div class="dashboard">
             <div class="card lime">
                 <h3><i class="fas fa-users"></i> <?php echo $lost_items; ?></h3> <!-- Items Lost -->
                 <p>Items Lost</p>
@@ -233,15 +234,18 @@ try {
                 <p>Items Found</p>
             </div>
             <div class="card blue">
-                <h3><i class="fas fa-clipboard-list"></i> <?php echo $reported_list; ?></h3> <!-- Student Reported List -->
-                <p>Student Item Requests </p>
+                <h3><i class="fas fa-clipboard-list"></i> <?php echo $total_inquiries; ?></h3>
+                <!-- Total Item Inquiries -->
+                <p>Student Item Inquiries</p> <!-- Updated label -->
             </div>
             <div class="card green">
-                <h3><i class="fas fa-check-circle"></i> <?php echo $returned_items; ?></h3> <!-- Successfully Returned -->
+                <h3><i class="fas fa-check-circle"></i> <?php echo $returned_items; ?></h3>
+                <!-- Successfully Returned -->
                 <p>Successfully Returned</p>
             </div>
             <div class="card red">
-                <h3><i class="fas fa-trash-alt"></i> <?php echo $disposed_items; ?></h3> <!-- Items Disposed/Recycled -->
+                <h3><i class="fas fa-trash-alt"></i> <?php echo $disposed_items; ?></h3>
+                <!-- Items Disposed/Recycled -->
                 <p>Items Disposed/Recycled</p>
             </div>
         </div>
@@ -250,7 +254,7 @@ try {
         <div class="grid-container">
             <div class="grid-item">
                 <h4>Graphs</h4>
-                
+
                 <h4>Lost Items <em>in the last month</em></h4>
                 <canvas id="lostItemsChart"></canvas>
                 <h4>Unclaimed <em>in the last month</em></h4>
@@ -260,150 +264,156 @@ try {
 
             </div>
 
-          
-
-    <!-- The loop for recently lost items -->
-    <?php if (!empty($recent_lost_items)): ?>
-        <?php foreach ($recent_lost_items as $lost): ?>
-            <div class="grid-item">
-                <h4>Recently Lost Items</h4>
-                <p>Name: <?php echo htmlspecialchars($lost['in_name']); ?></p>
-                <p>Item Type: <?php echo htmlspecialchars($lost['it_name']); ?></p>
-                <p>Location: <?php echo htmlspecialchars($lost['specific_location_name']); ?></p> <!-- Assuming specific_location_name is the brand -->
-                <p>Owner: <?php echo htmlspecialchars($lost['fn_firstname']) . ' ' . htmlspecialchars($lost['fn_lastname']); ?></p>
-                <div class="image-container">
-                    <img src="<?php echo htmlspecialchars($lost['item_photo']); ?>" alt="<?php echo htmlspecialchars($lost['in_name']); ?>">
-                    <a href="item_desc.php?item_id=<?php echo htmlspecialchars($lost['item_id']); ?>" class="show-button">Show</a>
-                </div>
-            </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>No recently lost items found.</p>
-    <?php endif; ?>
-</div>
 
 
+            <!-- The loop for recently lost items -->
+            <?php if (!empty($recent_lost_items)): ?>
+                <?php foreach ($recent_lost_items as $lost): ?>
+                    <div class="grid-item">
+                        <h4>Recently Lost Items</h4>
+                        <p>Name: <?php echo htmlspecialchars($lost['in_name']); ?></p>
+                        <p>Item Type: <?php echo htmlspecialchars($lost['it_name']); ?></p>
+                        <p>Location: <?php echo htmlspecialchars($lost['specific_location_name']); ?></p>
+                        <!-- Assuming specific_location_name is the brand -->
+                        <p>Owner:
+                            <?php echo htmlspecialchars($lost['fn_firstname']) . ' ' . htmlspecialchars($lost['fn_lastname']); ?>
+                        </p>
+                        <div class="image-container">
+                            <img src="<?php echo htmlspecialchars($lost['item_photo']); ?>"
+                                alt="<?php echo htmlspecialchars($lost['in_name']); ?>">
+                            <a href="item_desc.php?item_id=<?php echo htmlspecialchars($lost['item_id']); ?>"
+                                class="show-button">Show</a>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No recently lost items found.</p>
+            <?php endif; ?>
+        </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // Pass PHP arrays to JavaScript for Lost Items
-    var lostWeeks = <?php echo json_encode($weeks_lost); ?>;
-    var lostCounts = <?php echo json_encode($counts_lost); ?>;
 
-    // Pass PHP arrays to JavaScript for Found Items
-    var foundWeeksUnclaimed = <?php echo json_encode($weeks_found_unclaimed); ?>;
-    var foundCountsUnclaimed = <?php echo json_encode($counts_found_unclaimed); ?>;
 
-    var foundWeeksClaimed = <?php echo json_encode($weeks_found_claimed); ?>;
-    var foundCountsClaimed = <?php echo json_encode($counts_found_claimed); ?>;
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Pass PHP arrays to JavaScript for Lost Items
+            var lostWeeks = <?php echo json_encode($weeks_lost); ?>;
+            var lostCounts = <?php echo json_encode($counts_lost); ?>;
 
-    // Lost Items Chart
-    var lostCtx = document.getElementById('lostItemsChart').getContext('2d');
-    var lostItemsChart = new Chart(lostCtx, {
-        type: 'line',
-        data: {
-            labels: lostWeeks, // Dynamic week labels for lost items
-            datasets: [{
-                label: 'Lost Items',
-                data: lostCounts, // Dynamic lost item counts
-                borderColor: 'cyan',
-                borderWidth: 2,
-                fill: false
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    beginAtZero: true
+            // Pass PHP arrays to JavaScript for Found Items
+            var foundWeeksUnclaimed = <?php echo json_encode($weeks_found_unclaimed); ?>;
+            var foundCountsUnclaimed = <?php echo json_encode($counts_found_unclaimed); ?>;
+
+            var foundWeeksClaimed = <?php echo json_encode($weeks_found_claimed); ?>;
+            var foundCountsClaimed = <?php echo json_encode($counts_found_claimed); ?>;
+
+            // Lost Items Chart
+            var lostCtx = document.getElementById('lostItemsChart').getContext('2d');
+            var lostItemsChart = new Chart(lostCtx, {
+                type: 'line',
+                data: {
+                    labels: lostWeeks, // Dynamic week labels for lost items
+                    datasets: [{
+                        label: 'Lost Items',
+                        data: lostCounts, // Dynamic lost item counts
+                        borderColor: 'cyan',
+                        borderWidth: 2,
+                        fill: false
+                    }]
                 },
-                y: {
-                    beginAtZero: true
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
                 }
-            }
-        }
-    });
+            });
 
-    // Found Items Chart with both Unclaimed and Claimed status
-    var foundCtx = document.getElementById('foundItemsChart').getContext('2d');
-    var foundItemsChart = new Chart(foundCtx, {
-        type: 'line',
-        data: {
-            labels: foundWeeksUnclaimed.length > foundWeeksClaimed.length ? foundWeeksUnclaimed : foundWeeksClaimed, // Choose the larger dataset for labels
-            datasets: [{
-                label: 'Unclaimed Items',
-                data: foundCountsUnclaimed, // Dynamic unclaimed item counts
-                borderColor: 'red',
-                borderWidth: 2,
-                fill: false
-            },]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    beginAtZero: true
+            // Found Items Chart with both Unclaimed and Claimed status
+            var foundCtx = document.getElementById('foundItemsChart').getContext('2d');
+            var foundItemsChart = new Chart(foundCtx, {
+                type: 'line',
+                data: {
+                    labels: foundWeeksUnclaimed.length > foundWeeksClaimed.length ? foundWeeksUnclaimed : foundWeeksClaimed, // Choose the larger dataset for labels
+                    datasets: [{
+                        label: 'Unclaimed Items',
+                        data: foundCountsUnclaimed, // Dynamic unclaimed item counts
+                        borderColor: 'red',
+                        borderWidth: 2,
+                        fill: false
+                    }, ]
                 },
-                y: {
-                    beginAtZero: true
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
                 }
-            }
-        }
-    });
+            });
 
-     // Found Items Chart with both Unclaimed and Claimed status
-     var foundCtx = document.getElementById('ClaimedItemsChart').getContext('2d');
-    var foundItemsChart = new Chart(foundCtx, {
-        type: 'line',
-        data: {
-            labels: foundWeeksUnclaimed.length > foundWeeksClaimed.length ? foundWeeksUnclaimed : foundWeeksClaimed, // Choose the larger dataset for labels
-            datasets: [ {
-                label: 'Claimed Items',
-                data: foundCountsClaimed, // Dynamic claimed item counts
-                borderColor: 'green',
-                borderWidth: 2,
-                fill: false
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    beginAtZero: true
+            // Found Items Chart with both Unclaimed and Claimed status
+            var foundCtx = document.getElementById('ClaimedItemsChart').getContext('2d');
+            var foundItemsChart = new Chart(foundCtx, {
+                type: 'line',
+                data: {
+                    labels: foundWeeksUnclaimed.length > foundWeeksClaimed.length ? foundWeeksUnclaimed : foundWeeksClaimed, // Choose the larger dataset for labels
+                    datasets: [{
+                        label: 'Claimed Items',
+                        data: foundCountsClaimed, // Dynamic claimed item counts
+                        borderColor: 'green',
+                        borderWidth: 2,
+                        fill: false
+                    }]
                 },
-                y: {
-                    beginAtZero: true
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
                 }
-            }
-        }
-    });
+            });
 
 
-        // Dropdown toggle script
-        document.querySelector('.dropdown-caret').addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent the default action
-            this.closest('.dropdown').classList.toggle('open'); // Toggle the dropdown menu
-        });
+            // Dropdown toggle script
+            document.querySelector('.dropdown-caret').addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent the default action
+                this.closest('.dropdown').classList.toggle('open'); // Toggle the dropdown menu
+            });
 
-        document.addEventListener('click', function(event) {
-            var isClickInside = document.querySelector('.dropdown').contains(event.target);
+            document.addEventListener('click', function(event) {
+                var isClickInside = document.querySelector('.dropdown').contains(event.target);
 
-            if (!isClickInside) {
-                document.querySelector('.dropdown').classList.remove('open');
-            }
-        });
+                if (!isClickInside) {
+                    document.querySelector('.dropdown').classList.remove('open');
+                }
+            });
 
-    const logoutButton = document.getElementById('logoutButton');
+            const logoutButton = document.getElementById('logoutButton');
 
-    logoutButton.addEventListener('click', function() {
-        window.location.href = "../php/logout.php";
-    });
-</script>
+            logoutButton.addEventListener('click', function() {
+                window.location.href = "../php/logout.php";
+            });
+        </script>
 
-    </script>
+        </script>
 </body>
+
 </html>

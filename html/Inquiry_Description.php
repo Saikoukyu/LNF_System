@@ -71,149 +71,13 @@ if (isset($_GET['inquiry_id'])) {
 <html>
 
 <head>
+<link rel="stylesheet" href="/css/inquiry_desc.css" />
     <title>Lost & Found Form</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .form-container {
-            background-color: #35408e;
-            padding: 30px;
-            /* Adjust padding if needed */
-            border-radius: 15px;
-            width: 80%;
-            /* Adjust width to make it smaller or larger */
-            max-width: 800px;
-            /* Change this to desired max width */
-            color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .custom-disabled {
-            opacity: 1 !important; /* Override opacity */
-            background-color: #fff; /* Optional: To ensure the background remains the same */
-            color: #000; /* Optional: To keep the text color as it was */
-            pointer-events: none; /* Ensures it's still non-interactive */
-        }
-
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #cfa92c;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .form-group {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-width: 150px;
-        }
-
-        input[type="text"],
-        input[type="date"],
-        input[type="file"],
-        input[type="email"],
-        input[type="time"],
-        input[type="select"],
-        input[type="option"],
-        textarea {
-            padding: 8px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .radio-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 5px;
-        }
-
-        button {
-            padding: 10px;
-            background-color: #cfa92c;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100px;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #e0a800;
-        }
-
-        .submit-container {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            margin-top: 20px;
-        }
-
-        .popup {
-            width: 400px;
-            background: #fff;
-            border-radius: 6px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            padding: 30px;
-            color: #333;
-            display: none;
-            /* Hide popup by default */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .popup img {
-            width: 50px;
-            height: 50px;
-            margin-bottom: 10px;
-        }
-
-        .close-popup-btn {
-            background-color: #cfa92c;
-            border: none;
-            border-radius: 5px;
-            color: b;
-            padding: 5px 10px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .close-popup-btn:hover {
-            background-color: #e0a800;
-        }
-    </style>
+   
 </head>
 
 <body>
-    <form class="form-container" enctype="multipart/form-data" action="../php/connect_Lost_and_Found_Student_Item.php" method="POST">
+  <form class="form-container" enctype="multipart/form-data" action="../php/connect_Lost_and_Found_Student_Item.php" method="POST">
         <h2>LOST & FOUND FORM ITEM INQUIRY</h2>
         <form id="lostFoundForm">
             <div class="form-row">
@@ -340,37 +204,66 @@ if (isset($_GET['inquiry_id'])) {
             </div>
             <div class="form-row">
             <div class="form-group">
+
     <label for="upload">Uploaded Image</label>
     <div style="text-align: center;">
     <img src="<?php echo $itemPhoto; ?>" alt="Item Photo" style="max-width: 50%; height: auto;">
     </div>
 </div>
             </div>
-            <div class="submit-container">
-                <button type="submit">Release Item</button>
-                <button type="button" class="close-popup-btn" onclick="closePopup()">Close</button>
-            </div>
+             <div class="submit-container">
+        <button type="button" id="submitBtn">Release Item</button>
+        <button type="button" class="close-popup-btn" onclick="closePopup()">Close</button>
+    </div>
+</div>
+
+
         </form>
     </form>
 
     <div class="popup" id="popup">
-        <img src="assets/check.png" alt="Check">
-        <h2>Thank You!</h2>
-        <p>Your details have been successfully submitted.</p>
-        <button class="close-popup-btn" onclick="closePopup()">Ok</button>
-    </div>
-    <script>
-        // Show the popup after form submission
-        document.getElementById('lostFoundForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
-            document.getElementById('popup').style.display = 'block'; // Show the popup
-        });
+    <img src="assets/check.png" alt="Check">
+    <h2>Confirm Action</h2>
+    <p>Are you sure you want to release this item and mark it as claimed?</p>
+    <button id="confirmBtn" onclick="confirmAction()">Yes, Confirm</button>
+    <button class="close-popup-btn" onclick="closePopup()">No, Cancel</button>
+</div>
 
-        // Hide the popup and navigate back
-        function closePopup() {
-            document.getElementById('popup').style.display = 'none'; // Hide the popup
-            window.history.back(); // Go back to the previous page
-        }
+    <script>
+          // Show the popup when clicking "Release Item"
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        document.getElementById('popup').style.display = 'block'; // Show the popup
+    });
+
+    // Handle the confirmation action
+    function confirmAction() {
+     var inquiryId = <?= $inquiryId; ?>;  // Pass the inquiry ID
+
+     // AJAX request
+     var xhr = new XMLHttpRequest();
+     xhr.open("POST", "../php/release_item.php", true); // Point to the PHP processing script
+     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+     xhr.onreadystatechange = function () {
+         if (xhr.readyState === 4 && xhr.status === 200) {
+             var response = JSON.parse(xhr.responseText);
+
+             if (response.status === "success") {
+                 // Hide the popup and show confirmation
+                 alert(response.message);
+                 window.location.href = "item view.php";  // Redirect to success page
+             } else {
+                 // Show error message
+                 alert("Error: " + response.message);
+             }
+         }
+     };
+     xhr.send("inquiry_id=" + inquiryId + "&item_req_name_id=" + <?= $selectedName; ?>);  // Send inquiry ID and item ID to the server
+ }
+
+    // Close the popup
+    function closePopup() {
+        document.getElementById('popup').style.display = 'none'; // Hide the popup
+    }
 
 
         //drop down

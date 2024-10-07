@@ -75,7 +75,7 @@ body {
 
 /* Main Content Layout */
 .main-content {
-    margin-left: 50px;
+    margin-left: 100px;
     width: calc(100% - 260px); 
     height: 100vh;
 }

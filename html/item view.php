@@ -161,7 +161,8 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                 <th>Item Details</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="tableBody">
+            <!-- Rows will be dynamically added here -->
             <?php
             try {
                 // Query to fetch item details
@@ -224,6 +225,13 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
             ?>
         </tbody>
     </table>
+
+    <!-- Pagination Controls -->
+    <div class="pagination">
+        <button id="prevBtn" onclick="prevPage()">&#10094; Previous</button>
+        <span id="pageNumber"></span>
+        <button id="nextBtn" onclick="nextPage()">Next &#10095;</button>
+    </div>
 </div>
         </section>
     </div>
@@ -306,11 +314,63 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
             document.getElementById('searchInput').value = '';
         });
 
+        
         // Logout button script
         const logoutButton = document.getElementById('logoutButton');
         logoutButton.addEventListener('click', function() {
             window.location.href = "../php/logout.php";
         });
+
+
+        const rowsPerPage = 6; // Number of rows to show per page
+    let currentPage = 1;
+    const table = document.getElementById("itemTable");
+    const tableBody = document.getElementById("tableBody");
+    const rows = tableBody.querySelectorAll("tr");
+    const totalRows = rows.length;
+    const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+    function displayTable() {
+        // Hide all rows
+        rows.forEach((row, index) => {
+            row.style.display = "none";
+        });
+
+        // Show the current page rows
+        const startIndex = (currentPage - 1) * rowsPerPage;
+        const endIndex = Math.min(startIndex + rowsPerPage, totalRows);
+
+        for (let i = startIndex; i < endIndex; i++) {
+            rows[i].style.display = "";
+        }
+
+        // Update page number display
+        document.getElementById("pageNumber").innerText = `Page ${currentPage} of ${totalPages}`;
+
+        // Disable buttons at the start and end of the pagination
+        document.getElementById("prevBtn").disabled = currentPage === 1;
+        document.getElementById("nextBtn").disabled = currentPage === totalPages;
+    }
+
+    function nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            displayTable();
+        }
+    }
+
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            displayTable();
+        }
+    }
+
+    // Initial display of the table
+    displayTable();
+
+
+
     </script>
 </body>
 

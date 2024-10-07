@@ -125,3 +125,44 @@
                 width: 100%;
             }
         }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Adjust spacing between filters */
+            justify-content: center; /* Center the filter items horizontally */
+            align-items: center; /* Center items vertically (if needed) */
+            margin: 20px 0; /* Optional: Add margin for spacing */
+        }
+        
+        .date-time-filters {
+            display: flex;
+            gap: 10px; /* Space between date and time inputs */
+            justify-content: center; /* Center date-time filters horizontally */
+            align-items: center; /* Center items vertically (if needed) */
+        }
+        
+        .date-time-filters div {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center contents within each column */
+        }
+        
+        .filters select, .filters input {
+            width: 150px; /* Set a fixed width for consistency */
+            padding: 8px; /* Add padding for better touch targets */
+            margin: 5px 0; /* Add vertical margin for spacing */
+            box-sizing: border-box; /* Ensures padding does not affect total width */
+        }
+        
+        .filters button {
+            padding: 12px 20px; /* Increase padding for larger buttons */
+            font-size: 16px; /* Increase font size for better readability */
+            cursor: pointer; /* Change cursor to pointer on hover */
+            margin-left: 5px; /* Space between buttons */
+            background-color: #4CAF50; /* Set a background color */
+            color: white; /* Set button text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            transition: background-color 0.3s; /* Transition for hover effect */
+        }
