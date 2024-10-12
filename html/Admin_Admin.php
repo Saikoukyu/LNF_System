@@ -81,7 +81,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
         <script>
             // Dropdown toggle script
             document
-              .querySelector(".dropdown-caret")
+              .querySelector(".dropdown-toggle")
               .addEventListener("click", function (event) {
                 event.preventDefault(); // Prevent the default action
                 this.closest(".dropdown").classList.toggle("open"); // Toggle the dropdown menu
