@@ -29,13 +29,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['inquiry_id'])) {
         $stmtUpdateItemStatus->bind_param("i", $item_id);
         $stmtUpdateItemStatus->execute();
 
+
+
         // Commit the transaction
         mysqli_commit($conn);
 
         // Send a success response back to the AJAX request
         echo json_encode([
             "status" => "success",
-            "message" => "Inquiry and related item request have been deleted, and the item status has been updated to Claimed."
+            "message" => "Inquiry and related item request have been deleted, and the item status has been updated to Claimed.",
+            "message" => "item id = " . $item_id
         ]);
 
     } catch (Exception $e) {
