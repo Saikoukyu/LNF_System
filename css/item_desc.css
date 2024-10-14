@@ -1,0 +1,293 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    background-color: #35408e;
+    color: white;
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-greeting {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin: 15px 0;
+    padding: 10px 0;
+    border-bottom: 1px solid #2f3b82;
+}
+
+.menu-toggle {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    cursor: pointer;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.menu-toggle i {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 15px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #2f3b82;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar ul li i {
+    margin-right: 40px;
+    min-width: 24px;
+    text-align: center;
+}
+
+.sidebar ul li span {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active {
+    background-color: #2f3b82;
+}
+
+/* Main Content Layout */
+.main-content {
+    margin-left: 100px;
+    width: calc(100% - 260px); 
+    height: 100vh;
+}
+
+.header {
+    background-color: #35408e;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    left: 250px;
+    width: calc(100% - 260px); 
+    z-index: 999;
+    border-bottom: 2px solid #e1bd59;
+    box-sizing: border-box;
+}
+
+.system-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.right-menu {
+    display: flex;
+    align-items: center;
+}
+
+.right-menu a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    position: relative;
+}
+
+.add-lost-found .plus {
+    color: #e1bd59;
+  }
+
+  .add-lost-found .lost {
+    color: #e15959;
+  }
+
+  .add-lost-found .and,
+  .add-lost-found .found {
+    color: #18a3f3;
+  }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.dropdown-toggle i {
+    margin-right: 8px;
+    margin-left: 8px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown.open .dropdown-content {
+    display: block;
+}
+
+/* Content Layout */
+.content {
+    margin-top: 70px; 
+    padding: 15px;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+}
+
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Adds space between different content sections */
+}
+
+.item-description {
+    flex: 1; /* Allow this to take available space */
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.item-container {
+    display: flex;
+    align-items: flex-start; /* Aligns photo and details to the top */
+    gap: 20px; /* Adds space between the photo and details */
+}
+
+.item-photo {
+    flex-shrink: 0; /* Ensures the photo doesn't shrink */
+}
+
+.item-details {
+    flex-grow: 1; /* Takes up the remaining space next to the photo */
+}
+
+.location-time {
+    margin-top: 20px; /* Adds space below the photo and details */
+}
+
+.inquiries {
+    flex: 1; /* Allow this to take available space */
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-top: 0;
+    font-size: 22px;
+    color: #35408e;
+}
+
+.item-photo img {
+    max-width: 150px;
+    border-radius: 5px;
+}
+
+.item-details p,
+.location-time p {
+    margin: 5px 0;
+}
+
+.inquiries table, .item-description {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.inquiries table th, .item-description {
+    padding: 10px;
+    text-align: left;
+    color: white;
+    border-bottom: 1px solid #ddd;
+}
+
+.inquiries table td, .item-description {
+    padding: 10px;
+    text-align: left;
+    color: black;
+    border-bottom: 1px solid #ddd;
+}
+
+.inquiries table th {
+    background-color: #35408e;
+}
+
+
+button {
+    margin-left: auto;
+    background-color: #35408e;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2c367d;
+}
+
+@media (max-width: 1024px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+
+    .item-description, .inquiries {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .header {
+        left: 0;
+        width: 100%;
+    }
+}

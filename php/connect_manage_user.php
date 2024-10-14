@@ -3,7 +3,8 @@ include("../php/connect.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
-    $username = $_POST['email'];
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
     $password = $_POST['password'];
     $confirmPassword = $_POST['confirmpassword'];
 
@@ -13,13 +14,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    $role = ('Admin');
+    // Check if required fields are not empty
+    if (empty($username) || empty($email) || empty($password)) {
+        echo "<script>alert('All fields are required!'); window.location.href = '../html/manage_user.php';</script>";
+        exit();
+    }
+
+    $role = 'Admin'; // Assign role
 
     // Hash the password for security
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // Prepare the SQL query to insert user (only username and password)
-    $sql = "INSERT INTO tbl_do_admin (username, password, role) VALUES (?, ?, ?)";
+    // Prepare the SQL query to insert user
+    $sql = "INSERT INTO tbl_do_admin (username, email, password, role) VALUES (?, ?, ?, ?)";
 
     // Prepare statement to prevent SQL injection
     $stmt = $conn->prepare($sql);
@@ -29,8 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die('Error in preparing statement: ' . $conn->error);
     }
 
-    // Bind the parameters (username and hashed password)
-    $stmt->bind_param("sss", $username, $password, $role);
+    // Bind the parameters (use hashed password instead of raw password)
+    $stmt->bind_param("ssss", $username, $email, $hashedPassword, $role);
 
     // Execute the query
     if ($stmt->execute()) {

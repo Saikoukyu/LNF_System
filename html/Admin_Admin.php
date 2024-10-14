@@ -1,5 +1,6 @@
-<?php 
-    include("../php/connect.php");
+<?php
+session_start(); // Start the session
+$role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
 ?>
 
 <!DOCTYPE html>
@@ -16,13 +17,17 @@
 </head>
 
 <body>
-    <div class="sidebar">
+ <!-- Sidebar -->
+ <div class="sidebar">
         <div class="menu-toggle">
             <i class="fas fa-bars"></i>
             <span>MENU</span>
         </div>
         <div class="sidebar-greeting">
-            Hello, Admin 1
+            Hello, <?php
+            // Dynamically show the username or placeholder based on session (assumed username is stored in session)
+            echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
+            ?>
         </div>
         <ul>
             <li onclick="window.location.href='Admin_Dashboard.php'">
@@ -37,13 +42,13 @@
             <li onclick="window.location.href='Admin_Admin.php'">
                 <i class="fas fa-user"></i><span>Admin</span>
             </li>
+            <?php if ($role == 'IT_Admin') : ?>
             <li onclick="window.location.href='Admin_ITAdmin.php'">
                 <i class="fas fa-cogs"></i><span>IT Admin Setting</span>
             </li>
-            </li>
+            <?php endif; ?>
         </ul>
     </div>
-
     <div class="content">
         <div class="header">
             <span class="system-title">
@@ -60,7 +65,10 @@
                 </a>
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle">
-                        <i class="fas fa-user"></i> Admin 1
+                        <i class="fas fa-user"></i> <?php
+            // Dynamically show the username or placeholder based on session (assumed username is stored in session)
+            echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
+            ?>
                         <i class="fas fa-caret-down dropdown-caret"></i>
                     </a>
                     <div class="dropdown-content">
@@ -92,7 +100,8 @@
             const logoutButton = document.getElementById("logoutButton");
     
             logoutButton.addEventListener("click", function () {
-              window.location.href = "NU_LoginPage.php";
+        
+              window.location.href = "../php/logout.php";
             });
           </script>
 
@@ -108,10 +117,7 @@
                         <h3>ITEMS</h3>
                         <button class="edit-btn" onclick="navigateTo('ITEMS EDITING.php')">ITEMS</button>
                     </div>
-                    <div class="menu-item">
-                        <h3>FORM</h3>
-                        <button class="edit-btn" onclick="navigateTo('FORM EDITING.php')">FORM</button>
-                    </div>
+            
                 </div>
     
         </section>

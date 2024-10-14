@@ -1,13 +1,13 @@
 <?php
-include('connect.php');
+include('../php/connect.php');
 
-// Define the maximum file size in bytes (15 MB)
-$maxFileSize = 15 * 1024 * 1024; // 15 MB
 
-// Allowed image types
+$maxFileSize = 15 * 1024 * 1024; 
+
+
 $allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 
-// Fetch form data
+
 $firstName = $_POST['fn_firstname'];
 $lastName = $_POST['ln_lastname'];
 $item_req_sender_email = $_POST['item_req_sender_email'];
@@ -22,7 +22,7 @@ $date_lost = $_POST['date_lost'];
 $time_lost = $_POST['time_lost'];
 $item_req_add_info = $_POST['item_req_add_info'];
 
-// Handle file upload
+
 $file_name = $_FILES['item_req_photo']['name'];
 $temp_name = $_FILES['item_req_photo']['tmp_name'];
 $file_size = $_FILES['item_req_photo']['size'];
@@ -30,7 +30,7 @@ $file_type = $_FILES['item_req_photo']['type'];
 $upload_directory = '../html/item-images/'; // Folder to store images
 $file_path = $upload_directory . basename($file_name);
 
-// Validate file type
+
 if (!in_array($file_type, $allowedFileTypes)) {
     die("Error: Only .jpg, .jpeg, and .png files are allowed.");
 }

@@ -9,6 +9,14 @@
             min-height: 100vh;
         }
 
+        .custom-disabled {
+            opacity: 1 !important; /* Override opacity */
+            background-color: #fff; /* Optional: To ensure the background remains the same */
+            color: #000; /* Optional: To keep the text color as it was */
+            pointer-events: none; /* Ensures it's still non-interactive */
+        }
+        
+
         .form-container {
 			background-color: #35408e;
 			padding: 30px; /* Adjust padding if needed */

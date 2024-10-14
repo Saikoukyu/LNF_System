@@ -117,16 +117,16 @@
       }
 
       .add-lost-found .plus {
-        color: #ffffff;
+        color: #e1bd59;
       }
 
       .add-lost-found .lost {
-        color: #ffffff;
+        color: #e15959;
       }
 
       .add-lost-found .and,
       .add-lost-found .found {
-        color: #ffffff;
+        color: #18a3f3;
       }
 
       .dropdown {
