@@ -131,7 +131,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
             <tr>
               <th>Name</th>
               <th>Email</th>
-              <th>Password</th>
+
               <th>Manage</th>
               <th>Remove</th>
             </tr>
@@ -143,13 +143,17 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
               // Output each row of data from the database
               while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
+
+                if ($row['role'] === 'IT_Admin') {
+                  echo "<td></td>";
+              } else if ($row['role'] === 'Admin') {
                 echo "<td> ". htmlspecialchars($row['username']) ." </td>";
                 echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['password']) . "</td>";
+              }
+
                // Check the role and conditionally show buttons
             if ($row['role'] === 'IT_Admin') {
               // Do not show edit or delete buttons
-              echo "<td></td>";
               echo "<td></td>";
           } else if ($row['role'] === 'Admin') {
               // Show edit and delete buttons
@@ -366,13 +370,13 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
 </html>
 
 <script>
-  let selectedUsername; // To store the username for deletion
+  let selectedDoId; // Store the do_id for deletion
 
   // Function to open the delete confirmation modal
-  function openDeleteModal(name, username) {
-    document.getElementById('name').textContent = `Are you sure you want to delete user ${username}?`;
+  function openDeleteModal(name, doId) {
+    document.getElementById('name').textContent = `Are you sure you want to delete user ${name}?`;
     deleteModal.style.display = 'block';
-    selectedUsername = username; // Store the username for later deletion
+    selectedDoId = doId; // Store the do_id for later deletion
   }
 
   // Function to handle deletion when the "Yes" button is clicked
@@ -389,7 +393,10 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
         alert("Error deleting user. Please try again.");
       }
     };
-    xhr.send("username=" + encodeURIComponent(selectedUsername));
+
+    console.log ("doID:", selectedDoId)
+
+    xhr.send("do_id=" + encodeURIComponent(selectedDoId)); // Send do_id to PHP
 
     // Close the modal
     deleteModal.style.display = 'none';
@@ -412,6 +419,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
     }
   });
 </script>
+
 
 <?php
 // Close the database connection
