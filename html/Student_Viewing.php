@@ -144,26 +144,34 @@ include("../php/connect2.php");
                         $formattedDateLost = date("m/d/Y", strtotime($dateLost));
                         $statusName = $row['status_name'];
 
+                        $inquirySql = "SELECT COUNT(*) AS inquiry_count 
+                        FROM tbl_inquiry 
+                        WHERE inquiry_item_id = ?";
+         $inquiryStmt = $conn->prepare($inquirySql);
+         $inquiryStmt->execute([$itemId]);
+         $inquiryCount = $inquiryStmt->fetch(PDO::FETCH_ASSOC)['inquiry_count'];
+
                         echo "<tr>";
                         echo "<td>" . $itemName . "</td>";
                         echo "<td>" . $locationName . "</td>";
                         echo "<td>" . $formattedDateLost . "</td>";
                         echo "<td>" . $statusName . "</td>";
-                        echo '<td>0</td>';
-                        echo '<td><a href="Lost_and_Found_Student_Item.php?item_id=' . $itemId . '" class="btn-box">Inquire</a></td>';
-                        echo "</tr>";
-                    }
+                        echo "<td>" . $inquiryCount . "</td>";
+                        // Check if the status is not "Claimed" before displaying the Inquire button
+                if ($statusName !== "Claimed") {
+                    echo '<td><a href="Lost_and_Found_Student_Item.php?item_id=' . $itemId . '" class="btn-box">Inquire</a></td>';
                 } else {
-                    echo "<tr><td colspan='14'>No items found</td></tr>";
+                    echo '<td><span class="claimed-text">Item has been Claimed</span></td>'; // Optional message when claimed
                 }
-                ?>
-            </tr>
-        </tbody>
-    </table>
 
-    <div class="inquiry-container">
-        <button class="inquiry-button" id="inquiryButton">INQUIRY</button>
-    </div>
+                echo "</tr>";
+            }
+        } else {
+            echo "<tr><td colspan='14'>No items found</td></tr>";
+        }
+        ?>
+    </tbody>
+</table>
 
     <script>
         

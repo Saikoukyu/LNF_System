@@ -5,34 +5,30 @@ if (isset($_GET['inquiry_id'])) {
     $inquiryId = intval($_GET['inquiry_id']); // Sanitize the input for security
 
     try {
-        // Step 2: Prepare the SQL query to fetch inquiry details based on the inquiry_id from tbl_inquiry and tbl_item_request
-        $sql = "SELECT ir.*, 
-                       fn.fn_firstname, fn.fn_lastname, 
-                       it.it_name, 
-                       iname.in_name,
-                       loc.location_name, 
-                       sloc.specific_location_name, 
-                       tdate.date_lost, tdate.time_lost
-                FROM tbl_inquiry i
-                JOIN tbl_item_request ir ON i.inquiry_request_id = ir.item_req_id
-                JOIN tbl_full_name fn ON ir.item_req_full_name_id = fn.fn_id
-                JOIN tbl_item_type it ON ir.item_req_type_id = it.it_id
-                JOIN tbl_item_name iname ON ir.item_req_name_id = iname.in_id
-                JOIN tbl_location loc ON ir.item_req_location_id = loc.location_id
-                JOIN tbl_specific_location sloc ON ir.item_req_specific_location_id = sloc.specific_location_id
-                JOIN tbl_time_date tdate ON ir.item_req_time_date_id = tdate.time_date_id
-                WHERE i.inquiry_id = :inquiry_id"; // Fetch based on inquiry_id
+        // Fetch details from the database using inquiry_id
+        $sql = "SELECT i.inquiry_item_id, ir.*, 
+       fn.fn_firstname, fn.fn_lastname, 
+       it.it_name, iname.in_name, 
+       loc.location_name, sloc.specific_location_name, 
+       tdate.date_lost, tdate.time_lost
+FROM tbl_inquiry i
+JOIN tbl_item_request ir ON i.inquiry_request_id = ir.item_req_id
+JOIN tbl_full_name fn ON ir.item_req_full_name_id = fn.fn_id
+JOIN tbl_item_type it ON ir.item_req_type_id = it.it_id
+JOIN tbl_item_name iname ON ir.item_req_name_id = iname.in_id
+JOIN tbl_location loc ON ir.item_req_location_id = loc.location_id
+JOIN tbl_specific_location sloc ON ir.item_req_specific_location_id = sloc.specific_location_id
+JOIN tbl_time_date tdate ON ir.item_req_time_date_id = tdate.time_date_id
+WHERE i.inquiry_id = :inquiry_id";
+;
 
-        // Step 3: Prepare and execute the query
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(':inquiry_id', $inquiryId, PDO::PARAM_INT);
         $stmt->execute();
-
-        // Step 4: Fetch the result
         $inquiry = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($inquiry) {
-            // If the inquiry is found, store the values
+            // Fetch all necessary details, including the item request ID
             $fullName = $inquiry['fn_firstname'] . ' ' . $inquiry['fn_lastname'];
             $itemType = $inquiry['it_name'];
             $itemName = $inquiry['in_name'];
@@ -41,7 +37,7 @@ if (isset($_GET['inquiry_id'])) {
             $senderId = $inquiry['item_req_sender_stud_id'];
             $itemReqDetailedName = $inquiry['item_req_detailed_name'];
             $itemInfo = $inquiry['item_req_add_info'];
-            $itemPhoto = !empty($inquiry['item_req_photo']) ? '../assets/' . $inquiry['item_req_photo'] : 'https://via.placeholder.com/150'; // Placeholder if no image
+            $itemPhoto = !empty($inquiry['item_req_photo']) ? '../assets/' . $inquiry['item_req_photo'] : 'https://via.placeholder.com/150';
             $itemLocation = $inquiry['location_name'];
             $itemSpecificLocation = $inquiry['specific_location_name'];
             $dateLost = $inquiry['date_lost'];
@@ -52,8 +48,10 @@ if (isset($_GET['inquiry_id'])) {
             $selectedSpecificLocation = $inquiry['item_req_specific_location_id'];
             $selectedType = $inquiry['item_req_type_id'];
             $selectedName = $inquiry['item_req_name_id'];
+            $itemReqId = $inquiry['item_req_id']; // Important for JavaScript
+            $itemId = $inquiry['inquiry_item_id'];
+
         } else {
-            // If no inquiry is found, handle the error
             echo "Inquiry not found.";
             exit;
         }
@@ -77,9 +75,8 @@ if (isset($_GET['inquiry_id'])) {
 </head>
 
 <body>
-  <form class="form-container" enctype="multipart/form-data" action="../php/connect_Lost_and_Found_Student_Item.php" method="POST">
+  <form class="form-container" id="lostFoundForm" enctype="multipart/form-data" action="../php/connect_Lost_and_Found_Student_Item.php" method="POST">
         <h2>LOST & FOUND FORM ITEM INQUIRY</h2>
-        <form id="lostFoundForm">
             <div class="form-row">
                 <div class="form-group">
                     <label for="firstName">Full Name</label>
@@ -211,54 +208,80 @@ if (isset($_GET['inquiry_id'])) {
     </div>
 </div>
             </div>
-             <div class="submit-container">
-        <button type="button" id="submitBtn">Release Item</button>
-        <button type="button" class="close-popup-btn" onclick="closePopup()">Close</button>
-    </div>
+            <div class="submit-container">
+    <button type="button" id="submitBtn">Release Item</button>
+    <button type="button" class="close-popup-btn" onclick="closePopup()">Close</button>
+</div>
 </div>
 
-
-        </form>
     </form>
 
-    <div class="popup" id="popup">
+    <div class="popup" id="popup" style="display: none;"> <!-- Ensure popup is hidden initially -->
     <img src="assets/check.png" alt="Check">
     <h2>Confirm Action</h2>
     <p>Are you sure you want to release this item and mark it as claimed?</p>
     <button id="confirmBtn" onclick="confirmAction()">Yes, Confirm</button>
     <button class="close-popup-btn" onclick="closePopup()">No, Cancel</button>
 </div>
+</div>
 
-    <script>
-          // Show the popup when clicking "Release Item"
+<script>
+    // Show the popup when clicking "Release Item"
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        document.getElementById('popup').style.display = 'block'; // Show the popup
+    });
+
+    // Handle the confirmation action
+    // Show the popup when clicking "Release Item"
     document.getElementById('submitBtn').addEventListener('click', function() {
         document.getElementById('popup').style.display = 'block'; // Show the popup
     });
 
     // Handle the confirmation action
     function confirmAction() {
-     var inquiryId = <?= $inquiryId; ?>;  // Pass the inquiry ID
+        var inquiryId = <?= json_encode($inquiryId); ?>;  // Pass the inquiry ID as a JavaScript variable
+        var itemReqId = <?= json_encode($itemReqId); ?>;  // Pass the item request ID as a JavaScript variable
+        var itemId = <?= json_encode($inquiry['inquiry_item_id']); ?>; // Use linked item_id
 
-     // AJAX request
-     var xhr = new XMLHttpRequest();
-     xhr.open("POST", "../php/release_item.php", true); // Point to the PHP processing script
-     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-     xhr.onreadystatechange = function () {
-         if (xhr.readyState === 4 && xhr.status === 200) {
-             var response = JSON.parse(xhr.responseText);
+        if (!inquiryId || !itemReqId) {
+            alert("Missing inquiry ID or item request ID.");
+            return;
+        }
 
-             if (response.status === "success") {
-                 // Hide the popup and show confirmation
-                 alert(response.message);
-                 window.location.href = "item view.php";  // Redirect to success page
-             } else {
-                 // Show error message
-                 alert("Error: " + response.message);
-             }
-         }
-     };
-     xhr.send("inquiry_id=" + inquiryId + "&item_req_name_id=" + <?= $selectedName; ?>);  // Send inquiry ID and item ID to the server
- }
+        console.log(`Sending inquiry_id: ${inquiryId}, item_req_id: ${itemReqId}, item_id: ${itemId}`);
+
+
+        // AJAX request
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "../php/release_item.php", true); // Point to the PHP processing script
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log(xhr.responseText);  // Log raw server response
+
+                try {
+                    var response = JSON.parse(xhr.responseText);  // Try to parse JSON
+                    console.log(response);  // Log the parsed response for debugging
+
+                    if (response.status === "success") {
+                        // Hide the popup and show confirmation
+                        alert(response.message);
+                        window.location.href = "item view.php";  // Redirect to success page
+                    } else {
+                        // Show error message
+                        alert("Error: " + response.message);
+                    }
+                } catch (e) {
+                    // Handle JSON parse error
+                    console.error("Could not parse JSON: ", e);
+                    alert("An error occurred: Invalid JSON response from the server.");
+                }
+            }
+        };
+
+        // Send inquiry ID and item request ID to the server
+        xhr.send("inquiry_id=" + inquiryId + "&item_req_id=" + itemReqId + "&item_id=" + itemId);  // Send the correct IDs
+    }
 
     // Close the popup
     function closePopup() {
