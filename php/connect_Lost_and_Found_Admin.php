@@ -53,9 +53,7 @@ $stmt->bind_param("ss", $firstName, $lastName);
 
 if ($stmt->execute()) {
     // Check if the insert was successful
-    if ($stmt->affected_rows > 0) {
-        echo "Full name successfully inserted into tbl_full_name.<br>";
-        
+    if ($stmt->affected_rows > 0) {        
         // Get the fn_id of the newly inserted row
         $fn_id = $conn->insert_id; // This is the fn_id for tbl_full_name
     } else {
@@ -72,9 +70,7 @@ $stmt->bind_param("ss", $date_lost, $time_lost);
 
 if ($stmt->execute()) {
     // Check if the insert was successful
-    if ($stmt->affected_rows > 0) {
-        echo "Date and time successfully inserted into tbl_time_date.<br>";
-        
+    if ($stmt->affected_rows > 0) {    
         // Get the time_date_id of the newly inserted row
         $time_date_id = $conn->insert_id; // This is the time_date_id for tbl_time_date
     } else {
@@ -91,6 +87,7 @@ $stmt2->bind_param("issiissiiisis", $fn_id, $item_founder_email, $item_founder_s
 
 if ($stmt2->execute()) {
     echo "Item request successfully inserted into tbl_item_description.";
+    header('Location: ../html/Admin_Dashboard.php');
 } else {
     echo "Error inserting item request: " . $stmt2->error;
 }

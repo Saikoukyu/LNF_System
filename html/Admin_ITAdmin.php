@@ -19,17 +19,16 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
 
   <body>
     
-     <!-- Sidebar -->
-     <div class="sidebar">
+        <!-- Sidebar -->
+        <div class="sidebar">
         <div class="menu-toggle">
             <i class="fas fa-bars"></i>
             <span>MENU</span>
         </div>
         <div class="sidebar-greeting">
             Hello, <?php
-            // Dynamically show the username or placeholder based on session (assumed username is stored in session)
-            echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
-            ?>
+                    echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
+                    ?>
         </div>
         <ul>
             <li onclick="window.location.href='Admin_Dashboard.php'">
@@ -39,18 +38,19 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                 <i class="fas fa-eye"></i><span>Item View</span>
             </li>
             <li onclick="window.location.href='Admin_Report.php'">
-                <i class="fas fa-file-alt"></i><span>Report</span>
+                <i class="fas fa-file-alt"></i><span>Archive</span>
             </li>
             <li onclick="window.location.href='Admin_Admin.php'">
                 <i class="fas fa-user"></i><span>Admin</span>
             </li>
             <?php if ($role == 'IT_Admin') : ?>
-            <li onclick="window.location.href='Admin_ITAdmin.php'">
-                <i class="fas fa-cogs"></i><span>IT Admin Setting</span>
-            </li>
+                <li onclick="window.location.href='Admin_ITAdmin.php'">
+                    <i class="fas fa-cogs"></i><span>IT Admin Setting</span>
+                </li>
             <?php endif; ?>
         </ul>
     </div>
+
 
     <div class="content">
       <div class="header">
