@@ -370,22 +370,22 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
 </html>
 
 <script>
-  let selectedDoId; // Store the do_id for deletion
+  let selectedEmail; // Store the email for deletion
 
   // Function to open the delete confirmation modal
-  function openDeleteModal(name, doId) {
+  function openDeleteModal(name, email) {
     document.getElementById('name').textContent = `Are you sure you want to delete user ${name}?`;
     deleteModal.style.display = 'block';
-    selectedDoId = doId; // Store the do_id for later deletion
+    selectedEmail = email; // Store the email for later deletion
   }
 
   // Function to handle deletion when the "Yes" button is clicked
-  document.getElementById('confirmDelete').addEventListener('click', function() {
+  document.getElementById('confirmDelete').addEventListener('click', function () {
     // Proceed with deletion
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "../php/delete_user.php", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onload = function() {
+    xhr.onload = function () {
       if (xhr.status === 200) {
         alert(xhr.responseText); // Show success or error message
         window.location.reload(); // Reload the page to update the table
@@ -394,26 +394,26 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
       }
     };
 
-    console.log ("doID:", selectedDoId)
+    console.log("Email:", selectedEmail);
 
-    xhr.send("do_id=" + encodeURIComponent(selectedDoId)); // Send do_id to PHP
+    xhr.send("email=" + encodeURIComponent(selectedEmail)); // Send email to PHP
 
     // Close the modal
     deleteModal.style.display = 'none';
   });
 
   // Function to cancel and close the delete modal
-  document.getElementById('cancelDelete').addEventListener('click', function() {
+  document.getElementById('cancelDelete').addEventListener('click', function () {
     deleteModal.style.display = 'none'; // Close the modal without deleting
   });
 
   // Close the modal when clicking the "X" button
-  document.querySelector('.modal .close').addEventListener('click', function() {
+  document.querySelector('.modal .close').addEventListener('click', function () {
     deleteModal.style.display = 'none';
   });
 
   // Close the modal if the user clicks outside of it
-  window.addEventListener('click', function(event) {
+  window.addEventListener('click', function (event) {
     if (event.target === deleteModal) {
       deleteModal.style.display = 'none';
     }

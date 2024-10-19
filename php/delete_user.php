@@ -2,19 +2,19 @@
 include("../php/connect.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get the do_id from the POST request
-    $do_id = $_POST['do_id'];
+    // Get the email from the POST request
+    $email = $_POST['email'];
 
     // Prepare the delete statement
-    $sql = "DELETE FROM tbl_do_admin WHERE do_id = ?";
+    $sql = "DELETE FROM tbl_do_admin WHERE email = ?";
     $stmt = $conn->prepare($sql);
 
     if ($stmt === false) {
         die('Error in preparing statement: ' . $conn->error);
     }
 
-    // Bind the do_id to the statement
-    $stmt->bind_param("i", $do_id);  // "i" for integer
+    // Bind the email to the statement
+    $stmt->bind_param("s", $email);  // "s" for string
 
     // Execute the statement
     if ($stmt->execute()) {

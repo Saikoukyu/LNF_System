@@ -55,11 +55,23 @@ include("../php/connect2.php");
         </div>
     </header>
 
-    <div class="search-bar">
+
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="mySidebar">
+        <a href="#" id="view-items-link" class="active">
+            <i class="fas fa-eye"></i> View Items
+        </a>
+        <a href="#" id="rules-link">
+            <i class="fas fa-info-circle"></i> Lost & Found Rules
+        </a>
+    </div>
+    <div class="main-content">
+    <div class="search-bar" id="searchbar">
         <input type="text" id="searchInput" placeholder="Search items...">
     </div>
 
-    <div class="filter-bar">
+    <div class="filter-bar" id="filterbar">
         <label for="typeFilter">Type:</label>
         <input type="text" id="typeFilter" placeholder="Item Type">
 
@@ -92,7 +104,7 @@ include("../php/connect2.php");
         <button id="resetButton">Reset</button>
     </div>
 
-    <table class="lost-found-table">
+    <table class="lost-found-table" id="lostfoundtable">
         <thead>
             <tr>
                 <th>Type</th>
@@ -172,12 +184,104 @@ include("../php/connect2.php");
         ?>
     </tbody>
 </table>
+ <!-- Lost & Found Rules Section -->
+ <div id="rules" class="rules">
+            <h2>Lost and Found </h2>
+            <p>Lost and found items are handled by the Student Discipline Office (SDO). Members of the NU community are expected to be guided by the University's Code of Conduct to maintain personal integrity and respect for the property of others.</p>
+
+            <h3>Definitions</h3>
+            <ul>
+                <li><strong>Lost Property:</strong> Any unattended, abandoned, misplaced, or forgotten item found on University premises.</li>
+                <li><strong>University Premises:</strong> All buildings, grounds, and residences owned, leased, rented, or otherwise under the control of the university.</li>
+                <li><strong>Lost and Found Property Logbook:</strong> Consists of the details and data of the lost item managed by the personnel of the SDO.</li>
+            </ul>
+
+            <h3>Surrendering and Reporting Lost Items</h3>
+            <ul>
+                <li>All property inside the University Premises should be handed and surrendered to the SDO.</li>
+                <li>The person who surrendered the item shall fill out the Lost and Found Property Logbook for security purposes.</li>
+            </ul>
+
+            <h3>Returning Lost Property to Owners</h3>
+            <ul>
+                <li>To claim a lost property by the SDO, owners must retrieve the item personally.</li>
+                <li>In claiming the item, the owner must provide proof of ownership or a description of the lost property and its contents, if applicable.</li>
+                <li>The owner must acknowledge receipt of the property by signing and dating the Lost and Found Property Logbook.</li>
+            </ul>
+
+            <h3>Disposing of Unclaimed Lost Property</h3>
+            <ul>
+                <li>Perishable and personal items that can emit foul odors must be claimed within 48 hours to prevent pest infestation.</li>
+                <li>Non-perishable items can be claimed at the end of the term.</li>
+            </ul>
+
+            <h4>Items that are perishable and other personal items that can emit foul odor:</h4>
+            <ul>
+                <li>Food</li>
+                <li>Beverages (Bottled drinks, juice, soft drinks, etc.)</li>
+                <li>Personal Care items (toiletries, etc.)</li>
+                <li>Hygiene Products (Deodorants or Body Sprays)</li>
+                <li>Lunch Containers (with leftovers)</li>
+                <li>Fabric (clothes, towel, jacket, socks, etc.)</li>
+ 
+            </ul>
+
+            <h4>Items that are non-perishable:</h4>
+            <ul>
+                <li>Accessories</li>
+                <li>Electronics</li>
+                <li>Books</li>
+                <li>Bags</li>
+                <li>Stationeries and other school supplies</li>
+                <li>Keys and keychains</li>
+                <li>Umbrella</li>
+                <li>Shoes</li>
+                <li>Hats, bullcap, etc.</li>
+            </ul>
+
+            <h3>Disposal Procedures</h3>
+            <ul>
+                <li>Unclaimed property that easily decay, release odor, or are perishable disposed of within 48 hours. 
+				    Proper documentation (i.e., picture) will be provided.</li>
+                <li>Unclaimed non-perishable property will be disposed of after the end of the academic year.</li>
+                <li>Any items shredded or disposed of must be recorded in the Lost and Found Property Logbook.</li>
+            </ul>
+        </div>
+    </div>
+
+
+    <script>
+                 // Function to hide and show sections
+                 function toggleSections(isViewItems) {
+            document.getElementById('rules').style.display = isViewItems ? 'none' : 'block'; // Show rules if not view items
+            document.getElementById('lostfoundtable').style.display = isViewItems ? 'table' : 'none'; // Show table if view items
+            document.getElementById('searchbar').style.display = isViewItems ? 'block' : 'none'; // Show search bar if view items
+            document.getElementById('filterbar').style.display = isViewItems ? 'block' : 'none'; // Show filter bar if view items
+        }
+
+        // Sidebar active state handling
+        document.getElementById('view-items-link').addEventListener('click', function() {
+            toggleSections(true); // Show items, hide rules
+            document.getElementById('view-items-link').classList.add('active');
+            document.getElementById('rules-link').classList.remove('active');
+        });
+
+        document.getElementById('rules-link').addEventListener('click', function() {
+            toggleSections(false); // Show rules, hide items
+            document.getElementById('rules-link').classList.add('active');
+            document.getElementById('view-items-link').classList.remove('active');
+        });
+
+    </script>
 
     <script>
         
          document.getElementById('inquiryButton').addEventListener('click', function() {
             window.location.href = '../html/Lost_and_Found_Student.php';
         });
+
+
+
 
         function saveTableData() {
             const tableData = [];
@@ -306,14 +410,17 @@ include("../php/connect2.php");
             }
         });
     
-    document.getElementById('inquiryButton').addEventListener('click', function() {
-        window.location.href = '../html/Lost_and_Found_Student.php';
+</script>
+
+<script>
+
+    const logoutButton = document.getElementById('logoutButton');
+    logoutButton.addEventListener('click', function() {
+        // Ensure the redirect URL is correct
+        window.location.href = 'NU_LoginPage.php';
     });
 
-        const logoutButton = document.getElementById('logoutButton');
-        logoutButton.addEventListener('click', function() {
-            window.location.href = 'NU_LoginPage.php';
-        });
+    
 </script>
 </body>
 

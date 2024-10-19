@@ -225,10 +225,7 @@ try {
 
         <!-- Dashboard Cards -->
         <div class="dashboard">
-            <div class="card lime">
-                <h3><i class="fas fa-users"></i> <?php echo $lost_items; ?></h3> <!-- Items Lost -->
-                <p>Items Lost</p>
-            </div>
+            
             <div class="card yellow">
                 <h3><i class="fas fa-map-marker-alt"></i> <?php echo $found_items; ?></h3> <!-- Items Found -->
                 <p>Items Found</p>
