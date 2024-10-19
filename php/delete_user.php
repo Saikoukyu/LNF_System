@@ -2,7 +2,7 @@
 include("../php/connect.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get the username from the POST request
+    // Get the email from the POST request
     $email = $_POST['email'];
 
     // Prepare the delete statement
@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Bind the email to the statement
-    $stmt->bind_param("s", $email);
+    $stmt->bind_param("s", $email);  // "s" for string
 
     // Execute the statement
     if ($stmt->execute()) {

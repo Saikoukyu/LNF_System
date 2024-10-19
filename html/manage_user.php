@@ -131,7 +131,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
             <tr>
               <th>Name</th>
               <th>Email</th>
-              <th>Password</th>
+
               <th>Manage</th>
               <th>Remove</th>
             </tr>
@@ -143,13 +143,17 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
               // Output each row of data from the database
               while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
+
+                if ($row['role'] === 'IT_Admin') {
+                  echo "<td></td>";
+              } else if ($row['role'] === 'Admin') {
                 echo "<td> ". htmlspecialchars($row['username']) ." </td>";
                 echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['password']) . "</td>";
+              }
+
                // Check the role and conditionally show buttons
             if ($row['role'] === 'IT_Admin') {
               // Do not show edit or delete buttons
-              echo "<td></td>";
               echo "<td></td>";
           } else if ($row['role'] === 'Admin') {
               // Show edit and delete buttons
@@ -366,22 +370,22 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
 </html>
 
 <script>
-  let selectedUsername; // To store the username for deletion
+  let selectedEmail; // Store the email for deletion
 
   // Function to open the delete confirmation modal
-  function openDeleteModal(name, username) {
-    document.getElementById('name').textContent = `Are you sure you want to delete user ${username}?`;
+  function openDeleteModal(name, email) {
+    document.getElementById('name').textContent = `Are you sure you want to delete user ${name}?`;
     deleteModal.style.display = 'block';
-    selectedUsername = username; // Store the username for later deletion
+    selectedEmail = email; // Store the email for later deletion
   }
 
   // Function to handle deletion when the "Yes" button is clicked
-  document.getElementById('confirmDelete').addEventListener('click', function() {
+  document.getElementById('confirmDelete').addEventListener('click', function () {
     // Proceed with deletion
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "../php/delete_user.php", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onload = function() {
+    xhr.onload = function () {
       if (xhr.status === 200) {
         alert(xhr.responseText); // Show success or error message
         window.location.reload(); // Reload the page to update the table
@@ -389,29 +393,33 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
         alert("Error deleting user. Please try again.");
       }
     };
-    xhr.send("username=" + encodeURIComponent(selectedUsername));
+
+    console.log("Email:", selectedEmail);
+
+    xhr.send("email=" + encodeURIComponent(selectedEmail)); // Send email to PHP
 
     // Close the modal
     deleteModal.style.display = 'none';
   });
 
   // Function to cancel and close the delete modal
-  document.getElementById('cancelDelete').addEventListener('click', function() {
+  document.getElementById('cancelDelete').addEventListener('click', function () {
     deleteModal.style.display = 'none'; // Close the modal without deleting
   });
 
   // Close the modal when clicking the "X" button
-  document.querySelector('.modal .close').addEventListener('click', function() {
+  document.querySelector('.modal .close').addEventListener('click', function () {
     deleteModal.style.display = 'none';
   });
 
   // Close the modal if the user clicks outside of it
-  window.addEventListener('click', function(event) {
+  window.addEventListener('click', function (event) {
     if (event.target === deleteModal) {
       deleteModal.style.display = 'none';
     }
   });
 </script>
+
 
 <?php
 // Close the database connection
