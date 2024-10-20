@@ -57,7 +57,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
             </span>
 
             <div class="right-menu">
-            <a href="Lost_and_Found.php" class="add-lost-found">
+            <a href="Lost_and_Found_Admin.php" class="add-lost-found">
                     <span class="plus">+</span>
                     <span class="lost">Lost</span>
                     <span class="and">&</span>
@@ -110,8 +110,8 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
             <hr class="header-line">
                 <div class="menu-items">
                     <div class="menu-item">
-                        <h3>ARCHIVED</h3>
-                        <button class="edit-btn" onclick="navigateTo('Admin_Report.php')">ARCHIVE</button>
+                        <h3>FORMS</h3>
+                        <button class="edit-btn" onclick="navigateTo('Lost_and_Found_Admin.php')">Add Lost Items</button>
                     </div>
                     <div class="menu-item">
                         <h3>ITEMS</h3>

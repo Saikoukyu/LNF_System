@@ -105,7 +105,7 @@ foreach ($weekly_found_data as $found) {
 
 
 try {
-    // Fetch the two most recently lost distinct items
+    // Fetch the two most recently lost distinct items (existing code)
     $sql_recent_lost = "SELECT DISTINCT td.item_id, 
                                td.*, 
                                fn.fn_firstname, fn.fn_lastname, 
@@ -115,6 +115,7 @@ try {
                                sloc.specific_location_name, 
                                tdate.date_lost, tdate.time_lost,
                                stat.status_name,
+                               td.owner_name,
                                td.item_photo -- Fetch the item photo
                         FROM tbl_item_description td
                         JOIN tbl_full_name fn ON td.item_full_name_id = fn.fn_id
@@ -125,12 +126,42 @@ try {
                         JOIN tbl_time_date tdate ON td.item_time_date_id = tdate.time_date_id
                         JOIN tbl_status stat ON td.item_status_id = stat.status_id
                         WHERE td.item_status_id = 1 -- Unclaimed (lost items)
-                        ORDER BY tdate.date_lost DESC
-                        LIMIT 2"; // Get the 2 latest unique lost items
+                        ORDER BY td.item_id DESC -- Order by highest item_id
+                        LIMIT 1";
 
     $stmt_recent_lost = $conn->prepare($sql_recent_lost);
     $stmt_recent_lost->execute();
     $recent_lost_items = $stmt_recent_lost->fetchAll(PDO::FETCH_ASSOC);
+
+    // Fetch the two most recently found items where owner_name is not empty (new code)
+    $sql_recent_found = "SELECT DISTINCT td.item_id, 
+                                 td.*, 
+                                 fn.fn_firstname, fn.fn_lastname, 
+                                 it.it_name, 
+                                 iname.in_name,
+                                 loc.location_name, 
+                                 sloc.specific_location_name, 
+                                 stat.status_name,
+                                 td.owner_name,
+                                 td.item_photo -- Fetch the item photo
+                          FROM tbl_item_description td
+                          JOIN tbl_full_name fn ON td.item_full_name_id = fn.fn_id
+                          JOIN tbl_item_type it ON td.item_type_id = it.it_id
+                          JOIN tbl_item_name iname ON td.item_name_id = iname.in_id
+                          JOIN tbl_location loc ON td.item_location_id = loc.location_id
+                          JOIN tbl_specific_location sloc ON td.item_specific_location_id = sloc.specific_location_id
+                          JOIN tbl_time_date tdate ON td.item_time_date_id = tdate.time_date_id
+                          JOIN tbl_status stat ON td.item_status_id = stat.status_id
+                          WHERE td.item_status_id = 2 -- Found (claimed items)
+                          AND td.owner_name IS NOT NULL 
+                          AND td.owner_name != '' -- Check if owner name is not empty
+                          ORDER BY td.item_id DESC -- Order by highest item_id (most recent)
+                          LIMIT 1";
+
+    $stmt_recent_found = $conn->prepare($sql_recent_found);
+    $stmt_recent_found->execute();
+    $recent_found_items = $stmt_recent_found->fetchAll(PDO::FETCH_ASSOC);
+
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }
@@ -152,16 +183,16 @@ try {
 
 <body>
 
-       <!-- Sidebar -->
-       <div class="sidebar">
+    <!-- Sidebar -->
+    <div class="sidebar">
         <div class="menu-toggle">
             <i class="fas fa-bars"></i>
             <span>MENU</span>
         </div>
         <div class="sidebar-greeting">
             Hello, <?php
-                    echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
-                    ?>
+            echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
+            ?>
         </div>
         <ul>
             <li onclick="window.location.href='Admin_Dashboard.php'">
@@ -176,7 +207,7 @@ try {
             <li onclick="window.location.href='Admin_Admin.php'">
                 <i class="fas fa-user"></i><span>Admin</span>
             </li>
-            <?php if ($role == 'IT_Admin') : ?>
+            <?php if ($role == 'IT_Admin'): ?>
                 <li onclick="window.location.href='Admin_ITAdmin.php'">
                     <i class="fas fa-cogs"></i><span>IT Admin Setting</span>
                 </li>
@@ -204,9 +235,9 @@ try {
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle">
                         <i class="fas fa-user"></i> <?php
-                                                    // Dynamically show the username or placeholder based on session (assumed username is stored in session)
-                                                    echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
-                                                    ?>
+                        // Dynamically show the username or placeholder based on session (assumed username is stored in session)
+                        echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Admin';
+                        ?>
                         <i class="fas fa-caret-down dropdown-caret"></i>
                     </a>
                     <div class="dropdown-content">
@@ -225,7 +256,7 @@ try {
 
         <!-- Dashboard Cards -->
         <div class="dashboard">
-            
+
             <div class="card yellow">
                 <h3><i class="fas fa-map-marker-alt"></i> <?php echo $found_items; ?></h3> <!-- Items Found -->
                 <p>Items Found</p>
@@ -263,29 +294,48 @@ try {
 
 
 
-            <!-- The loop for recently lost items -->
+            <!-- Existing loop for Recently Lost Items -->
             <?php if (!empty($recent_lost_items)): ?>
-                <?php foreach ($recent_lost_items as $lost): ?>
-                    <div class="grid-item">
-                        <h4>Recently Lost Items</h4>
+                <div class="grid-item">
+                    <h4>Recently Lost Items</h4>
+                    <?php foreach ($recent_lost_items as $lost): ?>
                         <p>Name: <?php echo htmlspecialchars($lost['in_name']); ?></p>
                         <p>Item Type: <?php echo htmlspecialchars($lost['it_name']); ?></p>
                         <p>Location: <?php echo htmlspecialchars($lost['specific_location_name']); ?></p>
-                        <!-- Assuming specific_location_name is the brand -->
-                        <p>Owner:
-                            <?php echo htmlspecialchars($lost['fn_firstname']) . ' ' . htmlspecialchars($lost['fn_lastname']); ?>
-                        </p>
+                        <p>Owner: <?php echo !empty($lost['owner_name']) ? $lost['owner_name'] : 'Not Released'; ?></p>
                         <div class="image-container">
                             <img src="<?php echo htmlspecialchars($lost['item_photo']); ?>"
                                 alt="<?php echo htmlspecialchars($lost['in_name']); ?>">
                             <a href="item_desc.php?item_id=<?php echo htmlspecialchars($lost['item_id']); ?>"
                                 class="show-button">Show</a>
                         </div>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
             <?php else: ?>
                 <p>No recently lost items found.</p>
             <?php endif; ?>
+
+            <!-- New loop for Recently Found Items -->
+            <?php if (!empty($recent_found_items)): ?>
+                <div class="grid-item">
+                    <h4>Recently Found Items</h4>
+                    <?php foreach ($recent_found_items as $found): ?>
+                        <p>Name: <?php echo htmlspecialchars($found['in_name']); ?></p>
+                        <p>Item Type: <?php echo htmlspecialchars($found['it_name']); ?></p>
+                        <p>Location: <?php echo htmlspecialchars($found['specific_location_name']); ?></p>
+                        <p>Owner: <?php echo htmlspecialchars($found['owner_name']); ?></p>
+                        <div class="image-container">
+                            <img src="<?php echo htmlspecialchars($found['item_photo']); ?>"
+                                alt="<?php echo htmlspecialchars($found['in_name']); ?>">
+                            <a href="item_desc.php?item_id=<?php echo htmlspecialchars($found['item_id']); ?>"
+                                class="show-button">Show</a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p>No recently found items available.</p>
+            <?php endif; ?>
+
         </div>
 
 
@@ -344,7 +394,7 @@ try {
                         borderColor: 'red',
                         borderWidth: 2,
                         fill: false
-                    }, ]
+                    },]
                 },
                 options: {
                     responsive: true,
@@ -390,12 +440,12 @@ try {
 
 
             // Dropdown toggle script
-            document.querySelector('.dropdown-caret').addEventListener('click', function(event) {
+            document.querySelector('.dropdown-caret').addEventListener('click', function (event) {
                 event.preventDefault(); // Prevent the default action
                 this.closest('.dropdown').classList.toggle('open'); // Toggle the dropdown menu
             });
 
-            document.addEventListener('click', function(event) {
+            document.addEventListener('click', function (event) {
                 var isClickInside = document.querySelector('.dropdown').contains(event.target);
 
                 if (!isClickInside) {
@@ -405,7 +455,7 @@ try {
 
             const logoutButton = document.getElementById('logoutButton');
 
-            logoutButton.addEventListener('click', function() {
+            logoutButton.addEventListener('click', function () {
                 window.location.href = "../php/logout.php";
             });
         </script>

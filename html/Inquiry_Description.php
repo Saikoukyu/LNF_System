@@ -210,7 +210,7 @@ WHERE i.inquiry_id = :inquiry_id";
             </div>
             <div class="submit-container">
     <button type="button" id="submitBtn">Release Item</button>
-    <button type="button" class="close-popup-btn" onclick="closePopup()">Close</button>
+    <button type="button" class="close-btn" onclick="closePage()">Close</button>
 </div>
 </div>
 
@@ -226,6 +226,10 @@ WHERE i.inquiry_id = :inquiry_id";
 </div>
 
 <script>
+
+function closePage() {
+    window.history.back();
+}
     // Show the popup when clicking "Release Item"
     document.getElementById('submitBtn').addEventListener('click', function() {
         document.getElementById('popup').style.display = 'block'; // Show the popup
@@ -239,49 +243,53 @@ WHERE i.inquiry_id = :inquiry_id";
 
     // Handle the confirmation action
     function confirmAction() {
-        var inquiryId = <?= json_encode($inquiryId); ?>;  // Pass the inquiry ID as a JavaScript variable
-        var itemReqId = <?= json_encode($itemReqId); ?>;  // Pass the item request ID as a JavaScript variable
-        var itemId = <?= json_encode($inquiry['inquiry_item_id']); ?>; // Use linked item_id
+    var inquiryId = <?= json_encode($inquiryId); ?>;
+    var itemReqId = <?= json_encode($itemReqId); ?>;
+    var itemId = <?= json_encode($inquiry['inquiry_item_id']); ?>;
+    var ownerName = <?= json_encode($fullName); ?>;  // Full name of the inquirer
+    var ownerEmail = <?= json_encode($senderEmail); ?>;  // Email of the inquirer
+    var returnDate = new Date().toISOString().slice(0, 19).replace('T', ' ');  // Get current date in MySQL datetime format
 
-        if (!inquiryId || !itemReqId) {
-            alert("Missing inquiry ID or item request ID.");
-            return;
-        }
-
-        console.log(`Sending inquiry_id: ${inquiryId}, item_req_id: ${itemReqId}, item_id: ${itemId}`);
-
-
-        // AJAX request
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "../php/release_item.php", true); // Point to the PHP processing script
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                console.log(xhr.responseText);  // Log raw server response
-
-                try {
-                    var response = JSON.parse(xhr.responseText);  // Try to parse JSON
-                    console.log(response);  // Log the parsed response for debugging
-
-                    if (response.status === "success") {
-                        // Hide the popup and show confirmation
-                        alert(response.message);
-                        window.location.href = "item view.php";  // Redirect to success page
-                    } else {
-                        // Show error message
-                        alert("Error: " + response.message);
-                    }
-                } catch (e) {
-                    // Handle JSON parse error
-                    console.error("Could not parse JSON: ", e);
-                    alert("An error occurred: Invalid JSON response from the server.");
-                }
-            }
-        };
-
-        // Send inquiry ID and item request ID to the server
-        xhr.send("inquiry_id=" + inquiryId + "&item_req_id=" + itemReqId + "&item_id=" + itemId);  // Send the correct IDs
+    if (!inquiryId || !itemReqId) {
+        alert("Missing inquiry ID or item request ID.");
+        return;
     }
+
+    // AJAX request
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "../php/release_item.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            try {
+                var response = JSON.parse(xhr.responseText);
+
+                if (response.status === "success") {
+                    // Hide the popup and show confirmation
+                    alert(response.message);
+                    window.location.href = "item view.php";  // Redirect to the item view page
+                } else {
+                    // Show error message
+                    alert("Error: " + response.message);
+                }
+            } catch (e) {
+                console.error("Could not parse JSON: ", e);
+                alert("An error occurred: Invalid JSON response from the server.");
+            }
+        }
+    };
+
+    // Send inquiry ID, item request ID, item ID, owner name, owner email, and return date
+    xhr.send(
+        "inquiry_id=" + inquiryId + 
+        "&item_req_id=" + itemReqId + 
+        "&item_id=" + itemId +
+        "&owner_name=" + encodeURIComponent(ownerName) +
+        "&owner_email=" + encodeURIComponent(ownerEmail) +
+        "&return_date=" + encodeURIComponent(returnDate)
+    );
+}
+
 
     // Close the popup
     function closePopup() {

@@ -67,7 +67,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
             </span>
 
             <div class="right-menu">
-                <a href="Lost_and_Found.php" class="add-lost-found">
+                <a href="Lost_and_Found_Admin.php" class="add-lost-found">
                     <span class="plus">+</span>
                     <span class="lost">Lost</span>
                     <span class="and">&</span>
@@ -182,7 +182,8 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                         JOIN tbl_location loc ON td.item_location_id = loc.location_id
                         JOIN tbl_specific_location sloc ON td.item_specific_location_id = sloc.specific_location_id
                         JOIN tbl_time_date tdate ON td.item_time_date_id = tdate.time_date_id
-                        JOIN tbl_status stat ON td.item_status_id = stat.status_id";
+                        JOIN tbl_status stat ON td.item_status_id = stat.status_id
+                        WHERE stat.status_name NOT IN ('Claimed', 'Disposed')";
 
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();

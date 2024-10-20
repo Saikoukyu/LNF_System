@@ -64,7 +64,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
             </span>
 
             <div class="right-menu">
-                <a href="Lost_and_Found.php" class="add-lost-found">
+                <a href="Lost_and_Found_Admin.php" class="add-lost-found">
                     <span class="plus">+</span>
                     <span class="lost">Lost</span>
                     <span class="and">&</span>
@@ -168,7 +168,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                                     echo "</tr>";
                                 }
                             } else {
-                                echo "<tr><td colspan='14'>No disposed items found</td></tr>";
+                                echo "<tr><td colspan='14'>No Archives</td></tr>";
                             }
                         } catch (PDOException $e) {
                             echo "Error: " . $e->getMessage();
