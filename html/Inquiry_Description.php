@@ -210,6 +210,9 @@ WHERE i.inquiry_id = :inquiry_id";
             </div>
             <div class="submit-container">
     <button type="button" id="submitBtn">Release Item</button>
+    <!-- Add this button in your form -->
+    <button type="button" id="sendEmailBtn">Send Email</button>
+
     <button type="button" class="close-btn" onclick="closePage()">Close</button>
 </div>
 </div>
@@ -225,7 +228,55 @@ WHERE i.inquiry_id = :inquiry_id";
 </div>
 </div>
 
+
 <script>
+    // Trigger email sending
+document.getElementById('sendEmailBtn').addEventListener('click', function() {
+    if (confirm("Do you want to send an email to the inquirer?")) {
+        sendEmail();
+    }
+});
+
+function sendEmail() {
+    var senderEmail = <?= json_encode($senderEmail); ?>;
+    var inquiryId = <?= json_encode($inquiryId); ?>;
+
+
+    // AJAX request to send the email
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "../php/send_email.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+        console.log("Raw Response: ", xhr.responseText);  // Log raw response
+
+        if (xhr.status === 200) {
+            try {
+                var response = JSON.parse(xhr.responseText);
+                if (response.status === "success") {
+                    alert("Email sent successfully.");
+                    window.location.href = "item view.php";
+                } else {
+                    alert("Error: " + response.message);
+                }
+            } catch (e) {
+                console.error("Could not parse JSON: ", e);
+                alert("An error occurred: Invalid JSON response from the server.");
+            }
+        } else {
+            console.error("Request failed with status: ", xhr.status);
+        }
+    }
+};
+
+    xhr.send("sender_email=" + encodeURIComponent(senderEmail) + "&inquiry_id=" + encodeURIComponent(inquiryId));
+}
+
+</script>
+
+
+<script>
+
 
 function closePage() {
     window.history.back();
