@@ -240,6 +240,9 @@ document.getElementById('sendEmailBtn').addEventListener('click', function() {
 function sendEmail() {
     var senderEmail = <?= json_encode($senderEmail); ?>;
     var inquiryId = <?= json_encode($inquiryId); ?>;
+    var fullName = <?= json_encode($fullName); ?>;
+    var itemReqDetailedName = <?= json_encode($itemReqDetailedName); ?>;
+    var itemPhoto = <?= json_encode($itemPhoto); ?>;
 
 
     // AJAX request to send the email
@@ -269,9 +272,12 @@ function sendEmail() {
     }
 };
 
-    xhr.send("sender_email=" + encodeURIComponent(senderEmail) + "&inquiry_id=" + encodeURIComponent(inquiryId));
+xhr.send("sender_email=" + encodeURIComponent(senderEmail) +
+        "&inquiry_id=" + encodeURIComponent(inquiryId) +
+        "&full_name=" + encodeURIComponent(fullName) +
+        "&item_detailed_name=" + encodeURIComponent(itemReqDetailedName) +
+        "&item_photo=" + encodeURIComponent(itemPhoto));
 }
-
 </script>
 
 

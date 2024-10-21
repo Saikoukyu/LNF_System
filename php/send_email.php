@@ -32,9 +32,12 @@ if (!in_array($_SESSION['role'], $allowed_roles)) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['sender_email']) && isset($_POST['inquiry_id'])) {
+    if (isset($_POST['sender_email']) && isset($_POST['inquiry_id']) && isset($_POST['full_name']) && isset($_POST['item_detailed_name']) && isset($_POST['item_photo'])) {
         $senderEmail = $_POST['sender_email'];
         $inquiryId = intval($_POST['inquiry_id']);
+        $fullName = $_POST['full_name'];
+        $itemReqDetailedName = $_POST['item_detailed_name'];
+        $itemPhoto = $_POST['item_photo'];
 
         if (filter_var($senderEmail, FILTER_VALIDATE_EMAIL)) {
             $mail = new PHPMailer(true);
@@ -56,8 +59,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 //Content
                 $mail->isHTML(true);                                        // Set email format to HTML
                 $mail->Subject = 'Lost Item Inquiry Response';
-                $mail->Body    = 'Hi! We might have your Lost Item in our Inventory here in the Lost and Found Office, you might want to check it out.';
+                $mail->Body = 'Hi <strong>' . $fullName . '</strong>!<br><br>
+                We might have your <strong>' . $itemReqDetailedName . '</strong> in our Inventory here in the Lost and Found Office. You might want to check it out.<br><br>';
+ 
 
+
+                              //   'Here is a photo of the item you described:<br>' .
+                              //   '<img src="' . $itemPhoto . '" alt="Item Photo" style="max-width: 50%; height: auto;"><br><br>' .
+                                //  'If you believe this is your item, please visit our office to retrieve it.<br><br>Thank you!<br>Lost & Found Office';
+                
                 $mail->send();
                 echo json_encode(['status' => 'success', 'message' => 'Email has been sent']);
             } catch (Exception $e) {
