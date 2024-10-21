@@ -221,7 +221,9 @@ if (isset($_GET['item_id'])) {
                     <input type="text" id="fn_firstname" name="fn_firstname" placeholder="First Name" required>
                     <input type="text" id="ln_lastname" name="ln_lastname" placeholder="Last Name" required>
                     <label for="firstName" style="margin-top: 8px" ;>Email</label>
-                    <input type="email" id="item_req_sender_email" name="item_req_sender_email" placeholder="name@students.nu-dasma.edu.ph" required>
+                    <input type="email" id="item_req_sender_email" name="item_req_sender_email" placeholder="name@gmail.com" required  pattern="[a-zA-Z0-9._%+-]+@gmail\.com" 
+                    title="Please enter a valid Gmail address (e.g., name@gmail.com)" >
+
                     <label for="studentId" style="margin-top: 8px" ;>Student ID</label>
                     <input type="text" id="item_req_sender_stud_id" name="item_req_sender_stud_id" pattern="\d{4}-\d{6}" placeholder="0000-000000" required>
                 </div>
@@ -447,6 +449,21 @@ if (isset($_GET['item_id'])) {
             }
         }
     </script>
+
+<script>
+document.getElementById('item_req_sender_email').addEventListener('input', function () {
+    const emailField = this;
+    const email = emailField.value;
+    const isValidGmail = /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
+
+    if (!isValidGmail && email) {
+        emailField.setCustomValidity('Please enter a valid Gmail address.');
+    } else {
+        emailField.setCustomValidity('');
+    }
+});
+</script>
+
 </body>
 
 </html>
