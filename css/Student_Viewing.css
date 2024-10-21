@@ -1,51 +1,168 @@
 body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-    }
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
 
-    .header {
-        background-color: #35408e;
-        color: #fff;
-        padding: 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
 
-    .title {
-        margin-left: 20px;
-        font-size: 30px;
-        font-weight: bold;
-    }
+/* Lost and Found Rules Section */
+.rules {
+    display: none; /* Hidden initially */
+    padding: 25px;
+    background-color: #e1bd59; /* Light gray background for a soft look */
+    border-radius: 12px; /* Soft rounded corners */
+    border: 1px solid #ddd; /* Light border for separation */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+    max-width: 1000px;
+    margin: 30px auto; /* Center the container */
+    font-family: 'Roboto', sans-serif; /* Clean, modern font */
+    color: #3C3C3C; /* Neutral text color */
+    line-height: 1.8;
+}
 
-    .highlight {
-        color: #e1bd59;
-    }
+.rules h2 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #FFFFFF; /* Darker blue for heading */
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+}
 
-    .user-link {
-        color: #fff;
-        text-decoration: none;
-        position: relative;
-        display: flex;
-        align-items: center;
-    }
+.rules h2:after {
+    content: "";
+    display: block;
+    width: 150px;
+    height: 3px;
+    background-color: #35408E; /* Gold accent */
+    margin: 10px auto 0;
+}
 
-    .user-link span {
-        margin: 0 13px;
-    }
+.rules h3 {
+    font-size: 22px;
+    color: #35408E;
+    margin-bottom: 15px;
+    font-weight: 500;
+}
 
-    .user-link i.fas.fa-caret-down {
-        margin-right: 20px;
-        transition: transform 0.3s ease; 
-    }
+.rules ul {
+    padding-left: 20px;
+    list-style-type: none; /* Remove default bullets */
+}
 
-    .user-link.active i.fas.fa-caret-down {
-        transform: rotate(180deg); 
-    }
+.rules ul li {
+    margin-bottom: 12px;
+    padding: 15px;
+    background-color: #fff; /* White card background */
+    border-left: 5px solid #35408E; /* Gold left border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Card shadow */
+    position: relative;
+}
 
-    .dropdown-menu {
+.rules ul li:before {
+    content: "\2713"; /* Checkmark icon */
+    color: #35408E;
+    font-weight: bold;
+    position: absolute;
+    left: -25px;
+    font-size: 18px;
+}
+
+.rules p {
+    font-size: 16px;
+    color: #555;
+    background-color: #f4f7fa; /* Soft blue background for notice */
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 5px solid #2A6F97; /* Darker blue left border */
+    margin-bottom: 20px;
+}
+
+.rules .highlight {
+    color: #FFD700;
+    font-weight: bold; 
+}
+
+.rules .notice {
+    background-color: #fff4e5; /* Light peach background for notices */
+    padding: 15px;
+    border-left: 5px solid #FFD700; /* Gold border for attention */
+    font-size: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-top: 20px;
+}
+
+.rules .notice h4 {
+    color: #2A6F97;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.rules .notice p {
+    font-size: 15px;
+    color: #333;
+}
+
+.rules .important {
+    background-color: #fff3cd; /* Yellow background for important info */
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    border-left: 5px solid #ffca28;
+    margin-top: 20px;
+}
+
+.rules .important p {
+    font-size: 15px;
+    color: #6c757d;
+}
+
+
+
+.header {
+    background-color: #35408e;
+    color: #fff;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed; /* Make the header fixed */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100; /* Keep the header above other elements */
+}
+
+.title {
+    margin-left: 20px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.highlight {
+    color: #e1bd59; /* Color for 'Lost & Found' text */
+}
+
+.user-link {
+    color: #fff;
+    text-decoration: none;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.user-link span {
+    margin: 0 13px;
+}
+
+.user-link i.fas.fa-caret-down {
+    margin-right: 45px;
+}
+
+ .dropdown-menu {
         display: none;
         position: absolute;
         right: 20px;
@@ -61,73 +178,129 @@ body {
     .dropdown-menu .logout-button {
     background-color: transparent; /* Remove white container */
     border: none; /* Remove border */
-    color: #1E201E; /* Set text color to white */
+    color: #1E201E; /* Set text color */
     padding: 0;
     text-align: center;
     text-decoration: none;
     display: block;
-    width: 90px;
+    width: 80px;
     cursor: pointer;
+    margin-right: 10px; /* Add margin to move the button away from the right edge */
 }
 
-    .search-bar {
-        margin-top: 40px;
-        text-align: right;
-        margin-right: 70px;
-    }
 
-    .search-bar input[type="text"] {
-        padding: 10px;
-        width: 250px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
+.sidebar {
+    width: 200px;
+    background-color: #35408e;
+    position: fixed;
+    top: 60px; /* Adjust based on header height */
+    bottom: 0;
+    left: 0;
+    padding-top: 100px; /* Increased padding from 20px to 40px for more space */
+}
 
-    .lost-found-table {
-        width: 90%;
-        margin: 20px auto;
-        border-collapse: collapse;
-        background-color: #A6A6A6;
-        table-layout: fixed;
-    }
+.sidebar a i {
+    margin-right: 7px; /* Adjust the spacing between the icon and text */
+}
 
-    .lost-found-table th, .lost-found-table td {
-        border: 1px solid #1E201E;
-        padding: 20px;
-        text-align: center;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        color: #fff;
-    }
+.sidebar a {
+    display: block;
+    padding: 15px;
+    color: #fff;
+    text-decoration: none; /* Remove underline */
+    margin-bottom: 20px;
+}
 
-    .lost-found-table td[contenteditable="true"] {
-        background-color: #f4f4f4;
-        text-align: left;
-        white-space: normal;
-        word-wrap: break-word;
-        color: #000;
-    }
+.sidebar a:hover,
+.sidebar a.active {
+    background-color: #2f3b82;; /* Light blue background on hover or active */
+}
 
-    .inquiry-container {
-        display: flex;
-        justify-content: center;
-        padding: 20px;
-        background-color: #f4f4f4;
-    }
 
-    .inquiry-button {
-        background-color: #E1BD59;
-        border: none;
-        padding: 13px 30px;
-        color: #fff;
-        cursor: pointer;
-        border-radius: 20px;
-        transition: background-color 0.7s ease, transform 0.3s ease;
-        margin-left: 1000px;
-    }
+.main-content {
+    margin-left: 220px; /* Space for sidebar */
+    padding: 80px 20px 20px; /* Space for header and padding */
+}
 
-    .inquiry-button:active {
-        background-color: #e09b24;
-        transform: scale(0.97); 
-    }
+.search-bar {
+    margin-top: 5px;
+    text-align: right;
+    margin-left: 40px;
+}
+
+.search-bar input[type="text"] {
+    padding: 10px;
+    width: 250px; /* Reduced width */
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.filter-bar {
+    display: flex; /* Use flexbox for alignment */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically (if needed) */
+    margin: 20px 0; /* Add some margin for spacing */
+    margin-bottom: 60px;
+}
+
+.filter-bar input[type="text"],
+.filter-bar select {
+    padding: 12px; /* Increase padding for larger input fields */
+    font-size: 16px; /* Increase font size for better readability */
+    margin-right: 10px; /* Space between inputs */
+    width: 200px; /* Set a fixed width for consistency */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+.filter-bar button {
+    padding: 12px 20px; /* Increase padding for larger buttons */
+    font-size: 16px; /* Increase font size for better readability */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    margin-left: 5px; /* Space between buttons */
+    background-color: #e1bd59; /* Set a background color */
+    color: white; /* Set button text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+.filter-bar button:hover {
+    background-color: #D49F0B; /* Darker shade on hover */
+}
+
+.lost-found-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.lost-found-table th,
+.lost-found-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+    width: 16.66%; /* Make columns equal width (100% / 6) */
+}
+
+.lost-found-table th {
+    background-color: #35408e;
+    color: #fff;
+}
+
+.lost-found-table td {
+    background-color: #fff;
+}
+
+.btn-box {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #35408e;
+    color: white;
+    cursor: pointer;
+	margin-right: 10px;
+}
+
+.btn-box:hover {
+    background-color: #1d2b6e;
+}

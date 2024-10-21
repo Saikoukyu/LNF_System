@@ -75,7 +75,7 @@ body {
 
 /* Main Content Layout */
 .main-content {
-    margin-left: 260px;
+    margin-left: 100px;
     width: calc(100% - 260px); 
     height: 100vh;
 }
@@ -114,17 +114,17 @@ body {
 }
 
 .add-lost-found .plus {
-    color: #ffd100;
-}
+    color: #e1bd59;
+  }
 
-.add-lost-found .lost {
-    color: #ff4b4b;
-}
+  .add-lost-found .lost {
+    color: #e15959;
+  }
 
-.add-lost-found .and,
-.add-lost-found .found {
-    color: #6ccfff;
-}
+  .add-lost-found .and,
+  .add-lost-found .found {
+    color: #18a3f3;
+  }
 
 .dropdown {
     position: relative;

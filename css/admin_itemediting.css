@@ -1,0 +1,177 @@
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #35408e;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 250px;
+            width: calc(100% - 250px);
+            z-index: 999;
+            border-bottom: 2px solid #e1bd59;
+            box-sizing: border-box;
+        }
+
+        .table-container {
+            margin-top: 20px;
+            width: 150%;
+            margin-left: 5%;
+        }
+
+     
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #35408e;
+            color: white;
+        }
+
+        td img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+            margin-left: 100%;
+            margin-top: 5%;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px;
+            width: 250px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .btn-container {
+            margin-left: 115%;
+            display: flex;
+            gap: 10px;
+        }
+
+        .save-btn,
+        .close-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .close-btn {
+            background-color: #cfa92c;
+            color: white;
+        }
+
+        .close-btn:hover {
+            background-color: #f2c200;
+        }
+
+        .deleteBtn{
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            background-color: #9b0c0c;
+            color: white;
+        }
+
+        
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .header {
+                left: 200px;
+                width: calc(100% - 200px);
+            }
+
+            .search-bar input[type="text"] {
+                width: 100%;
+            }
+        }
+
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Adjust spacing between filters */
+            justify-content: center; /* Center the filter items horizontally */
+            align-items: center; /* Center items vertically (if needed) */
+            margin-left: 80px; /* Optional: Add margin for spacing */
+        }
+        
+        .date-time-filters {
+            display: flex;
+            gap: 10px; /* Space between date and time inputs */
+            justify-content: center; /* Center date-time filters horizontally */
+            align-items: center; /* Center items vertically (if needed) */
+        }
+        
+        .date-time-filters div {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center contents within each column */
+        }
+        
+        .filters select, .filters input {
+            width: 150px; /* Set a fixed width for consistency */
+            padding: 8px; /* Add padding for better touch targets */
+            margin: 5px 0; /* Add vertical margin for spacing */
+            box-sizing: border-box; /* Ensures padding does not affect total width */
+        }
+        
+        .filters button {
+            padding: 12px 20px; /* Increase padding for larger buttons */
+            font-size: 16px; /* Increase font size for better readability */
+            cursor: pointer; /* Change cursor to pointer on hover */
+            margin-left: 5px; /* Space between buttons */
+            background-color: #4CAF50; /* Set a background color */
+            color: white; /* Set button text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            transition: background-color 0.3s; /* Transition for hover effect */
+        }
+
+
+        .pagination-container{
+            margin-top: 15px;
+            margin-left: 50%;
+        }
