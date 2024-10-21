@@ -193,7 +193,10 @@
         width: 150px;
         height: 150px;
         border-radius: 50%;
-      }
+        border-color: black;
+        border-width: 100px;
+        
+              }
 
       .profile-name {
         font-size: 24px;

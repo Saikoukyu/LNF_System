@@ -1,15 +1,45 @@
 <?php
-include("../php/connect2.php");
 session_start(); // Start the session
 
+// Debugging message to check execution
+echo "Checking session and cookies...<br>";
+
+// Check if session exists
 if (!isset($_SESSION['email'])) {
-    echo "Session not found, redirecting...";  // Debugging message
-    header('Location: NU_LoginPage.php'); // Redirect to login if not logged in
-    exit();
+    // Check if cookies exist
+    if (isset($_COOKIE['email']) || isset($_COOKIE['username']) || isset($_COOKIE['role'])) {
+        // Expire the cookies by setting their expiration date to a past time
+        setcookie("username", "", time() - 3600, "/");
+        setcookie("email", "", time() - 3600, "/");
+        setcookie("role", "", time() - 3600, "/");
+
+        // Destroy the session
+        session_unset(); // Unset all session variables
+        session_destroy(); // Destroy the session
+
+        // Debugging message before redirect
+        echo "<script>
+                alert('Your session has expired. You will be redirected to the login page.');
+                window.location.href = 'NU_LoginPage.php'; // Redirect to login page
+              </script>";
+        exit();
+    } else {
+        // If no session and no cookies, just destroy the session (if any)
+        session_unset(); // Unset all session variables
+        session_destroy(); // Destroy the session
+        
+        // Debugging message before redirect
+        echo "<script>
+                alert('No Session Found. You will be redirected to the login page.');
+                window.location.href = 'NU_LoginPage.php'; // Redirect to login page
+              </script>";
+        exit();
+    }
 } else {
     echo "Session found: " . $_SESSION['email']; // Debugging message
 }
 
+// Optionally retrieve role from session or cookie (if it was restored from cookie in previous checks)
 $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
 
 ?>

@@ -31,6 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['email'] = $row['email'];
                 $_SESSION['role'] = $row['role'];
 
+                // Set cookies to store session data, expire after 1 minute
+                      setcookie("username", "", time() - 30, "/");
+        setcookie("email", "", time() - 30, "/");
+        setcookie("role", "", time() - 30, "/");
+
                 // Redirect to the admin dashboard
                 header('Location: ../html/Admin_Dashboard.php');
                 exit();

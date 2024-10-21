@@ -16,7 +16,7 @@
 <body>
     <div class="header">
         <div class="logo">
-            <img src="assets/nu shield.png" alt="NU Logo"> 
+            <img src="../html/assets/nu shield.png" alt="NU Logo"> 
             <div class="title">NU DASMARIÑAS</div>
         </div>
         <div class="welcome"><span style="font-weight: normal;">WELCOME TO</span> <span style="font-weight: bold; color:#dbbb33;">NU DASMARIÑAS</span></div>
@@ -25,7 +25,7 @@
 
     <div class="banner">
         <div class="banner-content">
-            <img src="assets/nu bulldog 2.png" alt="NU Bulldogs Logo" class="banner-logo"> 
+            <img src="..html/assets/nu bulldog 2.png" alt="NU Bulldogs Logo" class="banner-logo"> 
             <div class="banner-text">EDUCATION THAT WORKS</div>
         </div>
     </div>
