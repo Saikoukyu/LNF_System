@@ -141,11 +141,11 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
           }
         });
 
-        const logoutButton = document.getElementById("logoutButton");
+        const logoutButton = document.getElementById('logoutButton');
 
-        logoutButton.addEventListener("click", function () {
-          window.location.href = "../php/logout.php";
-        });
+logoutButton.addEventListener('click', function () {
+    window.location.href = "../php/logout.php";
+});
       </script>
 
       <section class="content">

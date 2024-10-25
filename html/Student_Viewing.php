@@ -67,6 +67,7 @@ include("../php/connect2.php");
         </a>
     </div>
     <div class="main-content">
+        <div id="filterbar" style="display: block;">
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Search items...">
         </div>
@@ -111,6 +112,7 @@ include("../php/connect2.php");
             <input type="date" id="dateFilter">
 
             <button id="resetButton">Reset</button>
+        </div>
         </div>
 
     <table class="lost-found-table" id="lostfoundtable" >
@@ -276,6 +278,23 @@ include("../php/connect2.php");
     </div>
 
     <script>
+
+// Script for handling dropdown
+document.querySelectorAll('.dropdown-toggle').forEach(dropdown => {
+   dropdown.addEventListener('click', function(e) {
+       e.preventDefault();
+       this.parentElement.classList.toggle('open');
+   });
+});
+
+const logoutButton = document.getElementById('logoutButton');
+
+logoutButton.addEventListener('click', function () {
+window.location.href = "../php/logout.php";
+});
+</script>
+
+    <script>
         const searchInput = document.getElementById('searchInput');
         const typeFilter = document.getElementById('typeFilter');
         const locationFilter = document.getElementById('locationFilter');
@@ -316,30 +335,30 @@ include("../php/connect2.php");
         });
     </script>
 
+<script>
+    // Function to hide and show sections
+    function toggleSections(isViewItems) {
+        document.getElementById('rules').style.display = isViewItems ? 'none' : 'block'; // Show rules if not view items
+        document.getElementById('lostfoundtable').style.display = isViewItems ? 'table' : 'none'; // Show table if view items
+        document.querySelector('.search-bar').style.display = isViewItems ? 'block' : 'none'; // Show search bar if view items
+    document.querySelector('.filter-bar').style.display = isViewItems ? 'block' : 'none'; // Show filter bar if view items
+    }
 
-    <script>
-                 // Function to hide and show sections
-                 function toggleSections(isViewItems) {
-            document.getElementById('rules').style.display = isViewItems ? 'none' : 'block'; // Show rules if not view items
-            document.getElementById('lostfoundtable').style.display = isViewItems ? 'table' : 'none'; // Show table if view items
-            document.getElementById('searchbar').style.display = isViewItems ? 'block' : 'none'; // Show search bar if view items
-            document.getElementById('filterbar').style.display = isViewItems ? 'block' : 'none'; // Show filter bar if view items
-        }
+    // Sidebar active state handling
+    document.getElementById('view-items-link').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default link behavior
+        toggleSections(true); // Show items, hide rules
+        document.getElementById('view-items-link').classList.add('active');
+        document.getElementById('rules-link').classList.remove('active');
+    });
 
-        // Sidebar active state handling
-        document.getElementById('view-items-link').addEventListener('click', function() {
-            toggleSections(true); // Show items, hide rules
-            document.getElementById('view-items-link').classList.add('active');
-            document.getElementById('rules-link').classList.remove('active');
-        });
-
-        document.getElementById('rules-link').addEventListener('click', function() {
-            toggleSections(false); // Show rules, hide items
-            document.getElementById('rules-link').classList.add('active');
-            document.getElementById('view-items-link').classList.remove('active');
-        });
-
-    </script>
+    document.getElementById('rules-link').addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default link behavior
+        toggleSections(false); // Show rules, hide items
+        document.getElementById('rules-link').classList.add('active');
+        document.getElementById('view-items-link').classList.remove('active');
+    });
+</script>
 
     <script>
         
@@ -432,16 +451,7 @@ include("../php/connect2.php");
     
 </script>
 
-<script>
 
-    const logoutButton = document.getElementById('logoutButton');
-    logoutButton.addEventListener('click', function() {
-        // Ensure the redirect URL is correct
-        window.location.href = 'NU_LoginPage.php';
-    });
-
-    
-</script>
 
 </body>
 

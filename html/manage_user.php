@@ -120,13 +120,24 @@ $result = $conn->query($sql); // Assign the query result to $result
     </div>
 
     <script>
-      // Dropdown toggle script
-      document
-        .querySelector(".dropdown-caret")
-        .addEventListener("click", function(event) {
-          event.preventDefault(); // Prevent the default action
-          this.closest(".dropdown").classList.toggle("open"); // Toggle the dropdown menu
-        });
+
+// Script for handling dropdown
+document.querySelectorAll('.dropdown-toggle').forEach(dropdown => {
+   dropdown.addEventListener('click', function(e) {
+       e.preventDefault();
+       this.parentElement.classList.toggle('open');
+   });
+});
+
+const logoutButton = document.getElementById('logoutButton');
+
+logoutButton.addEventListener('click', function () {
+window.location.href = "../php/logout.php";
+});
+</script>
+
+    <script>
+    
 
       document.addEventListener("click", function(event) {
         var isClickInside = document
@@ -138,11 +149,6 @@ $result = $conn->query($sql); // Assign the query result to $result
         }
       });
 
-      const logoutButton = document.getElementById("logoutButton");
-
-      logoutButton.addEventListener("click", function() {
-        window.location.href = "../php/logout.php";
-      });
     </script>
 
     <!-- Admin Dashboard Title with Icon -->

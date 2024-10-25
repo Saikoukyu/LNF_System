@@ -219,6 +219,23 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
     </div>
 
     <script>
+
+// Script for handling dropdown
+document.querySelectorAll('.dropdown-toggle').forEach(dropdown => {
+   dropdown.addEventListener('click', function(e) {
+       e.preventDefault();
+       this.parentElement.classList.toggle('open');
+   });
+});
+
+const logoutButton = document.getElementById('logoutButton');
+
+logoutButton.addEventListener('click', function () {
+window.location.href = "../php/logout.php";
+});
+</script>
+
+    <script>
         // Search functionality
         document.getElementById('searchInput').addEventListener('input', function() {
             const query = this.value.toLowerCase();
@@ -272,6 +289,8 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
         }
 
         displayTable();
+
+
     </script>
 </body>
 

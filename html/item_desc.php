@@ -354,7 +354,22 @@ if (isset($_GET['item_id'])) {
 
 
 
-    <script src="item_desc.js"></script>
+    <script>
+
+         // Script for handling dropdown
+         document.querySelectorAll('.dropdown-toggle').forEach(dropdown => {
+            dropdown.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.parentElement.classList.toggle('open');
+            });
+        });
+
+         const logoutButton = document.getElementById('logoutButton');
+
+logoutButton.addEventListener('click', function () {
+    window.location.href = "../php/logout.php";
+});
+    </script>
 </body>
 
 </html>

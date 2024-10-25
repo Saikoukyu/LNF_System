@@ -185,7 +185,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                 <th>Date Lost/Found</th>
                 <th>Time Lost/Found</th>
                 <th>Additional Info</th>
-                <th>No. of Inquiries</th>
+                <th  style="width: 1%;">No. of Inquiries</th>
                 <th>Status</th>
                 <th>Item Details</th>
             </tr>
@@ -241,7 +241,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                         echo "<td>" . date("m/d/Y", strtotime($row['date_lost'])) . "</td>";
                         echo "<td>" . date("h:i A", strtotime($row['time_lost'])) . "</td>";
                         echo "<td>" . $row['item_add_info'] . "</td>";
-                        echo "<td>" . $inquiryCount . "</td>"; // Display the inquiry count here
+                        echo "<td style='width: 100px; text-align: center;'>" . $inquiryCount . "</td>"; // Display the inquiry count here
                         echo "<td>" . $row['status_name'] . "</td>";
                         echo '<td><a href="item_desc.php?item_id=' . $itemId . '" class="btn-box">Details</a></td>';
                         echo "</tr>";
@@ -265,6 +265,12 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
 </div>
         </section>
     </div>
+
+<script>       const logoutButton = document.getElementById('logoutButton');
+
+logoutButton.addEventListener('click', function () {
+    window.location.href = "../php/logout.php";
+});</script>
 
     <script>
         // Script for handling dropdown
@@ -319,11 +325,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
         });
 
         
-        // Logout button script
-        const logoutButton = document.getElementById('logoutButton');
-        logoutButton.addEventListener('click', function() {
-            window.location.href = "../php/logout.php";
-        });
+ 
 
 
         const rowsPerPage = 6; // Number of rows to show per page
