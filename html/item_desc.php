@@ -1,5 +1,5 @@
 <?php
-
+include("../php/connect2.php");
 session_start(); // Start the session
 
 // Debugging message to check execution
@@ -139,12 +139,12 @@ if (isset($_GET['item_id'])) {
                 <i class="fas fa-eye"></i><span>Item View</span>
             </li>
             <li onclick="window.location.href='Admin_Report.php'">
-                <i class="fas fa-file-alt"></i><span>Report</span>
+                <i class="fas fa-file-alt"></i><span>Archive</span>
             </li>
             <li onclick="window.location.href='Admin_Admin.php'">
                 <i class="fas fa-user"></i><span>Admin</span>
             </li>
-            <?php if ($role == 'IT_Admin'): ?>
+            <?php if ($role == 'IT_Admin') : ?>
                 <li onclick="window.location.href='Admin_ITAdmin.php'">
                     <i class="fas fa-cogs"></i><span>IT Admin Setting</span>
                 </li>

@@ -23,27 +23,32 @@ $time_lost = $_POST['time_lost'];
 $item_add_info = $_POST['item_add_info'];
 $item_status_id = '1'; // Assuming status is a constant for now
 
-// Handle file upload
-$file_name = $_FILES['item_photo']['name']; // Use the name of your input file field
-$temp_name = $_FILES['item_photo']['tmp_name'];
-$file_size = $_FILES['item_photo']['size'];
-$file_type = $_FILES['item_photo']['type'];
-$upload_directory = '../html/item-images/'; // Absolute path to the upload directory
-$file_path = $upload_directory . basename($file_name);
+// Initialize file path as null
+$file_path = '../html/assets/noimage.jpg';
 
-// Validate file type
-if (!in_array($file_type, $allowedFileTypes)) {
-    die("Error: Only .jpg, .jpeg, and .png files are allowed.");
-}
+// Handle file upload if a file was uploaded
+if (isset($_FILES['item_photo']) && $_FILES['item_photo']['error'] != UPLOAD_ERR_NO_FILE) {
+    $file_name = $_FILES['item_photo']['name'];
+    $temp_name = $_FILES['item_photo']['tmp_name'];
+    $file_size = $_FILES['item_photo']['size'];
+    $file_type = $_FILES['item_photo']['type'];
+    $upload_directory = '../html/item-images/';
+    $file_path = $upload_directory . basename($file_name);
 
-// Validate file size
-if ($file_size > $maxFileSize) {
-    die("Error: File size exceeds the 15MB limit.");
-}
+    // Validate file type
+    if (!in_array($file_type, $allowedFileTypes)) {
+        die("Error: Only .jpg, .jpeg, and .png files are allowed.");
+    }
 
-// Move file to the server directory
-if (!move_uploaded_file($temp_name, $file_path)) {
-    die("Failed to upload image.<br>");
+    // Validate file size
+    if ($file_size > $maxFileSize) {
+        die("Error: File size exceeds the 15MB limit.");
+    }
+
+    // Move file to the server directory
+    if (!move_uploaded_file($temp_name, $file_path)) {
+        die("Failed to upload image.<br>");
+    }
 }
 
 // Insert into tbl_full_name (first name, last name)
@@ -52,10 +57,8 @@ $stmt = $conn->prepare($insertFullNameQuery);
 $stmt->bind_param("ss", $firstName, $lastName);
 
 if ($stmt->execute()) {
-    // Check if the insert was successful
     if ($stmt->affected_rows > 0) {        
-        // Get the fn_id of the newly inserted row
-        $fn_id = $conn->insert_id; // This is the fn_id for tbl_full_name
+        $fn_id = $conn->insert_id;
     } else {
         echo "Error inserting full name.<br>";
     }
@@ -69,10 +72,8 @@ $stmt = $conn->prepare($insertTimeDateQuery);
 $stmt->bind_param("ss", $date_lost, $time_lost);
 
 if ($stmt->execute()) {
-    // Check if the insert was successful
     if ($stmt->affected_rows > 0) {    
-        // Get the time_date_id of the newly inserted row
-        $time_date_id = $conn->insert_id; // This is the time_date_id for tbl_time_date
+        $time_date_id = $conn->insert_id;
     } else {
         echo "Error inserting date and time.<br>";
     }
@@ -80,7 +81,7 @@ if ($stmt->execute()) {
     echo "Error in date and time query: " . $stmt->error . "<br>";
 }
 
-// Insert into tbl_item_description using the fn_id as the foreign key
+// Insert into tbl_item_description using the fn_id as the foreign key, with image path or null
 $insertItemRequestQuery = "INSERT INTO tbl_item_description (item_full_name_id, item_founder_email, item_founder_stud_id, item_type_id, item_name_id, item_detailed_name, item_brand, item_location_id, item_specific_location_id, item_time_date_id, item_add_info, item_status_id, item_photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt2 = $conn->prepare($insertItemRequestQuery);
 $stmt2->bind_param("issiissiiisis", $fn_id, $item_founder_email, $item_founder_stud_id, $item_type_id, $item_name_id, $item_detailed_name, $item_brand, $item_location_id, $item_specific_location_id, $time_date_id, $item_add_info, $item_status_id, $file_path);

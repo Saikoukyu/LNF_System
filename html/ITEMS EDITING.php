@@ -1,9 +1,8 @@
 <?php 
-
+include("../php/connect2.php");
 session_start(); // Start the session
 
 // Debugging message to check execution
-echo "Checking session and cookies...<br>";
 
 // Check if session exists
 if (!isset($_SESSION['email'])) {
@@ -36,10 +35,7 @@ if (!isset($_SESSION['email'])) {
               </script>";
         exit();
     }
-} else {
-    echo "Session found: " . $_SESSION['email']; // Debugging message
-}
-
+};
 // Optionally retrieve role from session or cookie (if it was restored from cookie in previous checks)
 $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
 
@@ -80,103 +76,111 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
     <title>Admin Item View - Lost & Found Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/css/admin_itemediting.css">
+    <head>
+    <title>Admin Item View - Lost & Found Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/admin_itemediting.css">
 </head>
 <body>
 <section class="content">
- 
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search items...">
-            </div>
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search items...">
+    </div>
 
-            <div class="filters">
-                <div>
-                    <label for="locationFilter">Location:</label>
-                    <select id="locationFilter">
-                        <option value="">Select Location</option>
-                        <option value="1st Floor">1st Floor</option>
-                        <option value="4th Floor">4th Floor</option>
-                        <option value="5th Floor">5th Floor</option>
-                        <option value="Student Lounge">Student Lounge</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="itemTypeFilter">Item Type:</label>
-                    <select id="itemTypeFilter">
-                        <option value="">Select Item Type</option>
-                        <option value="Personal Belongings">Personal Belongings</option>
-                        <option value="School Supplies">School Supplies</option>
-                        <option value="Electronic Devices">Electronic Devices</option>
-                        <option value="Clothing">Clothing</option>
-                        <option value="Sports Equipment">Sports Equipment</option>
-                        <option value="Documents and IDs">Documents and IDs</option>
-                        <option value="Miscellaneous">Miscellaneous</option>
-                    </select>
-                </div>
-                <div>
-    <label for="dateFilter">Date:</label>
-    <input type="date" id="dateFilter" />
-</div>
+    <div class="filters">
+        <div>
+            <label for="locationFilter">Location:</label>
+            <select id="locationFilter">
+                <option value="">Select Location</option>
+                <option value="1st Floor">1st Floor</option>
+                <option value="4th Floor">4th Floor</option>
+                <option value="5th Floor">5th Floor</option>
+                <option value="Student Lounge">Student Lounge</option>
+            </select>
+        </div>
+        <div>
+            <label for="itemTypeFilter">Item Type:</label>
+            <select id="itemTypeFilter">
+                <option value="">Select Item Type</option>
+                <option value="Personal Belongings">Personal Belongings</option>
+                <option value="School Supplies">School Supplies</option>
+                <option value="Electronic Devices">Electronic Devices</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Sports Equipment">Sports Equipment</option>
+                <option value="Documents and IDs">Documents and IDs</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+            </select>
+        </div>
+        <div>
+            <label for="statusFilter">Status:</label>
+            <select id="statusFilter">
+                <option value="">Select Status</option>
+                <option value="1">Unclaimed</option>
+                <option value="2">Claimed</option>
+                <option value="3">Disposed</option>
+            </select>
+        </div>
+        <div>
+            <label for="dateFilter">Date:</label>
+            <input type="date" id="dateFilter" />
+        </div>
+        <div>
+            <button id="filterButton">Filter</button>
+            <button id="resetButton">Reset</button>
+        </div>
+    </div>
 
-                <div>
-                    <button id="filterButton">Filter</button>
-                    <button id="resetButton">Reset</button>
-                </div>
-            </div>
-
-        <div class="table-container">
-            <table id="itemTable">
-                <thead>
+    <div class="table-container">
+        <table id="itemTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Brand</th>
+                    <th>Image</th>
+                    <th>Lost Date</th>
+                    <th>Found Location</th>
+                    <th>Founder Name</th>
+                    <th>Status</th>
+                    <th>Item Deletion</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <?php foreach ($items as $item): ?>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Type</th>
-                        <th>Brand</th>
-                        <th>Image</th>
-                        <th>Lost Date</th>
-                        <th>Found Location</th>
-                        <th>Founder Name</th>
-                        <th>Status</th>
-                        <th>Item Deletion</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <?php foreach ($items as $item): ?>
-                        <tr>
-                            <td><?= $item['item_id'] ?></td>
-                            <td><?= $item['in_name'] ?></td>
-                            <td><?= $item['it_name'] ?></td>
-                            <td><?= $item['item_brand'] ?></td>
-                            <td><img src="<?= !empty($item['item_photo']) ? '../assets/' . $item['item_photo'] : 'https://via.placeholder.com/150' ?>" alt="Item Image"></td>
-                            <td><?= date("m/d/Y", strtotime($item['date_lost'])) ?></td>
-                            <td><?= $item['location_name'] ?></td>
-                            <td><?= $item['fn_firstname'] . ' ' . $item['fn_lastname'] ?></td>
-                            <td>
+                        <td><?= $item['item_id'] ?></td>
+                        <td><?= $item['in_name'] ?></td>
+                        <td><?= $item['it_name'] ?></td>
+                        <td><?= $item['item_brand'] ?></td>
+                        <td><img src="<?= !empty($item['item_photo']) ? '../assets/' . $item['item_photo'] : 'https://via.placeholder.com/150' ?>" alt="Item Image"></td>
+                        <td><?= date("m/d/Y", strtotime($item['date_lost'])) ?></td>
+                        <td><?= $item['location_name'] ?></td>
+                        <td><?= $item['fn_firstname'] . ' ' . $item['fn_lastname'] ?></td>
+                        <td>
                             <select class="status-select" data-item-id="<?php echo $item['item_id']; ?>">
                                 <option value="1" <?php if ($item['item_status_id'] == 1) echo 'selected'; ?>>Unclaimed</option>
                                 <option value="2" <?php if ($item['item_status_id'] == 2) echo 'selected'; ?>>Claimed</option>
                                 <option value="3" <?php if ($item['item_status_id'] == 3) echo 'selected'; ?>>Disposed</option>
                             </select>
-                            </td>
-                            <td><div class="report-actions" data-item-id="<?= htmlspecialchars($item['item_id']); ?>">
-                <button id="deleteBtn" onclick="deleteItem(<?= $item['item_id']; ?>)">Delete</button>
-                </div></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-<div class="container2">
+                        </td>
+                        <td><button id="deleteBtn" onclick="deleteItem(<?= $item['item_id']; ?>)">Delete</button></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 
-        <div class="pagination-container">
-    <button id="prevBtn" disabled>Previous</button>
-    <span id="pageIndicator">Page 1</span>
-    <button id="nextBtn">Next</button>
-        </div>
-        <div class="btn-container">
-            <button class="close-btn" id="closeBtn">Close</button>
-        </div>
-        </div>
-    </section>
+    <div class="pagination-container">
+        <button id="prevBtn" disabled>Previous</button>
+        <span id="pageIndicator">Page 1</span>
+        <button id="nextBtn">Next</button>
+    </div>
+
+    <div class="btn-container">
+        <button class="close-btn" id="closeBtn">Close</button>
+    </div>
+</section>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -379,11 +383,67 @@ document.getElementById('resetButton').addEventListener('click', function() {
     document.getElementById('searchInput').value = '';
 });
 
-
-
-
-
-
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const locationFilter = document.getElementById('locationFilter');
+        const itemTypeFilter = document.getElementById('itemTypeFilter');
+        const statusFilter = document.getElementById('statusFilter');
+        const dateFilter = document.getElementById('dateFilter');
+        const tableBody = document.getElementById('tableBody');
+
+        function filterTable() {
+            const location = locationFilter.value.toLowerCase();
+            const itemType = itemTypeFilter.value.toLowerCase();
+            const status = statusFilter.value;
+            const dateInput = dateFilter.value;
+            const formattedDateInput = dateInput ? formatDateToMMDDYYYY(dateInput) : '';
+
+            const rows = document.querySelectorAll('#itemTable tbody tr');
+
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const rowLocation = cells[6].textContent.toLowerCase();
+                const rowItemType = cells[2].textContent.toLowerCase();
+                const rowStatus = cells[8].querySelector('select').value;
+                const rowDate = cells[5].textContent;
+
+                const matchesLocation = location ? rowLocation.includes(location) : true;
+                const matchesItemType = itemType ? rowItemType.includes(itemType) : true;
+                const matchesStatus = status ? rowStatus === status : true;
+                const matchesDate = formattedDateInput ? rowDate === formattedDateInput : true;
+
+                if (matchesLocation && matchesItemType && matchesStatus && matchesDate) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        document.getElementById('filterButton').addEventListener('click', filterTable);
+
+        document.getElementById('resetButton').addEventListener('click', function() {
+            locationFilter.value = '';
+            itemTypeFilter.value = '';
+            statusFilter.value = '';
+            dateFilter.value = '';
+
+            document.querySelectorAll('#itemTable tbody tr').forEach(row => {
+                row.style.display = '';
+            });
+        });
+
+        function formatDateToMMDDYYYY(dateString) {
+            const date = new Date(dateString);
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            const year = date.getFullYear();
+            return `${month}/${day}/${year}`;
+        }
+    });
+</script>
+
 </body>
 </html>

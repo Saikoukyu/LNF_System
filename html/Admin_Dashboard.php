@@ -1,8 +1,9 @@
 <?php
+include("../php/connect2.php");
 session_start(); // Start the session
 
 // Debugging message to check execution
-echo "Checking session and cookies...<br>";
+
 
 // Check if session exists
 if (!isset($_SESSION['email'])) {

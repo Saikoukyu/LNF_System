@@ -49,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Connection failed: " . $conn->connect_error);
     }
 
+
     // Prepare statement to prevent SQL injection
     $stmt = $conn->prepare($sql);
 

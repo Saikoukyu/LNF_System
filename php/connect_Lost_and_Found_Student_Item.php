@@ -25,27 +25,32 @@ $item_req_add_info = $_POST['item_req_add_info'];
 // Capture the item_id from the form
 $item_id = $_POST['item_id'];
 
-// Handle file upload
-$file_name = $_FILES['item_req_photo']['name'];
-$temp_name = $_FILES['item_req_photo']['tmp_name'];
-$file_size = $_FILES['item_req_photo']['size'];
-$file_type = $_FILES['item_req_photo']['type'];
-$upload_directory = '../html/item-images/'; // Folder to store images
-$file_path = $upload_directory . basename($file_name);
+// Initialize file path as null
+$file_path = '../html/assets/noimage.jpg';
 
-// Validate file type
-if (!in_array($file_type, $allowedFileTypes)) {
-    die("Error: Only .jpg, .jpeg, and .png files are allowed.");
-}
+// Handle file upload if a file was uploaded
+if (isset($_FILES['item_req_photo']) && $_FILES['item_req_photo']['error'] != UPLOAD_ERR_NO_FILE) {
+    $file_name = $_FILES['item_req_photo']['name'];
+    $temp_name = $_FILES['item_req_photo']['tmp_name'];
+    $file_size = $_FILES['item_req_photo']['size'];
+    $file_type = $_FILES['item_req_photo']['type'];
+    $upload_directory = '../html/item-images/';
+    $file_path = $upload_directory . basename($file_name);
 
-// Validate file size
-if ($file_size > $maxFileSize) {
-    die("Error: File size exceeds the 15MB limit.");
-}
+    // Validate file type
+    if (!in_array($file_type, $allowedFileTypes)) {
+        die("Error: Only .jpg, .jpeg, and .png files are allowed.");
+    }
 
-// Move file to the server directory
-if (!move_uploaded_file($temp_name, $file_path)) {
-    die("Failed to upload image.<br>");
+    // Validate file size
+    if ($file_size > $maxFileSize) {
+        die("Error: File size exceeds the 15MB limit.");
+    }
+
+    // Move file to the server directory
+    if (!move_uploaded_file($temp_name, $file_path)) {
+        die("Failed to upload image.<br>");
+    }
 }
 
 // Insert into tbl_full_name
@@ -70,7 +75,7 @@ if (!$stmt->execute() || $stmt->affected_rows <= 0) {
 
 $time_date_id = $conn->insert_id; // Get inserted time_date_id
 
-// Insert into tbl_item_request with image path
+// Insert into tbl_item_request with image path or null
 $insertItemRequestQuery = "INSERT INTO tbl_item_request (item_req_full_name_id, item_req_sender_email, item_req_sender_stud_id, item_req_type_id, item_req_name_id, item_req_detailed_name, item_req_brand, item_req_location_id, item_req_specific_location_id, item_req_time_date_id, item_req_add_info, item_req_photo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt2 = $conn->prepare($insertItemRequestQuery);
 $stmt2->bind_param("issiissiiiss", $fn_id, $item_req_sender_email, $item_req_sender_stud_id, $item_req_type_id, $item_req_name_id, $item_req_detailed_name, $item_req_brand, $item_req_location_id, $item_req_specific_location_id, $time_date_id, $item_req_add_info, $file_path);

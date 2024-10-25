@@ -67,109 +67,134 @@ include("../php/connect2.php");
         </a>
     </div>
     <div class="main-content">
-    <div class="search-bar" id="searchbar">
-        <input type="text" id="searchInput" placeholder="Search items...">
-    </div>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search items...">
+        </div>
 
-    <div class="filter-bar" id="filterbar">
-        <label for="typeFilter">Type:</label>
-        <input type="text" id="typeFilter" placeholder="Item Type">
+        <div class="filter-bar">
+            <label for="typeFilter">Item Type:</label>
+            <select id="typeFilter">
+                <option value="">Select Item Type</option>
+                <option value="Personal Belongings">Personal Belongings</option>
+                <option value="School Supplies">School Supplies</option>
+                <option value="Electronic Devices">Electronic Devices</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Sports Equipment">Sports Equipment</option>
+                <option value="Documents and IDs">Documents and IDs</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+            </select>
 
-        <label for="locationFilter">Found Location:</label>
-        <select id="locationFilter">
-            <option value="">Select Location</option>
-            <option value="Entrance">Entrance</option>
-            <option value="Comfort Room">Comfort Room</option>
-            <option value="401 - 435">401 - 435</option>
-            <option value="Comfort Room Male">Comfort Room Male</option>
-            <option value="Comfort Room Female">Comfort Room Female</option>
-            <option value="Function Hall">Function Hall</option>
-            <option value="Accounting">Accounting</option>
-            <option value="Registrar">Registrar</option>
-            <option value="Hallway">Hallway</option>
-            <option value="501 - 535">501 - 535</option>
-            <option value="Gym">Gym</option>
-            <option value="ITSO">ITSO</option>
-            <option value="SDAO">SDAO</option>
-            <option value="2nd Floor">2nd Floor</option>
-            <option value="3rd Floor">3rd Floor</option>
-            <option value="4th Floor">4th Floor</option>
-            <option value="5th Floor">5th Floor</option>
-        </select>
+            <label for="locationFilter">Found Location:</label>
+<select id="locationFilter">
+    <option value="">Select Location</option>
+    <option value="Entrance">Entrance</option>
+    <option value="Comfort Room">Comfort Room</option>
+    <option value="401 - 435">401 - 435</option>
+    <option value="Comfort Room Male">Comfort Room Male</option>
+    <option value="Comfort Room Female">Comfort Room Female</option>
+    <option value="Function Hall">Function Hall</option>
+    <option value="Accounting">Accounting</option>
+    <option value="Registrar">Registrar</option>
+    <option value="Hallway">Hallway</option>
+    <option value="501 - 535">501 - 535</option>
+    <option value="Gym">Gym</option>
+    <option value="ITSO">ITSO</option>
+    <option value="SDAO">SDAO</option>
+    <option value="2nd Floor">2nd Floor</option>
+    <option value="3rd Floor">3rd Floor</option>
+    <option value="4th Floor">4th Floor</option>
+    <option value="5th Floor">5th Floor</option>
+</select>
 
-        <label for="dateFilter">Lost Date:</label>
-        <input type="text" id="dateFilter" placeholder="MM/DD/YYYY">
 
-        <button id="filterButton">Filter</button>
-        <button id="resetButton">Reset</button>
-    </div>
+            <label for="dateFilter">Lost Date:</label>
+            <input type="date" id="dateFilter">
 
-    <table class="lost-found-table" id="lostfoundtable">
+            <button id="resetButton">Reset</button>
+        </div>
+
+    <table class="lost-found-table" id="lostfoundtable" >
         <thead>
             <tr>
                 <th>Type</th>
+                <th>Name</th>
                 <th>Found Location</th>
-                <th>Lost Date</th>
+                <th>Date</th>
                 <th>Status</th>
-                <th>Number of Inquiries</th>
+                <th  style="width: 1%;">No. of Inquiries</th>
                 <th>Inquire</th>
             </tr>
         </thead>
         <tbody id="table-body">
-            <tr>
-                <?php
-                // Prepare the SQL query
-                $sql = "SELECT td.*, 
-                                       fn.fn_firstname, fn.fn_lastname, 
-                                       it.it_name, 
-                                       iname.in_name,
-                                       loc.location_name, 
-                                       sloc.specific_location_name, 
-                                       tdate.date_lost, tdate.time_lost ,
-                                       stat.status_name
-                                FROM tbl_item_description td
-                                JOIN tbl_full_name fn ON td.item_full_name_id = fn.fn_id
-                                JOIN tbl_item_type it ON td.item_type_id = it.it_id
-                                JOIN tbl_item_name iname ON td.item_name_id = iname.in_id
-                                JOIN tbl_location loc ON td.item_location_id = loc.location_id
-                                JOIN tbl_specific_location sloc ON td.item_specific_location_id = sloc.specific_location_id
-                                JOIN tbl_time_date tdate ON td.item_time_date_id = tdate.time_date_id
-                                JOIN tbl_status stat ON td.item_status_id = stat.status_id";
+    <tr>
+        <?php
+        // Prepare the SQL query with the condition for claimed items
+        $sql = "SELECT td.*, 
+                        fn.fn_firstname, fn.fn_lastname, 
+                        it.it_name, 
+                        iname.in_name,
+                        loc.location_name, 
+                        sloc.specific_location_name, 
+                        tdate.date_lost, tdate.time_lost, 
+                        td.return_date, 
+                        stat.status_name
+                FROM tbl_item_description td
+                JOIN tbl_full_name fn ON td.item_full_name_id = fn.fn_id
+                JOIN tbl_item_type it ON td.item_type_id = it.it_id
+                JOIN tbl_item_name iname ON td.item_name_id = iname.in_id
+                JOIN tbl_location loc ON td.item_location_id = loc.location_id
+                JOIN tbl_specific_location sloc ON td.item_specific_location_id = sloc.specific_location_id
+                JOIN tbl_time_date tdate ON td.item_time_date_id = tdate.time_date_id
+                JOIN tbl_status stat ON td.item_status_id = stat.status_id
+                WHERE NOT (stat.status_name = 'Claimed' 
+                           AND DATEDIFF(NOW(), td.return_date) > 1)";
 
-                // Prepare and execute the query
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
+        // Prepare and execute the query
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
 
-                // Fetch all results
-                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // Fetch all results
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                // Check if there are any records
-                if ($rows && count($rows) > 0) {
-                    // Loop through each row and display
-                    foreach ($rows as $row) {
-                        $itemId = $row['item_id'];
-                        $fullName = $row['fn_firstname'] . ' ' . $row['fn_lastname'];
-                        $itemType = $row['it_name'];
-                        $itemName = $row['in_name'];
-                        $locationName = $row['specific_location_name'];
-                        $dateLost = $row['date_lost'];
-                        $formattedDateLost = date("m/d/Y", strtotime($dateLost));
-                        $statusName = $row['status_name'];
+        // Check if there are any records
+        if ($rows && count($rows) > 0) {
+            // Loop through each row and display
+            foreach ($rows as $row) {
+                $itemId = $row['item_id'];
+                $fullName = $row['fn_firstname'] . ' ' . $row['fn_lastname'];
+                $itemType = $row['it_name'];
+                $itemName = $row['in_name'];
+                $locationName = $row['specific_location_name'];
+                $statusName = $row['status_name'];
 
-                        $inquirySql = "SELECT COUNT(*) AS inquiry_count 
-                        FROM tbl_inquiry 
-                        WHERE inquiry_item_id = ?";
-         $inquiryStmt = $conn->prepare($inquirySql);
-         $inquiryStmt->execute([$itemId]);
-         $inquiryCount = $inquiryStmt->fetch(PDO::FETCH_ASSOC)['inquiry_count'];
+                // If the item is claimed, use the return date, otherwise use the lost date
+                if ($statusName === "Claimed") {
+                    $date = $row['return_date'];
+                    $dateLabel = "Return Date";
+                } else {
+                    $date = $row['date_lost'];
+                    $dateLabel = "Lost Date";
+                }
+                $formattedDate = date("m/d/Y", strtotime($date));
 
-                        echo "<tr>";
-                        echo "<td>" . $itemName . "</td>";
-                        echo "<td>" . $locationName . "</td>";
-                        echo "<td>" . $formattedDateLost . "</td>";
-                        echo "<td>" . $statusName . "</td>";
-                        echo "<td>" . $inquiryCount . "</td>";
-                        // Check if the status is not "Claimed" before displaying the Inquire button
+                // Count inquiries for the item
+                $inquirySql = "SELECT COUNT(*) AS inquiry_count 
+                               FROM tbl_inquiry 
+                               WHERE inquiry_item_id = ?";
+                $inquiryStmt = $conn->prepare($inquirySql);
+                $inquiryStmt->execute([$itemId]);
+                $inquiryCount = $inquiryStmt->fetch(PDO::FETCH_ASSOC)['inquiry_count'];
+
+                // Display the row
+                echo "<tr data-type='$itemType' data-location='$locationName' data-date='$date'>";
+                echo "<td>" . $itemType . "</td>";
+                echo "<td>" . $itemName . "</td>";
+                echo "<td>" . $locationName . "</td>";
+                echo "<td>" . $dateLabel . ": " . $formattedDate . "</td>";
+                echo "<td>" . $statusName . "</td>";
+                echo "<td style='width: 100px; text-align: center;'>" . $inquiryCount . "</td>";
+
+                // Check if the status is not "Claimed" before displaying the Inquire button
                 if ($statusName !== "Claimed") {
                     echo '<td><a href="Lost_and_Found_Student_Item.php?item_id=' . $itemId . '" class="btn-box">Inquire</a></td>';
                 } else {
@@ -182,7 +207,8 @@ include("../php/connect2.php");
             echo "<tr><td colspan='14'>No items found</td></tr>";
         }
         ?>
-    </tbody>
+    </tr>
+</tbody>
 </table>
  <!-- Lost & Found Rules Section -->
  <div id="rules" class="rules">
@@ -248,6 +274,47 @@ include("../php/connect2.php");
             </ul>
         </div>
     </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const typeFilter = document.getElementById('typeFilter');
+        const locationFilter = document.getElementById('locationFilter');
+        const dateFilter = document.getElementById('dateFilter');
+        const resetButton = document.getElementById('resetButton');
+        const tableBody = document.getElementById('table-body');
+
+        function filterTable() {
+            const searchValue = searchInput.value.toLowerCase();
+            const typeValue = typeFilter.value;
+            const locationValue = locationFilter.value;
+            const dateValue = dateFilter.value;
+
+            Array.from(tableBody.rows).forEach(row => {
+                const type = row.getAttribute('data-type');
+                const location = row.getAttribute('data-location');
+                const date = row.getAttribute('data-date');
+
+                const matchesSearch = row.innerText.toLowerCase().includes(searchValue);
+                const matchesType = !typeValue || type === typeValue;
+                const matchesLocation = !locationValue || location === locationValue;
+                const matchesDate = !dateValue || date === dateValue;
+
+                row.style.display = (matchesSearch && matchesType && matchesLocation && matchesDate) ? '' : 'none';
+            });
+        }
+
+        searchInput.addEventListener('input', filterTable);
+        typeFilter.addEventListener('change', filterTable);
+        locationFilter.addEventListener('change', filterTable);
+        dateFilter.addEventListener('change', filterTable);
+        resetButton.addEventListener('click', () => {
+            searchInput.value = '';
+            typeFilter.value = '';
+            locationFilter.value = '';
+            dateFilter.value = '';
+            filterTable();
+        });
+    </script>
 
 
     <script>
@@ -347,53 +414,6 @@ include("../php/connect2.php");
             }
         });
 
-        // Filter functionality
-        document.getElementById('filterButton').addEventListener('click', function() {
-            const typeFilter = document.getElementById('typeFilter').value.toLowerCase();
-            const locationFilter = document.getElementById('locationFilter').value.toLowerCase();
-            const dateFilter = document.getElementById('dateFilter').value; // MM/DD/YYYY
-            const rows = document.getElementById('table-body').getElementsByTagName('tr');
-
-            for (let i = 0; i < rows.length; i++) {
-                let typeMatch = false;
-                let locationMatch = false;
-                let dateMatch = false;
-
-                const cells = rows[i].getElementsByTagName('td');
-                if (cells.length > 0) {
-                    // Check Type filter
-                    const typeText = cells[0].textContent || cells[0].innerText;
-                    typeMatch = typeFilter === "" || typeText.toLowerCase().indexOf(typeFilter) > -1;
-
-                    // Check Location filter
-                    const locationText = cells[1].textContent || cells[1].innerText;
-                    locationMatch = locationFilter === "" || locationText.toLowerCase() === locationFilter;
-
-                    // Check Date filter (MM/DD/YYYY)
-                    if (dateFilter) {
-                        const rowDate = cells[2].textContent.trim();
-                        dateMatch = rowDate === dateFilter; // Compare directly
-                    } else {
-                        dateMatch = true; // No date filter applied
-                    }
-                }
-
-                // If all conditions match, display the row
-                rows[i].style.display = (typeMatch && locationMatch && dateMatch) ? '' : 'none';
-            }
-        });
-
-        // Reset functionality
-        document.getElementById('resetButton').addEventListener('click', function() {
-            document.getElementById('typeFilter').value = '';
-            document.getElementById('locationFilter').selectedIndex = 0; // Reset dropdown
-            document.getElementById('dateFilter').value = '';
-            const rows = document.getElementById('table-body').getElementsByTagName('tr');
-            for (let i = 0; i < rows.length; i++) {
-                rows[i].style.display = ''; // Show all rows
-            }
-        });
-
 
 
     </script>
@@ -422,6 +442,7 @@ include("../php/connect2.php");
 
     
 </script>
+
 </body>
 
 </html>

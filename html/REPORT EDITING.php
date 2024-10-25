@@ -1,5 +1,5 @@
 <?php
-
+include("../php/connect2.php");
 session_start(); // Start the session
 
 // Debugging message to check execution

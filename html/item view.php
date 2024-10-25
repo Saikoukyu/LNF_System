@@ -1,4 +1,5 @@
 <?php
+include("../php/connect2.php");
 session_start(); // Start the session
 
 // Debugging message to check execution
@@ -124,7 +125,8 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                 <input type="text" id="searchInput" placeholder="Search items...">
             </div>
 
-            <div class="filters">
+            <div class="filters" id="filterContainer">
+                
                 <div>
                     <label for="locationFilter">Location:</label>
                     <select id="locationFilter">
@@ -148,26 +150,22 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                         <option value="Miscellaneous">Miscellaneous</option>
                     </select>
                 </div>
-                <div>
-                    <label for="statusFilter">Status:</label>
-                    <select id="statusFilter">
-                        <option value="">Select Status</option>
-                        <option value="Claimed">Claimed</option>
-                        <option value="Unclaimed">Unclaimed</option>
-                    </select>
-                </div>
+               
                 <div>
                     <label for="dateFilter">Date:</label>
-                    <input type="text" id="dateFilter" placeholder="mm/dd/yyyy" />
+                    <input type="date" id="dateFilter" placeholder="mm/dd/yyyy" />
                 </div>
-                <div>
-                    <label for="timeFilter">Time:</label>
-                    <input type="time" id="timeFilter" />
-                </div>
+
                 <div>
                     <button id="filterButton">Filter</button>
                     <button id="resetButton">Reset</button>
                 </div>
+
+<!-- No results message -->
+<div id="noResultsMessage" style="display: none; text-align: center; color: gray; font-weight: bold; margin-top: 10px;">
+    No items match the current filters.
+</div>
+
             </div>
 
 
@@ -284,47 +282,19 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
 
         // Function to filter table rows based on search input
         document.getElementById('searchInput').addEventListener('input', function() {
-            const query = this.value.toLowerCase();
-            const rows = document.querySelectorAll('#itemTable tbody tr');
+    const query = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#itemTable tbody tr');
 
-            rows.forEach(row => {
-                const cells = row.querySelectorAll('td');
-                const text = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
-                row.style.display = text.includes(query) ? '' : 'none';
-            });
-        });
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const text = Array.from(cells).map(cell => cell.textContent.toLowerCase()).join(' ');
+        row.style.display = text.includes(query) ? '' : 'none';
+    });
 
-        function filterTable() {
-            const location = document.getElementById('locationFilter').value.toLowerCase();
-            const itemType = document.getElementById('itemTypeFilter').value.toLowerCase();
-            const status = document.getElementById('statusFilter').value; // Keep it as is for direct comparison
-            const dateInput = document.getElementById('dateFilter').value; // Format: mm/dd/yyyy
-            const timeInput = document.getElementById('timeFilter').value; // Format: HH:MM
+    // After filtering, update the pagination display
+    displayTable();
+});
 
-            const rows = document.querySelectorAll('#itemTable tbody tr');
-
-            rows.forEach(row => {
-                const cells = row.querySelectorAll('td');
-                const rowLocation = cells[6].textContent.toLowerCase(); // Location Found
-                const rowItemType = cells[3].textContent.toLowerCase(); // Item Type
-                const rowStatus = cells[11].textContent; // Status
-                const rowDate = cells[8].textContent; // Date Lost/Found (in mm/dd/yyyy format)
-                const rowTime = cells[9].textContent; // Time Lost/Found (in HH:MM AM/PM format)
-
-                const matchesLocation = location ? rowLocation.includes(location) : true;
-                const matchesItemType = itemType ? rowItemType.includes(itemType) : true;
-                const matchesStatus = status ? rowStatus === status : true; // Change to direct comparison
-                const matchesDate = dateInput ? rowDate === dateInput : true; // Compare the entered date
-                const matchesTime = timeInput ? rowTime.includes(timeInput) : true; // Compare the entered time
-
-                // Show row if all filters match, otherwise hide
-                if (matchesLocation && matchesItemType && matchesStatus && matchesDate && matchesTime) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
 
 
         // Filter button event listener
@@ -334,9 +304,9 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
         document.getElementById('resetButton').addEventListener('click', function() {
             document.getElementById('locationFilter').value = '';
             document.getElementById('itemTypeFilter').value = '';
-            document.getElementById('statusFilter').value = '';
+
             document.getElementById('dateFilter').value = '';
-            document.getElementById('timeFilter').value = '';
+
 
             // Resetting the display of all rows
             const rows = document.querySelectorAll('#itemTable tbody tr');
@@ -344,6 +314,8 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
 
             // Optionally, reset the search input if needed
             document.getElementById('searchInput').value = '';
+
+            displayTable();
         });
 
         
@@ -404,6 +376,80 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
 
 
     </script>
+
+<script>
+    // Function to filter table rows based on filter inputs
+    function filterItems() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const location = document.getElementById('locationFilter').value.toLowerCase();
+        const itemType = document.getElementById('itemTypeFilter').value.toLowerCase();
+       
+        const dateInput = document.getElementById('dateFilter').value;
+       
+        
+        let rowsDisplayed = 0; // Counter for displayed rows
+        const rows = document.querySelectorAll('#itemTable tbody tr');
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            const rowLocation = cells[6].textContent.toLowerCase();
+            const rowItemType = cells[3].textContent.toLowerCase();
+           
+            const rowDate = cells[8].textContent;
+     
+
+            // Check all filters at once for better readability
+            const matchesQuery = query ? row.textContent.toLowerCase().includes(query) : true;
+            const matchesLocation = location ? rowLocation.includes(location) : true;
+            const matchesItemType = itemType ? rowItemType.includes(itemType) : true;
+   
+            const matchesDate = dateInput ? rowDate === dateInput : true;
+           
+
+            // Show row if it matches all filters, otherwise hide
+            if (matchesQuery && matchesLocation && matchesItemType && matchesStatus && matchesDate && matchesTime) {
+                row.style.display = '';
+                rowsDisplayed++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        // Display message if no items match the filters
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        noResultsMessage.style.display = rowsDisplayed === 0 ? '' : 'none';
+    }
+
+    // Add event listeners for filter inputs and search bar to trigger filtering
+    document.getElementById('searchInput').addEventListener('input', filterItems);
+    document.getElementById('locationFilter').addEventListener('change', filterItems);
+    document.getElementById('itemTypeFilter').addEventListener('change', filterItems);
+   
+    document.getElementById('dateFilter').addEventListener('input', filterItems);
+
+
+    // Reset button functionality
+    document.getElementById('resetButton').addEventListener('click', function() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('locationFilter').value = '';
+        document.getElementById('itemTypeFilter').value = '';
+      
+        document.getElementById('dateFilter').value = '';
+
+
+        // Reset the display of all rows and the no-results message
+        document.querySelectorAll('#itemTable tbody tr').forEach(row => row.style.display = '');
+        document.getElementById('noResultsMessage').style.display = 'none';
+    });
+
+    // Pagination integration (optional)
+    function refreshPagination() {
+        // Include pagination update code here to integrate with filtered results
+    }
+</script>
+
+
+
 </body>
 
 </html>

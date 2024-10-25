@@ -1,37 +1,28 @@
 <?php
+include("../php/connect.php");
 session_start(); // Start the session
-
-// Debugging message to check execution
-echo "Checking session and cookies...<br>";
 
 // Check if session exists
 if (!isset($_SESSION['email'])) {
     // Check if cookies exist
     if (isset($_COOKIE['email']) || isset($_COOKIE['username']) || isset($_COOKIE['role'])) {
-        // Expire the cookies by setting their expiration date to a past time
         setcookie("username", "", time() - 3600, "/");
         setcookie("email", "", time() - 3600, "/");
         setcookie("role", "", time() - 3600, "/");
 
-        // Destroy the session
         session_unset(); // Unset all session variables
         session_destroy(); // Destroy the session
-
-        // Debugging message before redirect
         echo "<script>
                 alert('Your session has expired. You will be redirected to the login page.');
-                window.location.href = 'NU_LoginPage.php'; // Redirect to login page
+                window.location.href = 'NU_LoginPage.php';
               </script>";
         exit();
     } else {
-        // If no session and no cookies, just destroy the session (if any)
         session_unset(); // Unset all session variables
         session_destroy(); // Destroy the session
-        
-        // Debugging message before redirect
         echo "<script>
                 alert('No Session Found. You will be redirected to the login page.');
-                window.location.href = 'NU_LoginPage.php'; // Redirect to login page
+                window.location.href = 'NU_LoginPage.php';
               </script>";
         exit();
     }
@@ -39,8 +30,12 @@ if (!isset($_SESSION['email'])) {
     echo "Session found: " . $_SESSION['email']; // Debugging message
 }
 
-// Optionally retrieve role from session or cookie (if it was restored from cookie in previous checks)
+// Optionally retrieve role from session or cookie
 $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
+
+// Query to retrieve user data
+$sql = "SELECT * FROM tbl_do_admin"; // Adjust table and column names as needed
+$result = $conn->query($sql); // Assign the query result to $result
 
 ?>
 
@@ -79,15 +74,15 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                 <i class="fas fa-eye"></i><span>Item View</span>
             </li>
             <li onclick="window.location.href='Admin_Report.php'">
-                <i class="fas fa-file-alt"></i><span>Report</span>
+                <i class="fas fa-file-alt"></i><span>Archive</span>
             </li>
             <li onclick="window.location.href='Admin_Admin.php'">
                 <i class="fas fa-user"></i><span>Admin</span>
             </li>
             <?php if ($role == 'IT_Admin') : ?>
-            <li onclick="window.location.href='Admin_ITAdmin.php'">
-                <i class="fas fa-cogs"></i><span>IT Admin Setting</span>
-            </li>
+                <li onclick="window.location.href='Admin_ITAdmin.php'">
+                    <i class="fas fa-cogs"></i><span>IT Admin Setting</span>
+                </li>
             <?php endif; ?>
         </ul>
     </div>
