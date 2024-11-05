@@ -134,8 +134,8 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
                             <th>Brand</th>
                             <th>Location Found</th>
                             <th>Specific Location Found</th>
-                            <th>Date Lost/Found</th>
-                            <th>Time Lost/Found</th>
+                            <th>Date Lost</th>
+                            <th>Time Lost</th>
                             <th>Additional Info</th>
                             <th>No. of Inquiries</th>
                             <th>Status</th>

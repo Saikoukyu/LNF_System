@@ -122,31 +122,7 @@ $role = isset($_SESSION['role']) ? trim($_SESSION['role']) : '';
         </div>
       </div>
 
-      <script>
-        // Dropdown toggle script
-        document
-          .querySelector(".dropdown-caret")
-          .addEventListener("click", function (event) {
-            event.preventDefault(); // Prevent the default action
-            this.closest(".dropdown").classList.toggle("open"); // Toggle the dropdown menu
-          });
 
-        document.addEventListener("click", function (event) {
-          var isClickInside = document
-            .querySelector(".dropdown")
-            .contains(event.target);
-
-          if (!isClickInside) {
-            document.querySelector(".dropdown").classList.remove("open");
-          }
-        });
-
-        const logoutButton = document.getElementById('logoutButton');
-
-logoutButton.addEventListener('click', function () {
-    window.location.href = "../php/logout.php";
-});
-      </script>
 
       <section class="content">
         <h2><i class="fas fa-user"></i> IT Admin Setting</h2>
@@ -184,3 +160,29 @@ logoutButton.addEventListener('click', function () {
     </div>
   </body>
 </html>
+
+<script>
+        // Dropdown toggle script
+        document
+          .querySelector(".dropdown-caret")
+          .addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent the default action
+            this.closest(".dropdown").classList.toggle("open"); // Toggle the dropdown menu
+          });
+
+        document.addEventListener("click", function (event) {
+          var isClickInside = document
+            .querySelector(".dropdown")
+            .contains(event.target);
+
+          if (!isClickInside) {
+            document.querySelector(".dropdown").classList.remove("open");
+          }
+        });
+
+        const logoutButton = document.getElementById('logoutButton');
+
+logoutButton.addEventListener('click', function () {
+    window.location.href = "../php/logout.php";
+});
+      </script>

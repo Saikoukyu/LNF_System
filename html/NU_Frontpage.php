@@ -25,7 +25,7 @@
 
     <div class="banner">
         <div class="banner-content">
-            <img src="..html/assets/nu bulldog 2.png" alt="NU Bulldogs Logo" class="banner-logo"> 
+            <img src="../html/assets/nu bulldog 2.png" alt="NU Bulldogs Logo" class="banner-logo"> 
             <div class="banner-text">EDUCATION THAT WORKS</div>
         </div>
     </div>

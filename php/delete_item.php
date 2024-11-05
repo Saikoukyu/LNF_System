@@ -21,7 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         try {
             // Ensure the SQL query is assigned to $sql
-            $sql = "DELETE FROM tbl_item_description WHERE item_id = :item_id";
+            $sql = " DELETE tbl_item_description, tbl_full_name
+    FROM tbl_item_description
+    INNER JOIN tbl_full_name ON tbl_full_name.fn_id = tbl_item_description.item_full_name_id
+    WHERE tbl_item_description.item_id = :item_id; 
+    ";
             $stmt = $conn->prepare($sql);
 
           

@@ -198,10 +198,12 @@ if (isset($_GET['item_id'])) {
 
                     <div class="location-time">
                         <h2>Location / Time</h2>
-                        <p><strong>Location:</strong> <?php echo $itemLocation; ?></p>
-                        <p><strong>Specific Location:</strong> <?php echo $itemSpecificLocation; ?></p>
-                        <p><strong>Time:</strong> <?php echo $formattedTimeLost; ?></p>
-                        <p><strong>Date:</strong> <?php echo $formattedDateLost; ?></p>
+                        
+                        <p><strong>Location Lost:</strong> <?php echo $itemLocation; ?></p>
+                        <p><strong>Specific Location Lost:</strong> <?php echo $itemSpecificLocation; ?></p>
+                        <p><strong>Time Lost:</strong> <?php echo $formattedTimeLost; ?></p>
+                        <p><strong>Date Lost:</strong> <?php echo $formattedDateLost; ?></p>
+                        <p><strong>--------------------------------------------</strong></p>
                         <div id="owner-info">
                         <p><strong>Owner Name:</strong> <span id="ownerName">
                                 <?php echo !empty($item['owner_name']) ? $item['owner_name'] : 'Not Released'; ?></p>
@@ -210,7 +212,7 @@ if (isset($_GET['item_id'])) {
                             <p><strong>Return Date:</strong><span id="returnDate">
                                 <?php echo !empty($item['return_date']) ? $item['return_date'] : 'Not Released'; ?>
                             </p>
-
+                
                         </div>
 
                         <!-- Edit Button -->
